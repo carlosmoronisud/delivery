@@ -2,3 +2,9 @@
 body {
   overflow-x: hidden;
 }
+
+
+@import 'swiper/css';
+@import 'swiper/css/navigation'; 
+@import 'swiper/css/pagination'; 
+

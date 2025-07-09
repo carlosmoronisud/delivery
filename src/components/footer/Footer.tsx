@@ -1,4 +1,5 @@
 function Footer() {
+  
   return (
     <footer className="bg-[#453E00] text-white py-14 px-6">
       <div className="max-w-7xl mx-auto flex flex-wrap justify-between gap-12">
