@@ -1,9 +1,11 @@
-import { FacebookLogo, InstagramLogo, LinkedinLogo } from '@phosphor-icons/react'
+import { FacebookLogo, GithubLogo, InstagramLogo, LinkedinLogo } from '@phosphor-icons/react'
 import { useContext, type ReactNode } from 'react'
 import { AuthContext } from '../../contexts/AuthContext'
 
+
 function Footer() {
 
+    // eslint-disable-next-line prefer-const
     let data = new Date().getFullYear()
 
     const { usuario } = useContext(AuthContext)
@@ -12,7 +14,7 @@ function Footer() {
 
     //Isso serve para mostrar um componente de maneira condicional
     //Na tela de login, navbar e footer n aparece, e quando faz o login aparece
-    if(usuario.token !== ""){
+    if(usuario.token == ""){
         component = (
   
  
@@ -52,8 +54,9 @@ function Footer() {
           <div className="flex flex-col gap-3 min-w-[150px]">
             <h3 className="text-lg font-semibold mb-2">Social</h3>
             {[ <LinkedinLogo size={48} weight='bold' />,
-             <InstagramLogo size={48} weight='bold' />,
-              <FacebookLogo size={48} weight='bold' />, "Linktree", "GitHub"].map((item, i) => (
+              <InstagramLogo size={48} weight='bold' />,
+              <FacebookLogo size={48} weight='bold' />,
+              <GithubLogo size={48} weight='bold' />].map((item, i) => (
               <p
                 key={i}
                 className="hover:scale-105 hover:text-yellow-300 transition-transform cursor-pointer"
@@ -66,14 +69,14 @@ function Footer() {
 
         {/* Rodapé inferior */}
         <div className="mt-10 text-center text-xs opacity-60">
-          © {new Date().getFullYear()} Delivery Company - Todos os direitos reservados.
+          © { data} Delivery Company - Todos os direitos reservados.
         </div>
       </footer>
         )
       }
 
   return (
-    {component}
+    component
   )
 
 }
