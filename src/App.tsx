@@ -8,12 +8,12 @@ import { AuthProvider } from "./contexts/AuthContext";
 import Login from "./pages/login/Login";
 import { ToastContainer } from "react-toastify";
 import Cadastro from "./pages/cadastro/Cadastro";
-import ListarCategorias from "./components/categorias/listarcategorias/ListarCategorias";
-import FormCategoria from "./components/categorias/FormCategorias.tsx/FormCategorias";
+import FormCategoria from "./components/categorias/formcategorias/FormCategorias";
 import DeletarCategoria from "./components/categorias/deletecategoria/DeleteCategorias";
 import RotaPrivada from "./contexts/RotaPrivada";
 import { GoogleOAuthProvider } from "@react-oauth/google";
 import Usuarios from "./pages/usuarios/Usuarios";
+import Categorias from "./pages/categorias/Categorias";
 
 
 
@@ -34,7 +34,7 @@ function App() {
               <Route path="/usuarios/cadastrar" element={<Cadastro />} />
               <Route path="/home" element={<Home />} />
               <Route path="/produtos" element={<Produtos />} />
-              <Route path="/categorias" element={<ListarCategorias />} />
+              <Route path="/categorias" element={<Categorias />} />
               <Route path="/sobre" element={<Sobre />} />
 
               {/* Rotas protegidas (somente usuário logado) */}

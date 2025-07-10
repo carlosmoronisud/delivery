@@ -32,7 +32,7 @@ function Navbar() {
 
           <div className="flex justify-between items-center gap-8 text-xl pr-10">
             <Link to="/" className="hover:scale-105 hover:text-yellow-300 transition-transform cursor-pointer">Home</Link>
-            <Link to="/clientes" className="hover:scale-105 hover:text-yellow-300 transition-transform cursor-pointer">Categorias</Link>
+            <Link to="/categorias" className="hover:scale-105 hover:text-yellow-300 transition-transform cursor-pointer">Categorias</Link>
             <Link to="/oportunidades" className="hover:scale-105 hover:text-yellow-300 transition-transform cursor-pointer">Produtos</Link>
             <Link to="/sobre" className="hover:scale-105 hover:text-yellow-300 transition-transform cursor-pointer">Sobre</Link>
             <Link to="/usuarios" className="hover:scale-105 hover:text-yellow-300 transition-transform cursor-pointer">Usuários</Link>

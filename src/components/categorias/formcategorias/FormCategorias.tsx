@@ -127,22 +127,22 @@ function FormCategoria() {
                     />
                 </div>
                 <div className="flex flex-col gap-2">
-                    <label htmlFor="palavrachave">Defina palavras chaves para essa Categoria</label>
+                    <label htmlFor="palavraChave">Defina palavras chaves para essa Categoria</label>
                     <input
                         type="text"
                         placeholder="Palavras Chave"
-                        name='palavrachave'
+                        name='palavraChave'
                         className="border-2 border-slate-700 rounded p-2"
                         value={categoria.palavraChave}
                         onChange={(e: ChangeEvent<HTMLInputElement>) => atualizarEstado(e)}
                     />
                 </div>
                 <div className="flex flex-col gap-2">
-                    <label htmlFor="imagem">Defina palavras chaves para essa Categoria</label>
+                    <label htmlFor="imagem">Defina imagem para essa Categoria</label>
                     <input
                         type="text"
-                        placeholder="Palavras Chave"
-                        name='image,'
+                        placeholder="Link da imagem"
+                        name="imagem"
                         className="border-2 border-slate-700 rounded p-2"
                         value={categoria.imagem}
                         onChange={(e: ChangeEvent<HTMLInputElement>) => atualizarEstado(e)}
