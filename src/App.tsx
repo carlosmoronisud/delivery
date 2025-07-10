@@ -14,6 +14,8 @@ import RotaPrivada from "./contexts/RotaPrivada";
 import { GoogleOAuthProvider } from "@react-oauth/google";
 import Usuarios from "./pages/usuarios/Usuarios";
 import Categorias from "./pages/categorias/Categorias";
+import FormProduto from "./components/produto/formprodutos/FormProdutos";
+import DeletarProduto from "./components/produto/deleteproduto/DeleteProdutos";
 
 
 
@@ -70,8 +72,11 @@ function App() {
               />
 
               {/* Se tiver: */}
-              {/* <Route path="/cadastrarproduto" element={<RotaPrivada><FormProduto /></RotaPrivada>} /> */}
-              {/* <Route path="/editarproduto/:id" element={<RotaPrivada><FormProduto /></RotaPrivada>} /> */}
+              <Route path="/cadastrarproduto" element={<RotaPrivada><FormProduto /></RotaPrivada>} /> 
+              <Route path="/editarproduto/:id" element={<RotaPrivada><FormProduto /></RotaPrivada>} />
+              <Route path="/editarproduto/:id" element={<RotaPrivada><FormProduto /></RotaPrivada>} />
+              <Route path="/deletarproduto/:id" element={<RotaPrivada><DeletarProduto /></RotaPrivada>} />
+
             </Routes>
           </div>
           <Footer />

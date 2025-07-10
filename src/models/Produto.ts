@@ -1,4 +1,5 @@
 import type Categoria from "./Categoria";
+import type Usuario from "./Usuario";
 
 
 export default interface Produto{
@@ -7,6 +8,7 @@ export default interface Produto{
     preco: number;
     imagem?: string;
     nutriScore?: string;
-    ingredientes: string;
-    categoria: Categoria | null;
+    ingrediente: string;
+    categoria: Categoria | number;
+    usuario: Usuario | number
 }

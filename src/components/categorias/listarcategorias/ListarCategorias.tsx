@@ -6,6 +6,7 @@ import type Categoria from "../../../models/Categoria";
 import { AuthContext } from "../../../contexts/AuthContext";
 import { buscar } from "../../../services/Service";
 import { ToastAlerta } from "../../../utils/ToastAlerta";
+import { DNA } from "react-loader-spinner";
 
 function ListarCategorias() {
 
@@ -20,9 +21,7 @@ function ListarCategorias() {
 
     async function buscarCategorias(){
         try{
-
             setIsLoading(true)
-
             await buscar("/categorias", setCategorias, {
                 headers: { Authorization: token}
             })
@@ -49,7 +48,7 @@ function ListarCategorias() {
 
     return (
         <>
-            {/* {isLoading && (
+            {isLoading && (
                 <DNA
 					visible={true}
 					height="200"
@@ -60,7 +59,7 @@ function ListarCategorias() {
 				/>
             )
 
-            } */}
+            }
             <div className="flex justify-center w-full my-4">
                 <div className="container flex flex-col mx-2">
 

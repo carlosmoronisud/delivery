@@ -12,6 +12,7 @@ import {
 import type UsuarioLogin from '../../models/UsuarioLogin'
 import { AuthContext } from '../../contexts/AuthContext'
 import { GoogleLogin } from '@react-oauth/google'
+import { RotatingLines } from 'react-loader-spinner'
 
 // import { RotatingLines } from 'react-loader-spinner'
 
@@ -96,7 +97,17 @@ function Login() {
 				<button
 					type="submit"
 					className="rounded bg-indigo-400 flex justify-center hover:bg-indigo-900 text-white w-1/2 py-2"
-				>
+				> {isLoading ? (
+							<RotatingLines
+								strokeColor="white"
+								strokeWidth="5"
+								animationDuration="0.75"
+								width="24"
+								visible={true}
+							/>
+						) : (
+							<span>Entrar</span>
+						)}
 					<span>Entrar</span>
 				</button>
 

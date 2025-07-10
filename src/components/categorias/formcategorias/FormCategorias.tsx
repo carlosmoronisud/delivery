@@ -4,7 +4,7 @@ import { useNavigate, useParams } from "react-router-dom"
 import { AuthContext } from "../../../contexts/AuthContext"
 import type Categoria from "../../../models/Categoria"
 import { atualizar, buscar, cadastrar } from "../../../services/Service"
-// import { RotatingLines } from "react-loader-spinner"
+import { RotatingLines } from "react-loader-spinner"
 import { ToastAlerta } from "../../../utils/ToastAlerta"
 
 function FormCategoria() {
@@ -153,7 +153,7 @@ function FormCategoria() {
                                hover:bg-indigo-800 w-1/2 py-2 mx-auto flex justify-center"
                     type="submit">
                     
-                    {/* {
+                     {
                         isLoading ? 
 
                         <RotatingLines
@@ -166,7 +166,7 @@ function FormCategoria() {
                         :
                         <span>{id === undefined ? "Cadastrar" : "Atualizar"}</span>
                         
-                    } */}
+                    } 
                     <span>{id === undefined ? "Cadastrar" : "Atualizar"}</span>
                 </button>
             </form>
