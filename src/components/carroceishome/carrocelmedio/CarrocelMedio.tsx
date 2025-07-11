@@ -1,49 +1,73 @@
-// src/components/carroceishome/carrocelmedio/CarrosselMedio.tsx
-import { useEffect, useState} from "react";
-import useEmblaCarousel from "embla-carousel-react";
+import { useEffect, useState } from "react";
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Autoplay, Pagination } from "swiper/modules";
+import { motion } from "framer-motion"; // 👈 animação
+import { buscarTodosProdutos } from "../../../services/Service";
+import type Produto from "../../../models/Produto";
+import Loader from "../../ui/Loader";
 
-import { buscar } from "../../../services/Service";
-
-interface Produto {
-  id: number;
-  imagem: string;
-}
 
 export default function CarrosselMedio() {
-  const [produtos, setProdutos] = useState<Produto[]>([]);
-  const [emblaRef] = useEmblaCarousel({ loop: true, align: "center" });
-
-  async function carregarProdutos() {
-  
-      await buscar("/produtos", setProdutos);
-    
-  }
+  const [banners, setBanners] = useState<string[]>([]);
+  const [carregando, setCarregando] = useState(true);
 
   useEffect(() => {
-    carregarProdutos();
+    async function carregarBanners() {
+      try {
+        const produtos: Produto[] = await buscarTodosProdutos();
+        const imagensValidas = produtos
+          .map((produto) => produto.imagem)
+          .filter((url): url is string => !!url);
+
+        setBanners(
+          imagensValidas.length > 0
+            ? imagensValidas
+            : [
+                "https://placehold.co/1000x800?text=Fallback+1",
+                "https://placehold.co/1000x800?text=Fallback+2"
+              ]
+        );
+      } catch (error) {
+        console.error("Erro ao carregar imagens dos produtos:", error);
+        setBanners([
+          "https://placehold.co/1000x800?text=Fallback+1",
+          "https://placehold.co/1000x800?text=Fallback+2"
+        ]);
+      } finally {
+        setCarregando(false);
+      }
+    }
+
+    carregarBanners();
   }, []);
 
+  if (carregando) return <Loader />;
+
   return (
-    <div
-      className="overflow-hidden w-full max-w-4xl h-[400px] lg:h-[500px] mx-auto rounded-xl"
-      ref={emblaRef}
+    <motion.div
+      className="w-full max-w-6xl mx-auto px-4"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.8 }}
     >
-      <div className="flex">
-        {produtos
-          .filter((p) => p.imagem)
-          .map((produto) => (
-            <div
-              key={produto.id}
-              className="flex-[0_0_100%] px-2 flex items-center justify-center"
-            >
-              <img
-                src={produto.imagem}
-                alt={`Produto ${produto.id}`}
-                className="w-full h-full object-cover rounded-xl"
-              />
-            </div>
-          ))}
-      </div>
-    </div>
+      <Swiper
+        modules={[Autoplay, Pagination]}
+        autoplay={{ delay: 5000 }}
+        pagination={{ clickable: true }}
+        loop={true}
+        slidesPerView={1}
+        className="rounded-xl"
+      >
+        {banners.map((imagem, i) => (
+          <SwiperSlide key={i}>
+            <img
+              src={imagem}
+              alt={`Destaque ${i}`}
+              className="w-full h-[300px] md:h-[400px] lg:h-[500px] object-cover rounded-xl"
+            />
+          </SwiperSlide>
+        ))}
+      </Swiper>
+    </motion.div>
   );
 }

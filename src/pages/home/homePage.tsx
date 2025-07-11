@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom';
 import CarrosselMedio from '../../components/carroceishome/carrocelmedio/CarrocelMedio';
 import CarrosselProdutos from '../../components/carroceishome/carrosselprodutos/CarrosselProdutos';
 
@@ -5,7 +6,7 @@ export default function Home() {
   return (
     <div className="w-full h-full flex flex-col items-center justify-center gap-6 pb-20 bg-[#F1EDD2]">
 
-      {/* Seção Hero / Carrossel Principal */}
+      {/* Banner Principal */}
       <article className="bg-gradient-to-b from-[#F4BF4F] from-50% to-[#F1EDD2] to-95% w-full px-4">
         <div className="flex flex-col lg:flex-row justify-center items-center gap-7 py-10">
           <section className="flex flex-col justify-center gap-4 max-w-xl text-center lg:text-left">
@@ -14,9 +15,9 @@ export default function Home() {
             <p className="text-4xl md:text-5xl text-[#1A1A1A]">nós entregamos!</p>
 
             <div className="pt-4 flex justify-center lg:justify-start">
-              <button className="border border-[#FAEB20] shadow-xl py-3 px-8 rounded-md text-2xl bg-[#FAEB20] hover:scale-105 transition">
+              <Link to="/produtos" className="border border-[#FAEB20] shadow-xl py-3 px-8 rounded-md text-2xl bg-[#FAEB20] hover:scale-105 transition">
                 Peça Aqui!
-              </button>
+              </Link >
             </div>
           </section>
 
@@ -30,7 +31,7 @@ export default function Home() {
         </div>
       </article>
 
-      {/* Carrossel de Pizzarias */}
+      {/* Carrossel Medio */}
       <div className="w-full max-w-screen-xl px-4 flex flex-col items-center justify-center">
         <h2 className="text-4xl font-poppins font-semibold text-lime-950 text-center py-4">Os mais pedidos</h2>
         <CarrosselMedio />

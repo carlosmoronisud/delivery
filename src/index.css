@@ -1,10 +1,10 @@
-@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@700&family=Poppins:wght@400;600;700&display=swap');
-@import 'swiper/css';
-@import 'swiper/css/navigation'; 
-@import 'swiper/css/pagination'; 
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@700&family=Poppins:wght@400;600;700&display=swap'); 
 @import "tailwindcss";
 body {
   overflow-x: hidden;
 }
+@import "swiper/css";
+@import "swiper/css/navigation";
+@import "swiper/css/pagination";
 
 
