@@ -11,7 +11,6 @@ function DeletarCategoria() {
 	const navigate = useNavigate()
 
 	const [isLoading, setIsLoading] = useState<boolean>(false)
-
 	const [categoria, setCategoria] = useState<Categoria>({} as Categoria)
 
 	const { usuario, handleLogout } = useContext(AuthContext)
@@ -52,12 +51,12 @@ function DeletarCategoria() {
 				headers: { Authorization: token },
 			})
 
-			ToastAlerta('Categoria excluído com sucesso!', 'sucesso')
+			ToastAlerta('Categoria excluída com sucesso!', 'sucesso')
 		} catch (error: any) {
 			if (error.toString().includes('401')) {
 				handleLogout()
 			} else {
-				ToastAlerta('Erro ao Excluir a categoria!', 'erro')
+				ToastAlerta('Erro ao excluir a categoria!', 'erro')
 				console.error(error)
 			}
 		}
@@ -71,47 +70,56 @@ function DeletarCategoria() {
 	}
 
 	return (
-		<div className="container w-1/3 mx-auto">
-			<h1 className="text-4xl text-center my-4">Deletar Categoria</h1>
-			<p className="text-center font-semibold mb-4">
-				Você tem certeza de que deseja apagar a categoria a
-				seguir?
-			</p>
-			<div className="border flex flex-col rounded-2xl overflow-hidden justify-between">
-				<header className="py-2 px-6 bg-indigo-600 text-white font-bold text-2xl">
-					Categoria
-				</header>
-				<p className="p-8 text-3xl bg-slate-200 h-full">
-					{categoria.descricao}
+		<div className='min-h-screen w-full bg-gradient-to-b from-[#F4BF4F] to-[#F1EDD2] flex justify-center items-center px-4'>
+
+			<div className="max-w-md w-full bg-white border-2 border-[#F4BF4F] rounded-2xl shadow-xl flex flex-col items-center p-6 gap-4 hover:scale-105 transition duration-300">
+				
+				<h1 className="text-4xl font-bold text-center text-gray-800">Deletar Categoria</h1>
+				
+				<p className="text-lg text-center text-gray-600">
+					Você tem certeza que deseja excluir a categoria a seguir?
 				</p>
-				<div className="flex">
+
+				{/* Card da Categoria */}
+				<div className="flex flex-col items-center gap-4 w-full">
+					<img
+						src={categoria.imagem || "https://placehold.co/250x250?text=Categoria"}
+						alt={categoria.descricao}
+						className="w-52 h-52 object-cover rounded-xl"
+					/>
+					<h2 className="text-xl font-semibold text-black">{categoria.descricao}</h2>
+					<p className="text-base font-medium text-gray-700">Palavra-chave: {categoria.palavraChave}</p>
+				</div>
+
+				{/* Botões */}
+				<div className="flex justify-center gap-12 pt-4 w-full">
 					<button
-						className="text-slate-100 bg-red-400 hover:bg-red-600 w-full py-2"
 						onClick={retornar}
+						className="text-lg text-red-600 hover:scale-110 transition duration-150"
 					>
 						Não
 					</button>
+
 					<button
-						className="w-full text-slate-100 bg-indigo-400 
-                                   hover:bg-indigo-600 flex items-center justify-center"
 						onClick={deletarCategoria}
+						className="text-lg text-green-700 hover:scale-110 transition duration-150 flex items-center justify-center"
 					>
 						{isLoading ? (
 							<RotatingLines
-								strokeColor="white"
-								strokeWidth="5"
+								strokeColor="green"
+								strokeWidth="4"
 								animationDuration="0.75"
 								width="24"
 								visible={true}
 							/>
 						) : (
 							<span>Sim</span>
-						)} 
-                        <span>Sim</span>
+						)}
 					</button>
 				</div>
 			</div>
 		</div>
 	)
 }
+
 export default DeletarCategoria

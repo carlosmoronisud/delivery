@@ -1,24 +1,13 @@
 import { FacebookLogo, GithubLogo, InstagramLogo, LinkedinLogo } from '@phosphor-icons/react'
-import { useContext, type ReactNode } from 'react'
-import { AuthContext } from '../../contexts/AuthContext'
-
 
 function Footer() {
 
     // eslint-disable-next-line prefer-const
     let data = new Date().getFullYear()
 
-    const { usuario } = useContext(AuthContext)
 
-    let component: ReactNode
 
-    //Isso serve para mostrar um componente de maneira condicional
-    //Na tela de login, navbar e footer n aparece, e quando faz o login aparece
-    if(usuario.token == ""){
-        component = (
-  
- 
-      <footer className="bg-[#453E00] text-white py-14 px-6">
+    return <footer className="bg-[#453E00] text-white py-14 px-6">
         <div className="max-w-7xl mx-auto flex flex-wrap justify-between gap-12">
 
           {/* Coluna 1 - Logo + Endereço */}
@@ -72,13 +61,9 @@ function Footer() {
           © { data} Delivery Company - Todos os direitos reservados.
         </div>
       </footer>
-        )
-      }
+        
+    }
 
-  return (
-    component
-  )
 
-}
 
 export default Footer;

@@ -2,7 +2,7 @@ interface ColaboradorProps {
   nome: string;
   cargo: string;
   linkedin: string;
-  imagem?: string; // URL da imagem (ex: GitHub ou LinkedIn)
+  imagem?: string; 
 }
 
 export default function ColaboradorCard({ nome, cargo, linkedin, imagem }: ColaboradorProps) {

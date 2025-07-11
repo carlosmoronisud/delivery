@@ -1,27 +1,26 @@
-import { PencilSimpleLine } from "@phosphor-icons/react"
-import type Usuario from "../../models/Usuario"
-
+import { PencilSimpleLine } from "@phosphor-icons/react";
+import type Usuario from "../../models/Usuario";
 
 interface Props {
-  usuario: Usuario
+  usuario: Usuario;
 }
 
 function CardUsuario({ usuario }: Props) {
   return (
-    <div className="border rounded shadow p-4 flex flex-col items-center bg-white">
+    <div className="border rounded-xl shadow-md p-6 flex flex-col items-center bg-[#FEF8EA] w-full max-w-sm">
       <img
         src={usuario.foto || "https://via.placeholder.com/100"}
         alt={usuario.nome}
-        className="w-24 h-24 rounded-full object-cover mb-2 border-2 border-yellow-400"
+        className="w-24 h-24 rounded-full object-cover mb-4 border-4 border-yellow-400 shadow"
       />
-      <h3 className="text-xl font-bold">{usuario.nome}</h3>
-      <p className="text-sm text-gray-600">{usuario.usuario}</p>
+      <h3 className="text-2xl font-bold text-[#453E00]">{usuario.nome}</h3>
+      <p className="text-sm text-gray-700">{usuario.usuario}</p>
 
-      <button className="mt-4 bg-blue-500 text-white px-4 py-1 rounded hover:bg-blue-700 flex items-center gap-2">
-        <PencilSimpleLine size={16} /> Atualizar
+      <button className="mt-5 bg-[#453E00] hover:bg-[#262401] text-white px-5 py-2 rounded-full flex items-center gap-2 transition font-bold shadow">
+        <PencilSimpleLine size={18} /> Atualizar
       </button>
     </div>
-  )
+  );
 }
 
-export default CardUsuario
+export default CardUsuario;

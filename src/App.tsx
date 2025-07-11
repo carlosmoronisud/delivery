@@ -21,6 +21,7 @@ import DeletarProduto from "./components/produto/deleteproduto/DeleteProdutos";
 
 function App() {
   return (
+    
     <GoogleOAuthProvider clientId="323883270092-ke6bscn6njau06ssposa02vtsto0rdv7.apps.googleusercontent.com">
     <AuthProvider>
       <ToastContainer />
@@ -62,14 +63,7 @@ function App() {
                   </RotaPrivada>
                 }
               />
-              <Route
-                path="/deletarcategoria/:id"
-                element={
-                  <RotaPrivada>
-                    <DeletarCategoria />
-                  </RotaPrivada>
-                }
-              />
+              <Route path="/deletarcategoria/:id"element={<RotaPrivada><DeletarCategoria /></RotaPrivada>}/>
 
               {/* Se tiver: */}
               <Route path="/cadastrarproduto" element={<RotaPrivada><FormProduto /></RotaPrivada>} /> 

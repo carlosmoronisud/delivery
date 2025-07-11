@@ -1,8 +1,8 @@
 .fundoCadastro {
-    background-image: url("https://i.imgur.com/ZZFAmzo.jpg");
+    background-image: url("https://images-ext-1.discordapp.net/external/-gUMtBIOCIW792r7mYAtJ-L-ZQJRNAEOdz6D7VNiA5A/%3FupdatedAt%3D1752172647185/https/ik.imagekit.io/8h7kfljfc/imgs/32464235_m502t0049_c_donuts_28jul22-removebg-preview.png?format=webp&quality=lossless&width=448&height=448");
     background-repeat: no-repeat;
-    width: 100%;
     min-height: 100vh;
+    width: 100%;
     background-size: cover;
     background-position: center;
-  }
+}

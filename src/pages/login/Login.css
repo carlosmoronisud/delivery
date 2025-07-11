@@ -1,8 +1,15 @@
 .fundoLogin {
-    background-image: url("https://i.imgur.com/ZZFAmzo.jpg");
-    background-repeat: no-repeat;
-    min-height: 100vh;
-    width: 100%;
-    background-size: cover;
-    background-position: center;
+  background-image: url("https://ik.imagekit.io/8h7kfljfc/imgs/2150857908.jpg?updatedAt=1752066425064");
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+  width: 100%;
+  height: 90%;
+  border-radius: 1.5rem;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+  transition: transform 0.4s ease;
+}
+
+.fundoLogin:hover {
+  transform: scale(1.02);
 }

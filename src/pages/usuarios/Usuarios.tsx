@@ -1,70 +1,76 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-import { useEffect, useState } from "react"
-import { useContext } from 'react'
-import { AuthContext } from '../../contexts/AuthContext'
+import { useEffect, useState, useContext } from "react";
+import { motion } from "framer-motion";
+import { AuthContext } from '../../contexts/AuthContext';
 
 import {
   buscarTodosUsuarios,
   buscarUsuarioPorId,
   buscarUsuarioPorEmail,
   buscarUsuariosPorNome,
-} from '../../services/Service'
+} from '../../services/Service';
 
-import type Usuario from "../../models/Usuario"
-import CardUsuario from "../../components/cardusuario/CardUsuario"
-import { ToastAlerta } from "../../utils/ToastAlerta"
-
-
+import type Usuario from "../../models/Usuario";
+import CardUsuario from "../../components/cardusuario/CardUsuario";
+import { ToastAlerta } from "../../utils/ToastAlerta";
 
 function Usuarios() {
-useEffect(() => {
-  buscar()
-}, [])
+  const { usuario } = useContext(AuthContext);
+  const header = {
+    headers: {
+      Authorization: usuario.token
+    }
+  };
 
-const { usuario } = useContext(AuthContext)
-const header = {
-  headers: {
-    Authorization: usuario.token
-  }
-}
+  const [filtro, setFiltro] = useState("");
+  const [usuarios, setUsuarios] = useState<Usuario[]>([]);
+  const [tipoBusca, setTipoBusca] = useState("todos");
 
-  const [filtro, setFiltro] = useState("")
-  const [usuarios, setUsuarios] = useState<Usuario[]>([])
-  const [tipoBusca, setTipoBusca] = useState("todos")
+  useEffect(() => {
+    buscar();
+  }, []);
 
   async function buscar() {
-      
-
     try {
       switch (tipoBusca) {
         case "id":
-            await buscarUsuarioPorId(Number(filtro), (res: Usuario) => setUsuarios([res]), header)
-            break
+          await buscarUsuarioPorId(Number(filtro), (res: Usuario) => setUsuarios([res]), header);
+          break;
         case "usuario":
-            await buscarUsuarioPorEmail(filtro, (res: Usuario) => setUsuarios([res]), header)
-            break
+          await buscarUsuarioPorEmail(filtro, (res: Usuario) => setUsuarios([res]), header);
+          break;
         case "nome":
-            await buscarUsuariosPorNome(filtro, setUsuarios, header)
-            break
+          await buscarUsuariosPorNome(filtro, setUsuarios, header);
+          break;
         default:
-            await buscarTodosUsuarios(setUsuarios, header)
-            break
+          await buscarTodosUsuarios(setUsuarios, header);
+          break;
       }
-
     } catch (error) {
-      console.error("Erro ao buscar usuários", error)
-      ToastAlerta("Erro ao buscar usuários", "erro")
+      console.error("Erro ao buscar usuários", error);
+      ToastAlerta("Erro ao buscar usuários", "erro");
     }
   }
 
   return (
-    <div className="p-4">
-      <h2 className="text-3xl font-bold mb-4">Usuários</h2>
+    <motion.div
+      className="p-6 bg-[#FEF8EA] min-h-screen font-poppins"
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5 }}
+    >
+      <motion.h2
+        className="text-4xl text-[#453E00] font-bold mb-6"
+        initial={{ opacity: 0, x: -50 }}
+        animate={{ opacity: 1, x: 0 }}
+        transition={{ duration: 0.5 }}
+      >
+        Usuários
+      </motion.h2>
 
-      <div className="flex gap-2 mb-4 flex-wrap">
+      <div className="flex flex-wrap gap-4 mb-6 items-center">
         <select
           onChange={(e) => setTipoBusca(e.target.value)}
-          className="border p-2 rounded"
+          className="border-2 border-[#453E00] p-2 rounded-md bg-white text-[#453E00]"
         >
           <option value="todos">Todos</option>
           <option value="id">Buscar por ID</option>
@@ -75,26 +81,45 @@ const header = {
         <input
           type="text"
           placeholder="Digite o valor"
-          className="border p-2 flex-1 rounded"
+          className="border-2 border-[#453E00] p-2 rounded-md flex-1 bg-white"
           value={filtro}
           onChange={(e) => setFiltro(e.target.value)}
         />
 
         <button
           onClick={buscar}
-          className="bg-indigo-600 text-white px-4 py-2 rounded hover:bg-indigo-800"
+          className="bg-[#453E00] text-white px-6 py-2 rounded-md hover:bg-[#262401] font-bold transition"
         >
           Buscar
         </button>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+      <motion.div
+        className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+        initial="hidden"
+        animate="visible"
+        variants={{
+          hidden: {},
+          visible: {
+            transition: {
+              staggerChildren: 0.1
+            }
+          }
+        }}
+      >
         {usuarios.map((usuario) => (
-          <CardUsuario key={usuario.id || usuario.usuario} usuario={usuario} />
+          <motion.div
+            key={usuario.id || usuario.usuario}
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.4, ease: "easeOut" }}
+          >
+            <CardUsuario usuario={usuario} />
+          </motion.div>
         ))}
-      </div>
-    </div>
-  )
+      </motion.div>
+    </motion.div>
+  );
 }
 
-export default Usuarios
+export default Usuarios;
