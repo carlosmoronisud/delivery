@@ -29,7 +29,6 @@ export const cadastrar = async (url: string, dados: Object, setDados: Function, 
     const resposta = await api.post(url, dados, header)
     setDados(resposta.data)
 }
-
 export const atualizar = async (url: string, dados: Object, setDados: Function, header: object) => {
     const resposta = await api.put(url, dados, header)
     setDados(resposta.data)
@@ -38,6 +37,8 @@ export const atualizar = async (url: string, dados: Object, setDados: Function, 
 export const deletar = async(url: string, header: object) => {
     await api.delete(url, header)
 }
+
+
 {/*Usuarios*/}
 // Buscar todos os usuários
 export const buscarTodosUsuarios = async (setDados: Function, header: object) => {

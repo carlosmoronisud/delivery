@@ -23,11 +23,14 @@ export default function CarrosselProdutos() {
         const adaptados = resposta.map((produto: Produto) => ({
           imagem: produto.imagem || "https://placehold.co/231x193",
           titulo: produto.nome,
+          // Assuming produto.id exists, otherwise consider a more robust unique key generation
+          // id: produto.id,
           preco: `R$ ${produto.preco.toFixed(2)}`,
         }));
         setProdutos(adaptados);
       } catch (error) {
         console.error("Erro ao carregar produtos:", error);
+        // Fallback data for development/error handling
         setProdutos([
           {
             imagem: "https://placehold.co/231x193?text=Pizza+Frango",
@@ -79,20 +82,20 @@ export default function CarrosselProdutos() {
       animate={{ opacity: 1 }}
       transition={{ duration: 0.8 }}
     >
-      {/* Botões fora do carrossel */}
-      <div className="absolute -left-14 top-1/2 z-10 -translate-y-1/2">
+      {/* Botões de navegação responsivos */}
+      <div className="absolute left-2 md:-left-14 top-1/2 z-10 -translate-y-1/2">
         <button
           ref={prevRef}
-          className="bg-gray-100 hover:bg-gray-300 rounded-full p-3 shadow-md"
+          className="bg-gray-100 hover:bg-gray-300 rounded-full p-2 md:p-3 shadow-md"
         >
           ⬅
         </button>
       </div>
 
-      <div className="absolute -right-14 top-1/2 z-10 -translate-y-1/2">
+      <div className="absolute right-2 md:-right-14 top-1/2 z-10 -translate-y-1/2">
         <button
           ref={nextRef}
-          className="bg-gray-100 hover:bg-gray-300 rounded-full p-3 shadow-md"
+          className="bg-gray-100 hover:bg-gray-300 rounded-full p-2 md:p-3 shadow-md"
         >
           ➡
         </button>
@@ -114,17 +117,18 @@ export default function CarrosselProdutos() {
         pagination={{ clickable: true }}
         spaceBetween={10}
         breakpoints={{
-          320: { slidesPerView: 1 },
-          640: { slidesPerView: 2 },
-          1024: { slidesPerView: 3 },
-          1280: { slidesPerView: 4 },
-          1536: { slidesPerView: 5 },
-          1920: { slidesPerView: 6 },
-          2560: { slidesPerView: 7 },
+          320: { slidesPerView: 1, spaceBetween: 5 }, // Smaller space for small screens
+          640: { slidesPerView: 2, spaceBetween: 10 },
+          1024: { slidesPerView: 3, spaceBetween: 10 },
+          1280: { slidesPerView: 4, spaceBetween: 15 }, // Slightly more space for large screens
+          1536: { slidesPerView: 5, spaceBetween: 15 },
+          1920: { slidesPerView: 6, spaceBetween: 20 }, // Even more space for very large screens
+          2560: { slidesPerView: 7, spaceBetween: 20 },
         }}
-        className="py-10"
+        className="py-10 gap-2 md:gap-2.5 w-full h-full"
       >
         {produtos.map((produto, i) => (
+          // Consider using a unique 'id' from 'produto' if available instead of 'i'
           <SwiperSlide key={i} className="flex justify-center">
             <CardProdutoCarrossel {...produto} />
           </SwiperSlide>
