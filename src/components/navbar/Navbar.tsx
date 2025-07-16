@@ -13,6 +13,7 @@ interface NavbarProps {
   onMenuClose: () => void;
 };
 
+
 function Navbar({ menuState, onMenuToggle, onMenuClose }: Readonly<NavbarProps>) {
   const navigate = useNavigate();
   const { quantidadeItems } = useContext(CartContext);
