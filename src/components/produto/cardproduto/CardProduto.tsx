@@ -1,83 +1,124 @@
 import React, { useContext } from 'react';
-import { Link } from 'react-router-dom'; // Usar Link para navegação de rotas
+import { Link } from 'react-router-dom';
 import { AuthContext } from '../../../contexts/AuthContext';
-import { CartContext } from '../../../contexts/CartContext'; // Importar CartContext
+import { CartContext } from '../../../contexts/CartContext';
 import type Produto from '../../../models/Produto';
-import type Usuario from '../../../models/Usuario'; // Importar Usuario para tipagem de produto.usuario
-import { PencilSimpleLine, Trash, ShoppingCartSimple } from '@phosphor-icons/react'; // Ajuste dos ícones
-import type Categoria from '../../../models/Categoria';
+
+import { PencilSimpleLine, Trash, ShoppingCartSimple } from '@phosphor-icons/react';
 
 interface CardProdutoProps {
   produto: Produto;
 }
-function isCategoria(categoria: number | Categoria): categoria is Categoria {
-  return typeof categoria === 'object';
-}
+
+// Função para mapear NutriScore para classes Tailwind
+const getNutriScoreClasses = (score: string | undefined): string => {
+  switch (score?.toUpperCase()) {
+    case 'A':
+      return 'bg-green-500 text-white'; 
+    case 'B':
+      return 'bg-lime-500 text-white'; 
+    case 'C':
+      return 'bg-yellow-500 text-gray-800'; 
+    case 'D':
+      return 'bg-orange-500 text-white'; 
+    case 'E':
+      return 'bg-red-500 text-white'; 
+    default:
+      return 'bg-gray-300 text-gray-700'; 
+  }
+};
 
 const CardProduto: React.FC<CardProdutoProps> = ({ produto }) => {
-  // Não precisamos de `useNavigate` aqui se usarmos `Link` para os botões de edição/exclusão.
-  // const navigate = useNavigate();
+  const { usuario: loggedInUser } = useContext(AuthContext);
+  const { adicionarProduto } = useContext(CartContext);
 
-  const { usuario: loggedInUser } = useContext(AuthContext); // Renomeado para evitar conflito
-  const { adicionarProduto } = useContext(CartContext); // Obter a função adicionarProduto do CartContext
+  console.log('Usuário logado:', loggedInUser);
+  console.log('Produto recebido:', produto);
 
-  // Lógica para verificar se o usuário logado é o "dono" do produto
-  // Garante que produto.usuario seja um objeto antes de acessar .id
-  const isDono = loggedInUser?.id &&
-                 typeof produto.usuario !== 'number' &&
-                 (produto.usuario as Usuario).id === loggedInUser.id; // Type assertion para segurança
+  let isDono = false;
+
+  if (loggedInUser?.id !== null && loggedInUser?.id !== undefined) {
+    const produtoUserId = produto?.usuario?.id;
+    console.log('ID do usuário do produto:', produtoUserId);
+    console.log('ID do usuário logado:', loggedInUser.id);
+
+    if (produtoUserId !== null && produtoUserId !== undefined && produtoUserId === loggedInUser.id) {
+      isDono = true;
+    }
+  }
+
+  console.log('isDono:', isDono);
 
   return (
-    <div className="h-80 w-2/3 bg-white p-3 rounded-xl flex flex-col justify-between items-start gap-1.5 shadow-md hover:shadow-lg transition-all relative">
+    <div className="relative bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 
+                    flex flex-col justify-start items-start overflow-hidden 
+                    w-64 h-96 p-4 border border-gray-200 cursor-pointer">
 
-      {/* Imagem do produto */}
       <img
-        className="w-56 h-48 object-cover rounded-xl"
-        src={produto.imagem || 'https://placehold.co/231x193'} // Usando produto.imagem
+        className="w-full h-40 object-cover rounded-xl mb-3 border border-gray-100" 
+        src={produto.imagem || 'https://placehold.co/256x160/F0F0F0/ADADAD?text=Sem+Imagem'} 
         alt={produto.nome}
       />
 
-      {/* Nome e preço */}
-      <div className="text-black/60 font-poppins">
-        <div className="font-bold">{produto.nome}</div>
-        <div>R$ {produto.preco.toFixed(2)}</div>
-      </div>
+      <h3 className="text-xl font-bold text-gray-900 mb-1 leading-tight">
+        {produto.nome}
+      </h3>
 
-      {/* Categoria do produto (Adicionado do código do professor) */}
-      {produto.categoria && isCategoria(produto.categoria) && (
-      <p className="text-sm italic text-gray-700">
-      Categoria: {produto.categoria.descricao}
+      <p className="text-2xl font-extrabold text-orange-600 mb-2">
+        R$ {produto.preco ? produto.preco.toFixed(2).replace('.', ',') : '0,00'}
+      </p>
+      
+      {produto.ingrediente && (
+        <p className="text-sm text-gray-700 leading-snug max-h-16 overflow-hidden text-ellipsis flex-grow"> 
+          <span className="font-semibold">Ingredientes:</span> {produto.ingrediente}
         </p>
       )}
 
-      {/* Nutriscore */}
-      <div className="text-red-800 text-3xl font-ibm">
-        {produto.nutriScore}
+      <div className="w-full flex-shrink-0 flex justify-center items-center py-2">
+        {isDono && (
+          <div className="flex gap-2 z-10"> 
+              <Link 
+                  to={`/editarproduto/${produto.id}`}
+                  className="bg-yellow-500 hover:bg-yellow-600 text-white p-2 rounded-full 
+                             shadow-md transition-all duration-300 transform hover:scale-110 
+                             flex items-center justify-center cursor-pointer"
+                  title="Editar produto"
+              >
+                  <PencilSimpleLine size={20} weight="bold" /> 
+              </Link>
+              <Link 
+                  to={`/deletarproduto/${produto.id}`}
+                  className="bg-red-500 hover:bg-red-600 text-white p-2 rounded-full 
+                             shadow-md transition-all duration-300 transform hover:scale-110 
+                             flex items-center justify-center cursor-pointer"
+                  title="Deletar produto"
+              >
+                  <Trash size={20} weight="bold" />
+              </Link>
+          </div>
+        )}
       </div>
 
-      {/* Botão de carrinho de compras */}
-      <button
-        onClick={() => adicionarProduto(produto)} // Chamada à função do CartContext
-        className="absolute top-3 right-3 bg-green-600 hover:bg-green-700 text-white p-2 rounded-full shadow transition"
-        title="Adicionar ao carrinho"
-      >
-        <ShoppingCartSimple size={20} weight="bold" />
-      </button>
-
-      {/* Botões de edição/exclusão se for dono */}
-      {isDono && (
-        <div className="flex gap-2 mt-2">
-          {/* Usando Link para navegação */}
-          <Link to={`/editarproduto/${produto.id}`}
-            className="bg-yellow-500 hover:bg-yellow-600 text-white py-1 px-3 rounded-md text-sm flex items-center justify-center">
-            <PencilSimpleLine size={16} /> {/* Ícone ajustado */}
-          </Link>
-          <Link to={`/deletarproduto/${produto.id}`}
-            className="bg-red-500 hover:bg-red-600 text-white py-1 px-3 rounded-md text-sm flex items-center justify-center">
-            <Trash size={16} />
-          </Link>
+      {produto.nutriScore && ( 
+        <div 
+          className={`absolute top-4 left-4 flex items-center justify-center 
+                      w-10 h-10 rounded-full font-bold text-lg shadow-md z-10 
+                      ${getNutriScoreClasses(produto.nutriScore)}`}
+          title={`NutriScore: Nível de nutrição ${produto.nutriScore}`}
+        >
+          {produto.nutriScore}
         </div>
       )}
+
+      <button
+        onClick={() => adicionarProduto(produto)}
+        className="absolute top-4 right-4 bg-green-500 hover:bg-green-600 text-white p-3 rounded-full 
+                   shadow-lg transition-all duration-300 transform hover:scale-110 focus:outline-none 
+                   focus:ring-2 focus:ring-green-400 cursor-pointer z-10" 
+        title="Adicionar ao carrinho"
+      >
+        <ShoppingCartSimple size={24} weight="bold" />
+      </button>
     </div>
   );
 };

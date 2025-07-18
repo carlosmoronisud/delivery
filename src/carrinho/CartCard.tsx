@@ -1,58 +1,93 @@
-import { MinusIcon, PlusIcon } from "@phosphor-icons/react"
-import { useContext } from "react"
-import type { Items } from "../contexts/CartContext"
+import { MinusCircle, PlusCircle, XCircle } from "@phosphor-icons/react"; // Using Phosphor icons for consistency
+import { useContext } from "react";
+import type { Items } from "../contexts/CartContext";
 import { CartContext } from '../contexts/CartContext';
+import { ToastAlerta } from "../utils/ToastAlerta"; // Ensure this path is correct
 
 // Props esperadas pelo CardCart: um item do carrinho
 interface CardProdutosProps {
-    item: Items
+    item: Items;
 }
 
 // CardCart exibe informações de um produto no carrinho e permite alterar quantidade
 function CardCart({ item }: Readonly<CardProdutosProps>) {
+    const { adicionarItem, removerItem, removerProdutoDoCarrinho } = useContext(CartContext);
 
-    // Consome funções do contexto para adicionar/remover itens
-    const { adicionarItem, removerItem } = useContext(CartContext)
+    // Função para remover completamente o item do carrinho
+    const handleRemoverCompletamente = () => {
+        removerProdutoDoCarrinho(item.id);
+        ToastAlerta(`${item.nome} removido do carrinho.`, 'info');
+    };
 
     return (
         // Card principal com imagem, detalhes e botões
-        <div className='flex flex-col rounded-lg overflow-hidden justify-between bg-white'>
-            <div className='py-4'>
+        <div className='relative flex flex-col rounded-xl overflow-hidden justify-between
+                                 bg-white shadow-md border border-gray-200
+                                 transform transition-transform duration-300 hover:scale-[1.02]'> {/* Estilo base do card */}
+            
+            {/* Botão de remover item completamente - posicionado no canto superior direito */}
+            <button
+                onClick={handleRemoverCompletamente}
+                className="absolute top-2 right-2 z-10 p-1 rounded-full bg-red-500 text-white
+                                hover:bg-red-600 shadow-sm transition-all duration-200 cursor-pointer"
+                title="Remover item do carrinho"
+            >
+                <XCircle size={20} weight="bold" /> {/* Ícone de fechar/remover */}
+            </button>
+
+            <div className='flex flex-col flex-grow'> {/* Flex-grow para preencher espaço */}
                 {/* Imagem do produto */}
-                <img src={item.imagem} className='mt-1 h-40 max-w-75 mx-auto' alt={item.nome} />
-                <div className='p-4'>
-                    {/* Nome, preço e categoria */}
-                    <p className='text-sm text-center uppercase'>{item.nome}</p>
-                    <h3 className='text-xl text-center font-bold uppercase'>
+                <div className="flex justify-center items-center p-4 bg-gray-50 border-b border-gray-100">
+                    <img src={item.imagem || 'https://placehold.co/120x120?text=Produto'}
+                              className='h-32 w-32 object-contain rounded-lg' // Tamanho fixo, object-contain para não cortar
+                              alt={item.nome} />
+                </div>
+
+                <div className='p-4 flex flex-col gap-1 text-gray-800'>
+                    {/* Nome do produto */}
+                    <p className='text-base font-semibold text-center leading-tight'>{item.nome}</p>
+                    
+                    {/* Preço formatado */}
+                    <h3 className='text-xl text-center font-bold text-orange-600 mb-2'>
                         {Intl.NumberFormat('pt-BR', {
                             style: 'currency',
                             currency: 'BRL'
-                        }).format(item.preco)}
+                        }).format(item.preco * item.quantidade)}
                     </h3>
-                    {item.categoria && typeof item.categoria === 'object' && (
-                    <p className='text-sm italic text-center'>Categoria: {item.categoria.descricao} </p>
+                    
+                    {/* Categoria do item (se existir e for um objeto) */}
+                    {item.id_categoria && typeof item.id_categoria === 'object' && 'descricao' in item.id_categoria && ( // Mais checks de segurança
+                        <p className='text-xs italic text-gray-600 text-center'>
+                            Categoria: {item.id_categoria.descricao}
+                        </p>
                     )}
+                    
                     {/* Quantidade do item */}
-                    <h4 className='my-2 text-center'>
-                        <span className="font-semibold">Quantidade:</span> {item.quantidade} 
+                    <h4 className='my-2 text-center text-gray-700'>
+                        <span className="font-semibold">Quantidade:</span> {item.quantidade}
                     </h4>
                 </div>
             </div>
+
             {/* Botões para adicionar/remover quantidade */}
-            <div className="flex flex-wrap">
-                <button className='w-1/2 text-slate-100 bg-blue-500 hover:bg-blue-700 
-                                   flex items-center justify-center py-2'
+            <div className="flex w-full border-t border-gray-200">
+                <button
+                    className='w-1/2 p-3 bg-green-500 text-white font-bold
+                                rounded-bl-lg hover:bg-green-600 transition-colors duration-200
+                                flex items-center justify-center cursor-pointer'
                     onClick={() => adicionarItem(item.id)}>
-                    <PlusIcon size={32} />
+                    <PlusCircle size={24} weight="bold" />
                 </button>
-                <button className='w-1/2 text-slate-100 bg-red-500 hover:bg-red-700 
-                                   flex items-center justify-center py-2'
+                <button
+                    className='w-1/2 p-3 bg-red-500 text-white font-bold
+                                rounded-br-lg hover:bg-red-600 transition-colors duration-200
+                                flex items-center justify-center cursor-pointer'
                     onClick={() => removerItem(item.id)}>
-                    <MinusIcon size={32} />
+                    <MinusCircle size={24} weight="bold" />
                 </button>
-            </div>
+            </div >
         </div >
-    )
+    );
 }
 
-export default CardCart
+export default CardCart;

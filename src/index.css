@@ -7,4 +7,12 @@ body {
 @import "swiper/css/navigation";
 @import "swiper/css/pagination";
 
+@keyframes float {
+  0% { transform: translateY(0px); }
+  50% { transform: translateY(-50px); } /* Agora subindo 50px como você definiu */
+  100% { transform: translateY(0px); }
+}
 
+.animate-float-custom {
+  animation: float 3s ease-in-out infinite; 
+}

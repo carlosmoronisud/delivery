@@ -1,17 +1,18 @@
-import ColaboradorCard from "../../components/colaborador/Colaborador";
+import ColaboradorCard from "../../components/colaborador/Colaborador"; // Ensure correct path
+import React from 'react'; // Import React
 
 function SobreProjetoPage() {
   const membros = [
     {
       nome: 'Carlos Moroni',
-      cargo: 'Desenvolvedor Front-end',
+      cargo: 'Desenvolvedor Fullstack Jr',
       linkedin: 'https://www.linkedin.com/in/carlosmoroni/',
       imagem: 'https://github.com/carlosmoronisud.png',
     },
     {
       nome: 'Bruno',
       cargo: 'Designer UI/UX',
-      linkedin: 'https://www.linkedin.com/in/bruno-exemplo',
+      linkedin: 'https://www.linkedin.com/in/bruno-exemplo', 
       imagem: 'https://github.com/BrunoAlves-tech.png',
     },
     {
@@ -35,64 +36,70 @@ function SobreProjetoPage() {
     {
       nome: 'Pablo',
       cargo: 'Scrum Master',
-      linkedin: 'https://github.com/Pablo-Casagrande',
+      linkedin: 'https://github.com/Pablo-Casagrande', // Placeholder, ensure real link
       imagem: 'https://github.com/Pablo-Casagrande.png',
     },
   ];
 
   return (
-    <div className="bg-gradient-to-b from-[#F4BF4F] via-[#FDF5D4] to-white min-h-screen w-full">
+    <div className="min-h-screen w-full bg-gray-50 flex flex-col font-sans"> {/* Consistent light background */}
 
-      <section className="flex items-center justify-center font-bold text-4xl pt-12 text-[#5A4000]">
-        <h1>Sobre o Delivery</h1>
+      {/* 🌟 Section 1: About the Delivery - Hero */}
+      <section className="bg-gradient-to-r from-orange-500 to-yellow-400 text-white py-16 md:py-24 px-6 md:px-16 shadow-lg">
+        <div className="max-w-4xl mx-auto text-center">
+          <h1 className="text-5xl md:text-7xl font-extrabold leading-tight mb-6 drop-shadow-md">
+            Sobre <br className="md:hidden"/>Nosso Delivery 🚀
+          </h1>
+          <p className="text-xl md:text-2xl font-light leading-relaxed opacity-90">
+            O **Delivery Valor** é uma plataforma inovadora criada para transformar sua experiência em pedidos de alimentos. Conectamos você aos melhores sabores, com praticidade e transparência.
+          </p>
+        </div>
       </section>
 
-      <article className="px-6 md:px-20 w-full">
-        <section className="flex pt-6 pb-10 justify-center">
-          <p className="font-light text-xl px-6 text-center text-[#1B1B1B] max-w-3xl">
-            O Delivery Valor é uma plataforma para pedidos de alimentos.
-          </p>
-        </section>
-
-        <div className="flex flex-col md:flex-row items-center justify-center gap-14 pb-10">
+      {/* 🚀 Section 2: Key Features & Benefits */}
+      <article className="px-6 md:px-16 py-16 w-full flex flex-col items-center">
+        <div className="flex flex-col md:flex-row items-center justify-center gap-12 md:gap-20 max-w-6xl w-full">
+          {/* Logo do Delivery - Lado esquerdo */}
           <img
-            className="rounded-full border-2 border-yellow-400 h-[300px] w-[300px] md:h-[450px] md:w-[450px] object-cover hover:scale-105 hover:shadow-2xl hover:shadow-yellow-600 transition duration-300"
+            className="rounded-full border-4 border-orange-400 h-64 w-64 md:h-80 md:w-80 object-cover shadow-xl hover:scale-105 hover:shadow-2xl hover:shadow-orange-600 transition-all duration-300 transform hover:-translate-y-2"
             src="https://ik.imagekit.io/8h7kfljfc/imgs/deliverylogo.png?updatedAt=1752066792229"
-            alt="logo do delivery"
+            alt="Logo do Delivery"
           />
 
-          <section className="flex flex-col gap-4 w-full max-w-2xl justify-center text-[#1B1B1B]">
-            <h2 className="text-xl font-semibold text-[#5A4000]">Ele oferece:</h2>
+          {/* Descrição das funcionalidades - Lado direito */}
+          <section className="flex flex-col gap-6 w-full max-w-2xl text-gray-800">
+            <h2 className="text-3xl md:text-4xl font-bold text-gray-800 border-b pb-4 border-gray-200">
+              O que oferecemos? ✨
+            </h2>
 
-            <div className="flex flex-col gap-3 text-justify">
-              <p>
-                <strong>Cadastro de categorias e produtos:</strong> Permite organizar os itens por tipo, facilitando a navegação e localização dentro do sistema. 
-                O software registra informações como nome, descrição, preço, imagem e disponibilidade de cada produto.
+            <div className="flex flex-col gap-5 text-justify">
+              <p className="text-lg leading-relaxed">
+                <strong className="text-orange-600">Cadastro de categorias e produtos:</strong> Organize seus itens por tipo, facilitando a navegação e a localização. Registre detalhes como nome, descrição, preço, imagem e disponibilidade.
               </p>
-
-              <p>
-                <strong>Painel de administração intuitivo:</strong> Oferece uma interface amigável para gerenciar facilmente os produtos, 
-                atualizar preços, adicionar novas categorias e controlar o estoque de forma prática.
+              <p className="text-lg leading-relaxed">
+                <strong className="text-orange-600">Painel de administração intuitivo:</strong> Uma interface amigável para gerenciar facilmente produtos, atualizar preços, adicionar novas categorias e controlar o estoque de forma prática e eficiente.
               </p>
-
-              <p>
-                <strong>Classificação NutriScore integrada:</strong> Avalia automaticamente os produtos com base em sua composição nutricional e atribui uma nota de A a E. 
-                Isso facilita a promoção de escolhas mais saudáveis e aumenta a transparência para o consumidor.
+              <p className="text-lg leading-relaxed">
+                <strong className="text-orange-600">Classificação NutriScore integrada:</strong> Avaliamos automaticamente os produtos com base em sua composição nutricional (de A a E). Promovemos escolhas mais saudáveis e aumentamos a transparência para você, consumidor.
+              </p>
+              <p className="text-lg leading-relaxed">
+                <strong className="text-orange-600">Filtros Avançados:</strong> Encontre exatamente o que busca com filtros por restrição alimentar, palavras-chave e faixas de preço. Sua dieta e suas preferências, no controle.
               </p>
             </div>
           </section>
         </div>
       </article>
 
-      <div className="max-w-7xl mx-auto px-4 py-10">
-        <h1 className="text-3xl font-bold text-center text-[#5A4000] mb-8">
-          Equipe Desenvolvedora do Projeto
+      {/* 🤝 Section 3: Our Team */}
+      <div className="max-w-7xl mx-auto px-6 md:px-16 py-16">
+        <h1 className="text-4xl md:text-5xl font-bold text-center text-gray-800 mb-12">
+          Conheça Nossa Equipe 🧑‍💻
         </h1>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 justify-items-center">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8 justify-items-center"> {/* Grid responsivo para colaboradores */}
           {membros.map((membro) => (
             <ColaboradorCard
-              key={membro.nome}
+              key={membro.nome} // Use nome como key, se for único
               nome={membro.nome}
               cargo={membro.cargo}
               linkedin={membro.linkedin}

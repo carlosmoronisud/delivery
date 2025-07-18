@@ -4,26 +4,34 @@ import CarrosselProdutos from '../../components/carroceishome/carrosselprodutos/
 
 export default function Home() {
   return (
-    <div className="w-full h-full flex flex-col items-center justify-center gap-6 pb-20 bg-[#F1EDD2]">
+    <div className="w-full h-full flex flex-col items-center justify-center gap-8 pb-24 bg-gray-50 font-sans">
+      {/* Banner Principal - Cores mais ousadas e gradiente suave */}
+      <article className="bg-gradient-to-br from-orange-500 via-yellow-400 to-yellow-200 w-full px-4 py-12 md:py-16 shadow-lg">
+        <div className="flex flex-col lg:flex-row justify-center items-center gap-8 md:gap-12 max-w-7xl mx-auto">
+          <section className="flex flex-col justify-center gap-5 max-w-xl text-center lg:text-left">
+            <h1 className="text-5xl md:text-7xl font-extrabold text-white leading-tight drop-shadow-md">
+              Bem-vindo ao <br className="hidden md:inline"/> Seu Delivery!
+            </h1>
+            <p className="text-4xl md:text-5xl font-semibold text-white/90 drop-shadow-sm">
+              você pede,
+            </p>
+            <p className="text-4xl md:text-5xl font-semibold text-white/90 drop-shadow-sm">
+              <strong>nós entregamos!</strong>
+            </p>
 
-      {/* Banner Principal */}
-      <article className="bg-gradient-to-b from-[#F4BF4F] from-50% to-[#F1EDD2] to-95% w-full px-4">
-        <div className="flex flex-col lg:flex-row justify-center items-center gap-7 py-10">
-          <section className="flex flex-col justify-center gap-4 max-w-xl text-center lg:text-left">
-            <h1 className="text-5xl md:text-6xl font-bold text-[#1A1A1A]">Bem-vindo ao Delivery</h1>
-            <p className="text-4xl md:text-5xl text-[#1A1A1A]">você pede,</p>
-            <p className="text-4xl md:text-5xl text-[#1A1A1A]">nós entregamos!</p>
-
-            <div className="pt-4 flex justify-center lg:justify-start">
-              <Link to="/produtos" className="border border-[#FAEB20] shadow-xl py-3 px-8 rounded-md text-2xl bg-[#FAEB20] hover:scale-105 transition">
-                Peça Aqui!
-              </Link >
+            <div className="pt-6 flex justify-center lg:justify-start">
+              <Link
+                to="/produtos"
+                className="bg-white text-orange-600 font-bold py-4 px-10 rounded-full text-xl md:text-2xl shadow-xl hover:scale-105 transition-transform duration-300 ease-in-out transform hover:-translate-y-1"
+              >
+                Peça Agora!
+              </Link>
             </div>
           </section>
 
-          <section className="pt-6">
+          <section className="pt-8 lg:pt-0">
             <img
-              className="w-[300px] md:w-[400px] lg:w-[50vh] h-auto animate-float-custom"
+              className="w-[320px] md:w-[450px] lg:w-[500px] h-auto object-contain animate-float-custom drop-shadow-2xl" // animate-float-custom está aqui!
               src="https://ik.imagekit.io/gqta2uhtht/um-delicioso-hamburguer-no-estudio-removebg-preview%201%20(1).png?updatedAt=1752104960964"
               alt="hamburguer"
             />
@@ -31,15 +39,19 @@ export default function Home() {
         </div>
       </article>
 
-      {/* Carrossel Medio */}
-      <div className="w-full max-w-screen-xl px-4 flex flex-col items-center justify-center">
-        <h2 className="text-4xl font-poppins font-semibold text-lime-950 text-center py-4">Os mais pedidos</h2>
+      {/* Seção de Destaque - Mais Populares/Os Queridinhos */}
+      <div className="w-full max-w-screen-xl px-4 mt-8">
+        <h2 className="text-4xl md:text-5xl font-bold text-gray-800 text-center mb-8">
+          😋 Deliciosas promoções
+        </h2>
         <CarrosselMedio />
       </div>
 
-      {/* Carrossel de Produtos */}
-      <div className="w-full max-w-screen-xl px-4 flex flex-col items-center justify-center">
-        <h2 className="text-4xl font-poppins font-semibold text-center text-black/60 py-4">Peça aqui!</h2>
+      {/* Seção de Produtos em Destaque */}
+      <div className="w-full max-w-screen-xl px-4 mt-12">
+        <h2 className="text-4xl md:text-5xl font-bold text-gray-800 text-center mb-8">
+          🍔 Explore Nossas Delícias
+        </h2>
         <CarrosselProdutos />
       </div>
 

@@ -8,86 +8,102 @@ export default function FiltroProduto() {
   const [params, setParams] = useSearchParams();
   const [categorias, setCategorias] = useState<Categoria[]>([]);
 
-  const selectedNutriScore = params.get("nutriScore");
+  // Captura os valores dos filtros da URL para controlar os inputs
+  const selectedPrecoMin = params.get("precoMin") || "";
+  const selectedPrecoMax = params.get("precoMax") || "";
+  const selectedIngrediente = params.get("ingrediente") || "";
+  const selectedNutriScore = params.get("nutriScore"); // Mantido como string, pode ser null
   const selectedCategoria = params.get("categoriaId") || "";
 
+  // Handler genérico para inputs de texto e select
   function handleChange(e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) {
     const { name, value } = e.target;
+    const newParams = new URLSearchParams(params); // Cria uma nova instância de URLSearchParams
 
     if (value === "") {
-      params.delete(name);
+      newParams.delete(name); // Remove o parâmetro se o valor estiver vazio
     } else {
-      params.set(name, value);
+      newParams.set(name, value); // Define ou atualiza o parâmetro
     }
-
-    setParams(params);
+    setParams(newParams); // Atualiza a URL
   }
 
+  // Handler específico para os botões do NutriScore
   function handleNutriScore(value: string) {
-    if (params.get("nutriScore") === value) {
-      params.delete("nutriScore");
+    const newParams = new URLSearchParams(params); // Cria uma nova instância de URLSearchParams
+    if (newParams.get("nutriScore") === value) {
+      newParams.delete("nutriScore"); // Desseleciona se já estiver selecionado
     } else {
-      params.set("nutriScore", value);
+      newParams.set("nutriScore", value); // Seleciona o novo NutriScore
     }
-    setParams(params);
+    setParams(newParams); // Atualiza a URL
   }
 
+  // Efeito para buscar as categorias ao montar o componente
   useEffect(() => {
-    async function buscarCategorias() {
+    async function fetchCategorias() {
       try {
         await buscar("/categorias", setCategorias);
       } catch (err) {
         console.error("Erro ao buscar categorias", err);
+        // ToastAlerta("Não foi possível carregar as categorias.", "erro"); // Opcional: mostrar alerta
       }
     }
-    buscarCategorias();
-  }, []);
+    fetchCategorias();
+  }, []); // Array de dependências vazio para rodar apenas uma vez ao montar
 
   return (
-    <div className="flex flex-col gap-6 p-6 bg-white rounded-2xl shadow-md font-poppins text-neutral-800">
-      <h2 className="text-4xl font-semibold">Filtros</h2>
+    <div className="flex flex-col gap-8 p-6 bg-white rounded-2xl shadow-lg border border-gray-100 font-sans text-gray-800"> {/* Ajustes do container principal */}
+      <h2 className="text-3xl font-bold border-b pb-4 border-gray-200">
+        Filtros Rápidos ✨
+      </h2>
 
       {/* Preço */}
-      <div className="flex flex-col gap-2">
-        <label className="text-2xl">Preço</label>
+      <div className="flex flex-col gap-3">
+        <label className="text-xl font-semibold">Preço (R$)</label>
         <div className="flex gap-4">
           <input
             name="precoMin"
             type="number"
             onChange={handleChange}
-            className="w-full p-2 text-lg border rounded-lg bg-red-400 text-white placeholder-white"
-            placeholder="De: 0"
+            value={selectedPrecoMin} // Controla o input com o estado da URL
+            className="w-full p-3 text-lg border border-gray-300 rounded-lg shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition-all duration-200"
+            placeholder="Mínimo"
+            step="0.01" // Permite decimais
           />
           <input
             name="precoMax"
             type="number"
             onChange={handleChange}
-            className="w-full p-2 text-lg border rounded-lg bg-indigo-600 text-white placeholder-white"
-            placeholder="Até: 0"
+            value={selectedPrecoMax} // Controla o input com o estado da URL
+            className="w-full p-3 text-lg border border-gray-300 rounded-lg shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition-all duration-200"
+            placeholder="Máximo"
+            step="0.01" // Permite decimais
           />
         </div>
       </div>
 
       {/* Ingredientes */}
-      <div>
-        <label className="text-2xl mb-1 block">Ingredientes</label>
+      <div className="flex flex-col gap-3">
+        <label className="text-xl font-semibold">Ingredientes</label>
         <input
           name="ingrediente"
           type="text"
           onChange={handleChange}
-          className="w-full p-2 border rounded-lg"
-          placeholder="Ex: tomate"
+          value={selectedIngrediente} // Controla o input com o estado da URL
+          className="w-full p-3 border border-gray-300 rounded-lg shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition-all duration-200"
+          placeholder="Ex: alho, tomate, queijo..."
         />
       </div>
 
       {/* Categoria */}
-      <div>
-        <label className="text-2xl mb-1 block">Categoria</label>
+      <div className="flex flex-col gap-3">
+        <label className="text-xl font-semibold">Categoria</label>
         <select
           name="categoriaId"
-          value={selectedCategoria}
+          value={selectedCategoria} // Controla o select com o estado da URL
           onChange={handleChange}
-          className="w-full p-2 border-2 border-orange-400 rounded-lg"
+          className="w-full p-3 border border-gray-300 rounded-lg shadow-sm text-gray-700 cursor-pointer focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition-all duration-200"
         >
           <option value="">Todas as categorias</option>
           {categorias.map((cat) => (
@@ -99,44 +115,43 @@ export default function FiltroProduto() {
       </div>
 
       {/* NutriScore */}
-      {/* NutriScore */}
-<div className="flex flex-col gap-2">
-  <label className="text-2xl">NutriScore</label>
-  <div className="flex gap-4">
-    {["A", "B", "C", "D", "E"].map((score) => {
-      const isSelected = selectedNutriScore === score;
+      <div className="flex flex-col gap-3">
+        <label className="text-xl font-semibold">NutriScore</label>
+        <div className="flex flex-wrap gap-3 justify-center"> {/* flex-wrap para responsividade em mobile */}
+          {["A", "B", "C", "D", "E"].map((score) => {
+            const isSelected = selectedNutriScore?.toUpperCase() === score; // Comparação case-insensitive
 
-      const defaultColors = {
-        A: "bg-green-200 hover:bg-green-700 text-green-900",
-        B: "bg-amber-200 hover:bg-amber-500 text-amber-900",
-        C: "bg-yellow-200 hover:bg-yellow-600 text-yellow-900",
-        D: "bg-red-200 hover:bg-red-500 text-red-900",
-        E: "bg-red-300 hover:bg-red-800 text-red-900",
-      };
+            const defaultColors = {
+              A: "bg-green-100 text-green-700 hover:bg-green-200", // Mais suave
+              B: "bg-lime-100 text-lime-700 hover:bg-lime-200",   // Mais suave
+              C: "bg-yellow-100 text-yellow-700 hover:bg-yellow-200", // Mais suave
+              D: "bg-orange-100 text-orange-700 hover:bg-orange-200", // Mais suave
+              E: "bg-red-100 text-red-700 hover:bg-red-200",     // Mais suave
+            };
 
-      const selectedColors = {
-        A: "bg-green-700 text-white",
-        B: "bg-amber-500 text-white",
-        C: "bg-yellow-600 text-white",
-        D: "bg-red-500 text-white",
-        E: "bg-red-800 text-white",
-      };
+            const selectedColors = {
+              A: "bg-green-500 text-white shadow-md", // Mais forte quando selecionado
+              B: "bg-lime-500 text-white shadow-md",
+              C: "bg-yellow-500 text-white shadow-md",
+              D: "bg-orange-500 text-white shadow-md",
+              E: "bg-red-500 text-white shadow-md",
+            };
 
-      const baseStyle = "w-14 h-14 rounded-full flex justify-center items-center text-xl font-bold transition-colors duration-200";
+            const baseStyle = "w-12 h-12 rounded-full flex justify-center items-center text-lg font-bold transition-all duration-200 transform hover:scale-105 cursor-pointer"; // Ajustei tamanho e adicionei scale
 
-      return (
-        <button
-          key={score}
-          type="button"
-          onClick={() => handleNutriScore(score)}
-          className={`${baseStyle} ${isSelected ? selectedColors[score as keyof typeof selectedColors] : defaultColors[score as keyof typeof defaultColors]}`}
-        >
-          {score}
-        </button>
-      );
-    })}
-  </div>
-</div>
+            return (
+              <button
+                key={score}
+                type="button" // Importante: type="button" para não submeter o formulário
+                onClick={() => handleNutriScore(score)}
+                className={`${baseStyle} ${isSelected ? selectedColors[score as keyof typeof selectedColors] : defaultColors[score as keyof typeof defaultColors]}`}
+              >
+                {score}
+              </button>
+            );
+          })}
+        </div>
+      </div>
     </div>
   );
 }

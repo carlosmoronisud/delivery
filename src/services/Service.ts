@@ -112,7 +112,7 @@ export const buscarTodosProdutos = async (): Promise<Produto[]> => {
     preco: item.preco,
     imagem: item.imagem,
     nutriScore: item.nutriScore,
-    ingredientes: item.ingrediente, // conversão aqui
+    ingrediente: item.ingrediente, 
     categoria: item.id_categoria,
     usuario: item.id_usuario,
   }));

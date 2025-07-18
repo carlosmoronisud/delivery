@@ -1,33 +1,34 @@
 import { Link } from 'react-router-dom';
-import ListarCategorias from '../../components/categorias/listarcategorias/ListarCategorias';
-import { GrAdd } from "react-icons/gr";
+import ListarCategorias from '../../components/categorias/listarcategorias/ListarCategorias'; // Ensure correct path
+import { PlusCircle } from "@phosphor-icons/react"; // Using Phosphor Icons for consistency
 
 function Categorias() {
   return (
-    <div className='min-h-screen bg-gradient-to-b from-[#F4BF4F] via-[#F7E8B8] to-[#F1EDD2] flex flex-col gap-10 py-10'>
+    <div className='min-h-screen bg-gray-50 flex flex-col font-sans'> {/* Consistent light background */}
 
-      {/* Cabeçalho */}
-      <div className='flex flex-col items-center justify-center gap-4 px-4' >
-        <h1 className='text-4xl md:text-6xl font-bold text-neutral-800 text-center'>
-          Categorias
+      {/* 🌟 Header Section: Title and Add Category Button */}
+      <div className='w-full bg-gradient-to-r from-orange-500 to-yellow-400 text-white flex flex-col md:flex-row justify-between items-center px-6 md:px-16 py-12 md:py-20 shadow-lg'>
+        <h1 className='text-4xl md:text-6xl font-extrabold leading-tight text-center md:text-left drop-shadow-md mb-6 md:mb-0'>
+          Todas as Categorias <br className="hidden md:inline"/>Culinárias! 🍽️
         </h1>
 
-        {/* Botão Nova Categoria */}
-        <div className='w-full flex justify-center md:justify-end md:pr-16'>
+        {/* "Nova Categoria" Button - Prominent and Professional */}
+        <div className='flex justify-center md:justify-end'>
           <Link to="/cadastrarcategoria">
             <button
-              className="w-44 md:w-48 bg-[#262401] text-white py-3 px-4 flex items-center justify-center gap-2 rounded-lg 
-                         hover:scale-105 hover:shadow-lg transition duration-200"
+              className="bg-white text-orange-600 font-bold py-3 px-8 rounded-full text-lg md:text-xl shadow-xl 
+                         hover:scale-105 transition-all duration-300 ease-in-out transform hover:-translate-y-1 
+                         flex items-center justify-center gap-2 cursor-pointer"
             >
-              <p className="text-sm md:text-base">Nova Categoria</p>
-              <GrAdd size={20} />
+              Nova Categoria
+              <PlusCircle size={24} weight="bold" /> {/* Consistent Phosphor Icon */}
             </button>
           </Link>
         </div>
       </div>
 
-      {/* Lista de Categorias */}
-      <div className='px-4 md:px-16'>
+      {/* 📋 Category List Section */}
+      <div className='px-6 md:px-16 py-12'> {/* Adjusted padding for consistency */}
         <ListarCategorias />
       </div>
     </div>

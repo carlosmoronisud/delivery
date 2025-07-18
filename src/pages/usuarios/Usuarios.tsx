@@ -1,183 +1,230 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { useEffect, useState, useContext } from "react";
+import { useEffect, useState, useContext, type ChangeEvent } from "react";
 import { motion } from "framer-motion";
 import { AuthContext } from '../../contexts/AuthContext';
+import { RotatingLines } from "react-loader-spinner"; // Import RotatingLines
 
 import {
   buscarTodosUsuarios,
   buscarUsuarioPorId,
-  buscarUsuarioPorEmail, // Manter se necessário para o admin buscar por email
-  buscarUsuariosPorNome, // Manter se necessário para o admin buscar por nome
-} from '../../services/Service'; // Mantenha estas funções na Service
+  buscarUsuarioPorEmail,
+  buscarUsuariosPorNome,
+} from '../../services/Service'; // Ensure these are correctly typed in Service.ts
 
 import type Usuario from "../../models/Usuario";
-import CardUsuario from "../../components/cardusuario/CardUsuario";
+import CardUsuario from "../../components/cardusuario/CardUsuario"; // Assume this component exists and is styled
 import { ToastAlerta } from "../../utils/ToastAlerta";
 
 function Usuarios() {
-  const { usuario: loggedInUser, handleLogout } = useContext(AuthContext); // Renomeado para evitar conflito
-  const header = {
-    headers: {
-      Authorization: loggedInUser.token
-    }
-  };
+  const { usuario: loggedInUser, handleLogout } = useContext(AuthContext);
+  const token = loggedInUser.token;
 
   const [filtro, setFiltro] = useState("");
-  const [usuariosExibidos, setUsuariosExibidos] = useState<Usuario[]>([]); // Renomeado para evitar conflito com 'usuario' do AuthContext
-  const [tipoBusca, setTipoBusca] = useState("meuPerfil"); // Default para 'meuPerfil'
+  const [usuariosExibidos, setUsuariosExibidos] = useState<Usuario[]>([]);
+  const [tipoBusca, setTipoBusca] = useState("meuPerfil"); // Default to 'meuPerfil'
+  const [isLoadingContent, setIsLoadingContent] = useState(true); // Loader for content fetch
 
+  // Admin ID is 7
+  const isAdmin = loggedInUser.id === 7;
+
+  // --- Initial Load: Fetch current user's profile ---
   useEffect(() => {
-    // Ao carregar a página, sempre busca e exibe o perfil do usuário logado
-    if (loggedInUser.id) { // Garante que o ID do usuário logado existe
-      buscarMeuPerfil();
+    if (loggedInUser.id !== null && loggedInUser.id !== undefined && token) { // Ensure ID and token exist
+      // If admin, default to showing all users. Otherwise, show only own profile.
+      if (isAdmin) {
+          setTipoBusca("todos"); // Default admin view to 'todos'
+          buscar(); // Trigger initial search for all users
+      } else {
+          setTipoBusca("meuPerfil"); // Default regular user view
+          buscarMeuPerfil(); // Trigger initial search for own profile
+      }
+    } else {
+        // Handle case where user is not logged in or token is missing
+        ToastAlerta("Você precisa estar logado para ver usuários.", "info");
+        handleLogout(); // Log out and redirect if not properly logged in
     }
-  }, [loggedInUser.id]); // Adiciona loggedInUser.id como dependência
+  }, [loggedInUser.id, isAdmin, token]); // Add token to dependencies to re-run if it changes
 
+  // --- Search for current user's profile ---
   async function buscarMeuPerfil() {
-    if (!loggedInUser.id) {
-      ToastAlerta("ID do usuário não encontrado para carregar o perfil.", "erro");
+    if (loggedInUser.id === null || loggedInUser.id === undefined || !token) {
+      ToastAlerta("ID do usuário ou token não encontrado para carregar o perfil.", "erro");
+      setIsLoadingContent(false);
       return;
     }
+    setIsLoadingContent(true);
     try {
-      // Usa a função buscarUsuarioPorId para buscar o próprio perfil
-      // A função setUsuariosExibidos precisa receber um array
-      await buscarUsuarioPorId(loggedInUser.id, (res: Usuario) => setUsuariosExibidos([res]), header);
+      await buscarUsuarioPorId(loggedInUser.id, (res: Usuario) => setUsuariosExibidos([res]), { headers: { Authorization: token } });
     } catch (error: any) {
       console.error("Erro ao buscar seu perfil", error);
       ToastAlerta("Erro ao carregar seu perfil.", "erro");
-      if (error.response?.status === 403) { // Exemplo: se o token expirou
+      if (error.response?.status === 403 || error.response?.status === 401) {
         ToastAlerta('Sua sessão expirou!', 'erro');
         handleLogout();
       }
+    } finally {
+      setIsLoadingContent(false);
     }
   }
 
+  // --- Generic Search Function (for Admin) ---
   async function buscar() {
-    // Permissão para buscar outros usuários apenas se for o admin (ID 1)
-    if (loggedInUser.id !== 7) {
+    if (!isAdmin) { // Double check admin permission
       ToastAlerta("Apenas administradores podem buscar outros usuários.", "aviso");
-      setFiltro(""); // Limpa o filtro
-      setTipoBusca("meuPerfil"); // Volta para o modo de buscar apenas o próprio perfil
-      buscarMeuPerfil(); // Recarrega o próprio perfil
+      setFiltro("");
+      setTipoBusca("meuPerfil");
+      buscarMeuPerfil();
       return;
     }
 
+    setIsLoadingContent(true);
     try {
-      // Lógica de busca para o admin
+      const authHeader = { headers: { Authorization: token } };
       switch (tipoBusca) {
         case "id":
-          if (filtro.trim() === "") {
+          if (!filtro.trim()) {
             ToastAlerta("Por favor, digite um ID para buscar.", "aviso");
+            setIsLoadingContent(false);
             return;
           }
-          await buscarUsuarioPorId(Number(filtro), (res: Usuario) => setUsuariosExibidos([res]), header);
+          await buscarUsuarioPorId(Number(filtro), (res: Usuario) => setUsuariosExibidos([res]), authHeader);
           break;
-        case "usuario":
-          if (filtro.trim() === "") {
+        case "usuario": // Email
+          if (!filtro.trim()) {
             ToastAlerta("Por favor, digite um email para buscar.", "aviso");
+            setIsLoadingContent(false);
             return;
           }
-          await buscarUsuarioPorEmail(filtro, (res: Usuario) => setUsuariosExibidos([res]), header);
+          // Assuming buscarUsuarioPorEmail returns an array or you handle conversion
+          await buscarUsuarioPorEmail(filtro, setUsuariosExibidos, authHeader);
           break;
         case "nome":
-          if (filtro.trim() === "") {
+          if (!filtro.trim()) {
             ToastAlerta("Por favor, digite um nome para buscar.", "aviso");
+            setIsLoadingContent(false);
             return;
           }
-          await buscarUsuariosPorNome(filtro, setUsuariosExibidos, header);
+          await buscarUsuariosPorNome(filtro, setUsuariosExibidos, authHeader);
           break;
-        case "todos": // "Buscar todos" para o admin
-          await buscarTodosUsuarios(setUsuariosExibidos, header);
+        case "todos":
+          await buscarTodosUsuarios(setUsuariosExibidos, authHeader);
           break;
-        default: // Caso padrão (meu perfil) para outros usuários
-          buscarMeuPerfil();
+        case "meuPerfil": // If admin switches to 'meuPerfil' option
+            buscarMeuPerfil();
+            return; // Exit to avoid double loading state
+        default:
+          ToastAlerta("Tipo de busca inválido.", "erro");
           break;
       }
     } catch (error: any) {
       console.error("Erro ao buscar usuários", error);
       ToastAlerta("Erro ao buscar usuários.", "erro");
-      if (error.response?.status === 403) {
+      if (error.response?.status === 403 || error.response?.status === 401) {
         ToastAlerta('Sua sessão expirou!', 'erro');
         handleLogout();
       }
+    } finally {
+      setIsLoadingContent(false);
     }
   }
 
+  // --- Render ---
   return (
     <motion.div
-      className="p-6 bg-[#FEF8EA] min-h-screen font-poppins"
+      className="p-6 bg-gray-100 min-h-screen font-sans flex flex-col items-center" // Consistent background and centering
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}
     >
       <motion.h2
-        className="text-4xl text-[#453E00] font-bold mb-6"
+        className="text-4xl md:text-5xl text-gray-800 font-bold mb-8 text-center" // Professional title
         initial={{ opacity: 0, x: -50 }}
         animate={{ opacity: 1, x: 0 }}
         transition={{ duration: 0.5 }}
       >
-        Usuários
+        Gerenciar Usuários 👥
       </motion.h2>
 
-      {loggedInUser.id === 7 && ( // Exibe os controles de busca apenas para o admin (ID 1)
-        <div className="flex flex-wrap gap-4 mb-6 items-center">
+      {/* Admin Search Controls */}
+      {isAdmin && (
+        <div className="flex flex-col md:flex-row gap-4 mb-8 w-full max-w-2xl bg-white p-6 rounded-lg shadow-md border border-gray-200">
           <select
-            onChange={(e) => setTipoBusca(e.target.value)}
-            value={tipoBusca} // Garante que o select exibe o valor atual do estado
-            className="border-2 border-[#453E00] p-2 rounded-md bg-white text-[#453E00]"
+            onChange={(e: ChangeEvent<HTMLSelectElement>) => setTipoBusca(e.target.value)}
+            value={tipoBusca}
+            className="border border-gray-300 p-3 rounded-lg bg-gray-50 text-gray-700 text-lg focus:outline-none focus:ring-2 focus:ring-orange-500 transition-colors cursor-pointer w-full md:w-auto flex-shrink-0"
           >
-            <option value="todos">Todos</option>
+            <option value="todos">Todos os Usuários</option>
+            <option value="meuPerfil">Meu Perfil</option> {/* Option for admin to view own profile */}
             <option value="id">Buscar por ID</option>
             <option value="usuario">Buscar por Email</option>
             <option value="nome">Buscar por Nome</option>
           </select>
 
-          <input
-            type="text"
-            placeholder="Digite o valor"
-            className="border-2 border-[#453E00] p-2 rounded-md flex-1 bg-white"
-            value={filtro}
-            onChange={(e) => setFiltro(e.target.value)}
-          />
+          {tipoBusca !== "todos" && tipoBusca !== "meuPerfil" && ( // Input only for specific search types
+            <input
+              type={tipoBusca === "id" ? "number" : "text"} // Type number for ID
+              placeholder={`Digite o ${tipoBusca === "id" ? "ID" : tipoBusca === "usuario" ? "Email" : "Nome"}`}
+              className="border border-gray-300 p-3 rounded-lg flex-1 bg-white text-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-orange-500 transition-colors"
+              value={filtro}
+              onChange={(e: ChangeEvent<HTMLInputElement>) => setFiltro(e.target.value)}
+            />
+          )}
 
           <button
             onClick={buscar}
-            className="bg-[#453E00] text-white px-6 py-2 rounded-md hover:bg-[#262401] font-bold transition"
+            className="bg-orange-600 text-white px-6 py-3 rounded-lg hover:bg-orange-700 font-bold text-lg shadow-md transition-all duration-300 transform hover:-translate-y-1 cursor-pointer w-full md:w-auto flex-shrink-0"
           >
             Buscar
           </button>
         </div>
       )}
+      
+      {/* Content Loader */}
+      {isLoadingContent && (
+        <div className="flex justify-center items-center py-20 w-full">
+          <RotatingLines
+            strokeColor="#F97316"
+            strokeWidth="5"
+            animationDuration="0.75"
+            width="96"
+            visible={true}
+          />
+        </div>
+      )}
 
-      <motion.div
-        className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
-        initial="hidden"
-        animate="visible"
-        variants={{
-          hidden: {},
-          visible: {
-            transition: {
-              staggerChildren: 0.1
+      {/* User Cards Grid */}
+      {!isLoadingContent && (
+        <motion.div
+          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 w-full max-w-7xl px-4" // Added px-4
+          initial="hidden"
+          animate="visible"
+          variants={{
+            hidden: {},
+            visible: {
+              transition: {
+                staggerChildren: 0.1
+              }
             }
-          }
-        }}
-      >
-        {usuariosExibidos.length === 0 && (loggedInUser.id === 1 ?
-          <p className="text-gray-600">Nenhum usuário encontrado para o filtro.</p> :
-          <p className="text-gray-600">Carregando seu perfil...</p>
-        )}
-
-        {usuariosExibidos.map((usuario) => (
-          <motion.div
-            key={usuario.id || usuario.usuario}
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.4, ease: "easeOut" }}
-          >
-            <CardUsuario usuario={usuario} />
-          </motion.div>
-        ))}
-      </motion.div>
+          }}
+        >
+          {usuariosExibidos.length === 0 ? (
+            <p className="text-xl text-gray-600 col-span-full text-center py-12 bg-white rounded-lg shadow-md border border-gray-200">
+              {isAdmin ? "Nenhum usuário encontrado para a busca." : "Carregando seu perfil..."}
+            </p>
+          ) : (
+            usuariosExibidos.map((usuario) => (
+              <motion.div
+                key={usuario.id || usuario.usuario} // Use email as fallback key for safety
+                initial={{ opacity: 0, y: 30 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.4, ease: "easeOut" }}
+              >
+                <CardUsuario usuario={usuario} />
+              </motion.div>
+            ))
+          )}
+        </motion.div>
+      )}
     </motion.div>
   );
 }

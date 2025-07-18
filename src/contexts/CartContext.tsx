@@ -1,28 +1,29 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable react-refresh/only-export-components */
-import { createContext,  useState, useMemo, type ReactNode } from "react";
-import type Produto from "../models/Produto";
-
+import { createContext, useState, useMemo, type ReactNode } from "react";
+import type Produto from "../models/Produto"; // Make sure this path is correct
+import { ToastAlerta } from "../utils/ToastAlerta"; // Ensure this path is correct and ToastAlerta is updated
 
 // Cria o tipo Items, como uma herança do tipo Produto, adicionando quantidade
-export interface Items extends Produto{
-    quantidade: number;
+export interface Items extends Produto {
+  quantidade: number;
 }
 
 // Define os atributos, estados e funções compartilhados pelo contexto do carrinho
 interface CartContextProps {
-    adicionarProduto: (produto: Produto) => void;
-    adicionarItem: (id: number) => void;
-    removerItem: (id: number) => void;
-    limparCart: () => void;
-    items: Items[];
-    quantidadeItems: number;
-    valorTotal: number;
+  adicionarProduto: (produto: Produto) => void;
+  adicionarItem: (id: number) => void;
+  removerItem: (id: number) => void;
+  removerProdutoDoCarrinho: (id: number) => void; // Adicionada esta função
+  limparCart: () => void;
+  items: Items[];
+  quantidadeItems: number;
+  valorTotal: number;
 }
 
 // Props do provider do contexto
 interface CartProviderProps {
-    children: ReactNode;
+  children: ReactNode;
 }
 
 // Criação do contexto do carrinho
@@ -30,94 +31,107 @@ export const CartContext = createContext({} as CartContextProps);
 
 // Provider do contexto do carrinho, envolve a aplicação
 export function CartProvider({ children }: Readonly<CartProviderProps>) {
-    
-    // Estado que armazena os produtos adicionados ao carrinho
-    const [items, setItems] = useState<Items[]>([]);
 
-    // Calcula o número total de itens no carrinho (quantidade acumulada)
-    const quantidadeItems = items.reduce((acc, item) => acc + item.quantidade, 0);
+  // Estado que armazena os produtos adicionados ao carrinho
+  const [items, setItems] = useState<Items[]>([]);
 
-    // Calcula o valor total da compra em Reais
-    const valorTotal = items.reduce((acc, item) => acc + item.preco * item.quantidade, 0);
+  // Calcula o número total de itens no carrinho (quantidade acumulada)
+  const quantidadeItems = items.reduce((acc, item) => acc + item.quantidade, 0);
 
-    // Adiciona um produto ao carrinho (ou incrementa quantidade se já existir)
-    function adicionarProduto(produto: Produto) {
-        // Localiza o produto no array items e guarda o indice
-        const itemIndex = items.findIndex(item => item.id === produto.id);
-        
-        if (itemIndex !== -1) {
-            // Produto já está no carrinho, aumenta a quantidade
-            const novoCart = [...items];
-            novoCart[itemIndex].quantidade += 1;
-            setItems(novoCart);
-           alert('01 item adicionado!');
-        } else {
-            // Produto não está no carrinho, adiciona novo item
-            setItems(itensAtuais => [...itensAtuais, { ...produto, quantidade: 1 }]);
-           alert('Produto adicionado ao carrinho!');
-        }
+  // Calcula o valor total da compra em Reais
+  const valorTotal = items.reduce((acc, item) => acc + item.preco * item.quantidade, 0);
+
+  // Adiciona um produto ao carrinho (ou incrementa quantidade se já existir)
+  function adicionarProduto(produto: Produto) {
+    const itemIndex = items.findIndex(item => item.id === produto.id);
+
+    if (itemIndex !== -1) {
+      // Produto já está no carrinho, aumenta a quantidade
+      const novoCart = [...items];
+      novoCart[itemIndex].quantidade += 1;
+      setItems(novoCart);
+      ToastAlerta('Mais 01 item adicionado ao carrinho!', 'info'); // Usando ToastAlerta
+    } else {
+      // Produto não está no carrinho, adiciona novo item
+      setItems(itensAtuais => [...itensAtuais, { ...produto, quantidade: 1 }]);
+      ToastAlerta('Produto adicionado ao carrinho!', 'sucesso'); // Usando ToastAlerta
     }
+  }
 
-    // Incrementa a quantidade de um item já presente no carrinho
-    function adicionarItem(id: number) {
-        // Localiza o produto no array items e guarda o indice
-        const itemIndex = items.findIndex(item => item.id === id);
-        
-        if (itemIndex !== -1) {
-            const novoCart = [...items];
-            novoCart[itemIndex].quantidade += 1;
-            setItems(novoCart);
-           alert('01 item adicionado!');
-        } else {
-           alert('Produto não encontrado no carrinho!');
-        }
+  // Incrementa a quantidade de um item já presente no carrinho
+  function adicionarItem(id: number) {
+    const itemIndex = items.findIndex(item => item.id === id);
+
+    if (itemIndex !== -1) {
+      const novoCart = [...items];
+      novoCart[itemIndex].quantidade += 1;
+      setItems(novoCart);
+      ToastAlerta('Quantidade aumentada em 01!', 'info'); // Usando ToastAlerta
+    } else {
+      // Isso não deveria acontecer se a lógica de UI for correta, mas é um fallback
+      ToastAlerta('Produto não encontrado no carrinho para adicionar!', 'erro'); // Usando ToastAlerta
     }
+  }
 
-    // Remove um item do carrinho (decrementa quantidade ou remove se for o último)
-    function removerItem(id: number) {
-       // Localiza o produto no array items e guarda o indice
-        const itemIndex = items.findIndex(item => item.id === id);
-        
-        if (itemIndex !== -1) {
-            const novoCart = [...items];
-            
-            if (novoCart[itemIndex].quantidade > 1) {
-                // Reduz a quantidade do produto
-                novoCart[itemIndex].quantidade -= 1;
-                setItems(novoCart);
-               alert('01 Item removido!');
-            } else {
-                // Remove o produto se a quantidade for 1
-                novoCart.splice(itemIndex, 1);
-                setItems(novoCart);
-               alert('Produto removido!');
-            }
-        }
+  // Decrementa a quantidade de um item já presente no carrinho
+  function removerItem(id: number) {
+    const itemIndex = items.findIndex(item => item.id === id);
+
+    if (itemIndex !== -1) {
+      const novoCart = [...items];
+
+      if (novoCart[itemIndex].quantidade > 1) {
+        // Reduz a quantidade do produto
+        novoCart[itemIndex].quantidade -= 1;
+        setItems(novoCart);
+        ToastAlerta('Quantidade diminuída em 01!', 'info'); // Usando ToastAlerta
+      } else {
+        // Remove o produto se a quantidade for 1 (com feedback específico)
+        novoCart.splice(itemIndex, 1);
+        setItems(novoCart);
+        ToastAlerta('Item removido do carrinho!', 'sucesso'); // Usando ToastAlerta
+      }
     }
+  }
 
-    // Limpa o carrinho
-    function limparCart() {
-       alert('Compra efetuada com sucesso!');
-        setItems([]);
+  // Função para remover completamente um produto do carrinho (todas as suas quantidades)
+  function removerProdutoDoCarrinho(id: number) {
+    setItems(currentItems => {
+      const updatedItems = currentItems.filter(item => item.id !== id);
+      // O ToastAlerta para isso será chamado pelo CardCart
+      return updatedItems;
+    });
+  }
+
+
+  // Limpa o carrinho
+  function limparCart() {
+    if (quantidadeItems > 0) { // Só mostra o alerta se houver itens para finalizar
+      ToastAlerta('Compra efetuada com sucesso! ✨', 'sucesso'); // Usando ToastAlerta
+      setItems([]);
+    } else {
+      ToastAlerta('Seu carrinho já está vazio!', 'info');
     }
+  }
 
-    // Memoiza o valor do contexto para evitar recriação desnecessária
-    const contextValue = useMemo(() => ({
-        adicionarProduto,
-        adicionarItem,
-        removerItem,
-        limparCart,
-        items,
-        quantidadeItems,
-        valorTotal
-    }), [items, quantidadeItems, valorTotal]);
+  // Memoiza o valor do contexto para evitar recriação desnecessária
+  const contextValue = useMemo(() => ({
+    adicionarProduto,
+    adicionarItem,
+    removerItem,
+    removerProdutoDoCarrinho, // Adicionada aqui para ser exportada
+    limparCart,
+    items,
+    quantidadeItems,
+    valorTotal
+  }), [items, quantidadeItems, valorTotal]);
 
-    // Retorna o provider envolvendo os filhos
-    return (
-        <CartContext.Provider 
-            value={contextValue}
-        >
-            {children}
-        </CartContext.Provider>
-    );
+  // Retorna o provider envolvendo os filhos
+  return (
+    <CartContext.Provider
+      value={contextValue}
+    >
+      {children}
+    </CartContext.Provider>
+  );
 }
