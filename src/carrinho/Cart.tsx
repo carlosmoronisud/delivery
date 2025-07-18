@@ -1,3 +1,4 @@
+// src/carrinho/Cart.tsx
 import { useContext, useState, useEffect } from 'react';
 import CardCart from './CartCard';
 import { CartContext, type Items } from '../contexts/CartContext';
@@ -5,12 +6,12 @@ import { Link, useNavigate } from 'react-router-dom';
 import { ToastAlerta } from '../utils/ToastAlerta';
 
 import { AuthContext } from '../contexts/AuthContext';
-// Remova o import de DeliveryMap
+// Não mais importamos DeliveryMap
 // import DeliveryMap from './DeliveryMap';
 import { Frown } from 'lucide-react';
 import AddressForm from './AddressForm';
 import type { EnderecoData } from '../models/EnderecoData'; 
-import DeliveryVisualization from './DeliveryVisualization'; // Novo componente de visualização
+import DeliveryVisualization from './DeliveryVisualization'; // Opcional, se quiser manter a visualização no carrinho
 
 const LOJA_ENDERECO_ORIGEM = 'Rua do Ouvidor, 666, Campinas, SP';
 
@@ -41,17 +42,10 @@ function Cart() {
             setDistance('');
             setIsFreteCalculated(false);
         }
-        // Nota: O cálculo real do frete e tempo será acionado pelo AddressForm via onAddressSelect/onAddressChange
-        // e passado para handleRouteCalculated, simulando o mapa ou um serviço de API.
     }, [deliveryOption, enderecoData.rua, enderecoData.numero, enderecoData.cidade]);
 
 
-    // handleRouteCalculated agora recebe a distância e duração simuladas ou calculadas
-    // pelo AddressForm, sem precisar de um mapa para isso.
     const handleRouteCalculated = (calculatedDistance: string, calculatedDuration: string) => {
-        // Simula o cálculo do frete com base na distância (se disponível)
-        // Se a distância for vazia (ex: autocomplete não preencheu, ou serviço de rota falhou),
-        // o frete pode ser um valor padrão ou 0.
         const distanceInKm = parseFloat(calculatedDistance.replace(',', '.').replace(' km', '')) || 0;
         const simulatedFrete = parseFloat((distanceInKm * 0.5 + 5).toFixed(2));
 
@@ -67,17 +61,13 @@ function Cart() {
             ...prev,
             [e.target.name]: e.target.value,
         }));
-        setIsFreteCalculated(false); // Resetar cálculo do frete ao mudar o endereço manualmente
+        setIsFreteCalculated(false);
         setDeliveryTime('');
         setDistance('');
         
-        // Simular cálculo de rota ao digitar manualmente
         const currentAddress = { ...enderecoData, [e.target.name]: e.target.value };
         if (currentAddress.rua && currentAddress.numero && currentAddress.cidade) {
-            // Em um app real, aqui você chamaria uma API de rotas.
-            // Para simulação, vamos usar valores fixos ou baseados em alguma lógica simples.
-            // Exemplo: Simular 5km e 20 minutos de entrega para qualquer endereço válido.
-            const simulatedDistance = "5.0 km"; // Ou uma lógica mais complexa
+            const simulatedDistance = "5.0 km";
             const simulatedDuration = "20 mins";
             handleRouteCalculated(simulatedDistance, simulatedDuration);
         }
@@ -85,15 +75,12 @@ function Cart() {
 
     const handleAddressSelect = (selectedAddress: EnderecoData) => {
         setEnderecoData(selectedAddress);
-        setIsFreteCalculated(false); // Resetar cálculo do frete ao selecionar um endereço do autocomplete
+        setIsFreteCalculated(false);
         setDeliveryTime('');
         setDistance('');
 
-        // Disparar o cálculo de rota/frete ao selecionar do autocomplete
         if (selectedAddress.rua && selectedAddress.numero && selectedAddress.cidade) {
-            // Em um app real, aqui você chamaria uma API de rotas.
-            // Para simulação, vamos usar valores fixos ou baseados em alguma lógica simples.
-            const simulatedDistance = "7.5 km"; // Valores de exemplo para autocomplete
+            const simulatedDistance = "7.5 km";
             const simulatedDuration = "30 mins";
             handleRouteCalculated(simulatedDistance, simulatedDuration);
         }
@@ -119,9 +106,8 @@ function Cart() {
             return;
         }
 
-        ToastAlerta('Pedido finalizado com sucesso! Em breve, sua delícia chegará!', 'sucesso');
-        
-        navigate('/order-tracking', {
+        // Redireciona para a página de confirmação de pedido
+        navigate('/order-confirmation', { // <--- Nova rota de redirecionamento
             state: {
                 deliveryOption,
                 frete,
@@ -134,6 +120,7 @@ function Cart() {
             }
         });
 
+        // Limpa o carrinho e reseta os estados locais APÓS a navegação para que os dados sejam passados
         limparCart();
         setDeliveryOption('none');
         setFrete(0);
@@ -217,7 +204,6 @@ function Cart() {
                                     </div>
                                 </div>
 
-                                {/* AddressForm e DeliveryVisualization agora são renderizados juntos */}
                                 {showAddressForm && deliveryOption === 'delivery' && (
                                     <>
                                         <AddressForm
@@ -225,7 +211,7 @@ function Cart() {
                                             onAddressChange={handleAddressChange}
                                             onAddressSelect={handleAddressSelect}
                                         />
-                                        {isFreteCalculated && ( // Mostra a visualização apenas se o frete foi calculado
+                                        {isFreteCalculated && (
                                             <DeliveryVisualization
                                                 origin={LOJA_ENDERECO_ORIGEM}
                                                 destination={`${enderecoData.rua}, ${enderecoData.numero}, ${enderecoData.bairro ? enderecoData.bairro + ', ' : ''}${enderecoData.cidade}`}

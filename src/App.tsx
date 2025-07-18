@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import './App.css';
 
-// Componentes da sua versão (priorizados para páginas principais)
+// Componentes da sua versão
 import Navbar from './components/navbar/Navbar';
 import Footer from './components/footer/Footer';
 import Home from './pages/home/homePage';
@@ -22,7 +22,8 @@ import DeletarProduto from './components/produto/deleteproduto/DeleteProdutos';
 // Componentes do carrinho e finalização
 import Cart from './carrinho/Cart';
 import FormUsuario from './components/formusuario/FormUsuario';
-
+import OrderConfirmation from './carrinho/OrderConfirmation'; // Importe o novo componente
+import OrderTracking from './carrinho/OrderTraking'; // O componente de rastreamento
 
 // Contextos
 import { AuthProvider } from './contexts/AuthContext';
@@ -35,9 +36,6 @@ import 'react-toastify/dist/ReactToastify.css';
 import RotaPrivada from './contexts/RotaPrivada';
 
 
-/**
- * Tipo (type) para controlar o estado do Menu Mobile (aberto ou fechado)
- */
 type MenuState = 'closed' | 'open';
 
 function App() {
@@ -84,6 +82,12 @@ function App() {
 
                   {/* Rota do Carrinho de Compras */}
                   <Route path="/cart" element={<Cart />} />
+
+                  {/* NOVO: Rota de Confirmação de Pedido */}
+                  <Route path="/order-confirmation" element={<RotaPrivada><OrderConfirmation /></RotaPrivada>} />
+
+                  {/* Rota de Acompanhamento de Pedido (agora pode receber um ID) */}
+                  <Route path="/order-tracking/:orderId?" element={<RotaPrivada><OrderTracking /></RotaPrivada>} />
 
                   {/* Rotas protegidas (somente usuário logado) */}
                   <Route path="/usuarios" element={<RotaPrivada><Usuarios /></RotaPrivada>} />
