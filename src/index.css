@@ -9,7 +9,7 @@ body {
 
 @keyframes float {
   0% { transform: translateY(0px); }
-  50% { transform: translateY(-50px); } /* Agora subindo 50px como você definiu */
+  50% { transform: translateY(-50px); }
   100% { transform: translateY(0px); }
 }
 

@@ -1,9 +1,9 @@
 import { useState, type ChangeEvent, type FormEvent } from 'react';
 import type Usuario from '../../models/Usuario';
 import { Link, useNavigate } from 'react-router-dom';
-import { cadastrarUsuario } from '../../services/Service';
 import { RotatingLines } from 'react-loader-spinner';
 import { ToastAlerta } from '../../utils/ToastAlerta';
+import { cadastrarUsuario } from '../../services/UsuarioService';
 
 function Cadastro() {
   const navigate = useNavigate();
@@ -200,16 +200,6 @@ function Cadastro() {
                      bg-[url('https://ik.imagekit.io/8h7kfljfc/imgs/2151989794.jpg?updatedAt=1752706340278')] 
                      bg-cover bg-center bg-no-repeat rounded-3xl lg:rounded-r-3xl lg:rounded-l-none"
         >
- 
-          {/* <div className="absolute inset-0 bg-black bg-opacity-30 rounded-3xl lg:rounded-r-3xl lg:rounded-l-none"></div>
-          <div className="relative z-10 text-center">
-            <h2 className="text-4xl md:text-5xl font-bold mb-4 drop-shadow-lg">
-              Sua Aventura Culinária Começa Aqui!
-            </h2>
-            <p className="text-xl md:text-2xl font-light leading-relaxed">
-              Junte-se à nossa comunidade e descubra um mundo de sabores.
-            </p>
-          </div> */}
         </div>
       </div>
     </div>

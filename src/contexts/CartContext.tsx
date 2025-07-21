@@ -26,6 +26,7 @@ interface CartProviderProps {
   children: ReactNode;
 }
 
+
 // Criação do contexto do carrinho
 export const CartContext = createContext({} as CartContextProps);
 

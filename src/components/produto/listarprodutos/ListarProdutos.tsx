@@ -3,9 +3,10 @@ import { DNA } from "react-loader-spinner";
 import CardProduto from "../cardproduto/CardProduto";
 import { useQuery } from "@tanstack/react-query";
 import { useSearchParams } from "react-router-dom";
-import { buscarTodosProdutos } from "../../../services/Service";
-import type Produto from "../../../models/Produto"; // Ensure this import is correct and up-to-date
-import type Categoria from "../../../models/Categoria"; // Import Categoria for filtering logic
+
+import type Produto from "../../../models/Produto"; 
+import type Categoria from "../../../models/Categoria";
+import { buscarProdutos } from "../../../services/ProdutoService";
 
 function ListarProdutos() {
   const [searchParams] = useSearchParams();
@@ -25,14 +26,13 @@ function ListarProdutos() {
   } = useQuery<Produto[]>({
     queryKey: ["produtos", filtros],
     queryFn: async () => {
-      const data = await buscarTodosProdutos(); // This should return Produto[]
+      const data = await buscarProdutos();
 
       // Filter logic applied on the client-side
       return data.filter((produto) => {
-        const preco = parseFloat(produto.preco?.toString() || '0'); // Safely get price, default to 0
+        const preco = parseFloat(produto.preco?.toString() || '0'); 
         const precoMin = parseFloat(filtros.precoMin) || 0;
         const precoMax = parseFloat(filtros.precoMax) || Infinity;
-
         const matchPreco = preco >= precoMin && preco <= precoMax;
         
         // NutriScore filter
@@ -55,13 +55,12 @@ function ListarProdutos() {
         return matchPreco && matchNutri && matchCategoria && matchIngrediente;
       });
     },
-    // Adding staleTime to prevent refetches on every mount if data doesn't change frequently
-    // Adjust based on how fresh you need the product list to be.
+    
     staleTime: 5 * 60 * 1000, // 5 minutes
   });
 
   if (error) {
-    ToastAlerta("Erro ao carregar produtos. Tente novamente mais tarde.", "erro"); // More user-friendly message
+    ToastAlerta("Erro ao carregar produtos. Tente novamente mais tarde.", "erro"); 
     console.error("Erro na consulta de produtos:", error); // Log error for debugging
     return null; // Or render an error component
   }

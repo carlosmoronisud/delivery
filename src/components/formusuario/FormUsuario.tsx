@@ -4,9 +4,10 @@ import { useNavigate, useParams, Link } from 'react-router-dom'; // Import Link 
 import { RotatingLines } from 'react-loader-spinner';
 import { ToastAlerta } from '../../utils/ToastAlerta';
 import type Usuario from '../../models/Usuario'; // Assuming this is correct
-import { atualizar, buscarUsuarioPorId } from '../../services/Service'; // Ensure types are correct in Service.ts
+import { atualizar,  } from '../../services/Service'; // Ensure types are correct in Service.ts
 import { AuthContext } from '../../contexts/AuthContext'; // Ensure this is correct
 import { ArrowLeft } from '@phosphor-icons/react'; // For a professional back icon
+import { buscarUsuarioPorId } from '../../services/UsuarioService';
 
 function FormUsuario() {
   const navigate = useNavigate();

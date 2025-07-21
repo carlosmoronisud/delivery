@@ -9,5 +9,5 @@ export default interface Produto {
   nutriScore?: string;
   ingrediente?: string;
   id_categoria?: Categoria;
-  usuario?: Usuario;
+  id_usuario?: Usuario;
 }

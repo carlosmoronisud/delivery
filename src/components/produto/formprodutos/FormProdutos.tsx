@@ -30,7 +30,7 @@ function FormProduto() {
     nutriScore: "",
     ingrediente: "",
     id_categoria: { id: undefined, descricao: "", palavraChave: "", imagem: "" }, 
-    usuario: { id: null, nome: "", usuario: "", senha: "", foto: "" }, 
+    id_usuario: { id: null, nome: "", usuario: "", senha: "", foto: "" }, 
   });
 
   // --- Auth Check ---
@@ -67,8 +67,8 @@ function FormProduto() {
       setProduto({
         ...fetchedProduct,
         id_categoria: typeof fetchedProduct.id_categoria === 'object' ? fetchedProduct.id_categoria : { id: fetchedProduct.id_categoria as undefined, descricao: "", palavraChave: "", imagem: "" },
-        usuario: {
-          id: fetchedProduct.usuario ? fetchedProduct.usuario.id : null,
+        id_usuario: {
+          id: fetchedProduct.id_usuario ? fetchedProduct.id_usuario.id : null,
           nome: "",
           usuario: "",
           senha: "",
@@ -98,7 +98,7 @@ function FormProduto() {
       setProduto((prev: Produto) => ({
         ...prev,
         // Ensure 'usuario' is an object with 'id' for the backend
-        usuario: { ...(prev.usuario as Usuario), id: usuario.id } as Usuario, 
+        usuario: { ...(prev.id_usuario as Usuario), id: usuario.id } as Usuario, 
       }));
     }
   }, [usuario]); // Dependency: re-run if usuario changes
@@ -128,7 +128,7 @@ function FormProduto() {
     setIsLoading(true);
 
     // Basic validation (can be expanded)
-    if (!produto.nome || !produto.preco || !produto.ingrediente || !produto.id_categoria?.id || !produto.usuario?.id) {
+    if (!produto.nome || !produto.preco || !produto.ingrediente || !produto.id_categoria?.id || !produto.id_usuario?.id) {
         ToastAlerta("Por favor, preencha todos os campos obrigatórios.", "erro");
         setIsLoading(false);
         return;
@@ -140,7 +140,7 @@ function FormProduto() {
       const produtoParaEnvio = {
           ...produto,
           categoria: produto.id_categoria.id, // Backend likely expects just the ID here
-          usuario: produto.usuario.id,     // Backend likely expects just the ID here
+          usuario: produto.id_usuario.id,     // Backend likely expects just the ID here
       };
 
       if (id) {

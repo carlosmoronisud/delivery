@@ -4,16 +4,11 @@ import { motion } from "framer-motion";
 import { AuthContext } from '../../contexts/AuthContext';
 import { RotatingLines } from "react-loader-spinner"; // Import RotatingLines
 
-import {
-  buscarTodosUsuarios,
-  buscarUsuarioPorId,
-  buscarUsuarioPorEmail,
-  buscarUsuariosPorNome,
-} from '../../services/Service'; // Ensure these are correctly typed in Service.ts
 
 import type Usuario from "../../models/Usuario";
 import CardUsuario from "../../components/cardusuario/CardUsuario"; // Assume this component exists and is styled
 import { ToastAlerta } from "../../utils/ToastAlerta";
+import { buscarTodosUsuarios, buscarUsuarioPorEmail, buscarUsuarioPorId, buscarUsuariosPorNome } from "../../services/UsuarioService";
 
 function Usuarios() {
   const { usuario: loggedInUser, handleLogout } = useContext(AuthContext);
@@ -70,7 +65,7 @@ function Usuarios() {
   // --- Generic Search Function (for Admin) ---
   async function buscar() {
     if (!isAdmin) { // Double check admin permission
-      ToastAlerta("Apenas administradores podem buscar outros usuários.", "aviso");
+      ToastAlerta("Apenas administradores podem buscar outros usuários.", "info");
       setFiltro("");
       setTipoBusca("meuPerfil");
       buscarMeuPerfil();
@@ -83,7 +78,7 @@ function Usuarios() {
       switch (tipoBusca) {
         case "id":
           if (!filtro.trim()) {
-            ToastAlerta("Por favor, digite um ID para buscar.", "aviso");
+            ToastAlerta("Por favor, digite um ID para buscar.", "info");
             setIsLoadingContent(false);
             return;
           }
@@ -91,7 +86,7 @@ function Usuarios() {
           break;
         case "usuario": // Email
           if (!filtro.trim()) {
-            ToastAlerta("Por favor, digite um email para buscar.", "aviso");
+            ToastAlerta("Por favor, digite um email para buscar.", "info");
             setIsLoadingContent(false);
             return;
           }
@@ -100,7 +95,7 @@ function Usuarios() {
           break;
         case "nome":
           if (!filtro.trim()) {
-            ToastAlerta("Por favor, digite um nome para buscar.", "aviso");
+            ToastAlerta("Por favor, digite um nome para buscar.", "info");
             setIsLoadingContent(false);
             return;
           }

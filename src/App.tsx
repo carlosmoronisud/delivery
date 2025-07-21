@@ -22,8 +22,8 @@ import DeletarProduto from './components/produto/deleteproduto/DeleteProdutos';
 // Componentes do carrinho e finalização
 import Cart from './carrinho/Cart';
 import FormUsuario from './components/formusuario/FormUsuario';
-import OrderConfirmation from './carrinho/OrderConfirmation'; // Importe o novo componente
-import OrderTracking from './carrinho/OrderTraking'; // O componente de rastreamento
+import OrderConfirmation from './carrinho/OrderConfirmation'; 
+import OrderTracking from './carrinho/OrderTraking'; 
 
 // Contextos
 import { AuthProvider } from './contexts/AuthContext';
@@ -50,9 +50,10 @@ function App() {
   };
 
   const shouldShowFooter = (): boolean => menuState === 'closed';
+  const GOOGLE_CLIENT_ID = import.meta.env.VITE_GOOGLE_CLIENT_ID;
 
   return (
-    <GoogleOAuthProvider clientId="81916486443-v4tlh14vid1irmcs4juc0ptahmgqbvqs.apps.googleusercontent.com">
+    <GoogleOAuthProvider clientId={GOOGLE_CLIENT_ID}>
       <AuthProvider>
         <CartProvider>
           <ToastContainer />

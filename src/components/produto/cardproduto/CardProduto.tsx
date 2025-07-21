@@ -38,7 +38,7 @@ const CardProduto: React.FC<CardProdutoProps> = ({ produto }) => {
   let isDono = false;
 
   if (loggedInUser?.id !== null && loggedInUser?.id !== undefined) {
-    const produtoUserId = produto?.usuario?.id;
+    const produtoUserId = produto?.id_usuario?.id;
     console.log('ID do usuário do produto:', produtoUserId);
     console.log('ID do usuário logado:', loggedInUser.id);
 

@@ -6,9 +6,8 @@ import { motion } from "framer-motion";
 import { DNA } from "react-loader-spinner";
 
 import CardProduto from "../../produto/cardproduto/CardProduto"; 
-
-import { buscarTodosProdutos } from "../../../services/Service";
 import type Produto from "../../../models/Produto"; 
+import { buscarProdutos } from "../../../services/ProdutoService";
  
 
 export default function CarrosselProdutos() {
@@ -21,7 +20,7 @@ export default function CarrosselProdutos() {
   useEffect(() => {
     async function carregarProdutos() {
       try {
-        const resposta: Produto[] = await buscarTodosProdutos();
+        const resposta: Produto[] = await buscarProdutos();
         const produtosComFallbacks = resposta.map(produto => ({
             ...produto,
             imagem: produto.imagem || "https://placehold.co/231x193?text=Sem+Imagem",
@@ -42,7 +41,7 @@ export default function CarrosselProdutos() {
               nutriScore: "C", 
               ingrediente: "Frango, catupiry, molho de tomate, mussarela", 
               id_categoria: { id: 1, descricao: "Pizzas", palavraChave: "pizza", imagem: "url_pizza_categoria" }, 
-              usuario: { id: null, nome: "Admin do Sabor", usuario: "admin@delivery.com", senha: "senhaSegura123", foto: "url_admin_foto" }
+              id_usuario: { id: null, nome: "Admin do Sabor", usuario: "admin@delivery.com", senha: "senhaSegura123", foto: "url_admin_foto" }
           },
           {
               id: 2, 
@@ -52,7 +51,7 @@ export default function CarrosselProdutos() {
               nutriScore: "D", 
               ingrediente: "Calabresa, cebola, molho de tomate, mussarela", 
               id_categoria: { id: 1, descricao: "Pizzas", palavraChave: "pizza", imagem: "url_pizza_categoria" }, 
-              usuario: { id: null, nome: "Admin do Sabor", usuario: "admin@delivery.com", senha: "senhaSegura123", foto: "url_admin_foto" }
+              id_usuario: { id: null, nome: "Admin do Sabor", usuario: "admin@delivery.com", senha: "senhaSegura123", foto: "url_admin_foto" }
           },
           {
               id: 3, 
@@ -62,7 +61,7 @@ export default function CarrosselProdutos() {
               nutriScore: "B", 
               ingrediente: "Alface, frango grelhado, croutons, molho caesar", 
               id_categoria: { id: 2, descricao: "Saladas", palavraChave: "saudavel", imagem: "url_salada_categoria" }, 
-              usuario: { id: null, nome: "Restaurante Sabor Verde", usuario: "saborverde@delivery.com", senha: "senhaRestaurante123", foto: "url_restaurante_foto" }
+              id_usuario: { id: null, nome: "Restaurante Sabor Verde", usuario: "saborverde@delivery.com", senha: "senhaRestaurante123", foto: "url_restaurante_foto" }
           },
           {
               id: 4, 
@@ -72,7 +71,7 @@ export default function CarrosselProdutos() {
               nutriScore: "E", 
               ingrediente: "Pão brioche, carne, queijo, bacon, alface, tomate", 
               id_categoria: { id: 3, descricao: "Lanches", palavraChave: "lanche", imagem: "url_lanche_categoria" }, 
-              usuario: { id: null, nome: "Admin do Sabor", usuario: "admin@delivery.com", senha: "senhaSegura123", foto: "url_admin_foto" }
+              id_usuario: { id: null, nome: "Admin do Sabor", usuario: "admin@delivery.com", senha: "senhaSegura123", foto: "url_admin_foto" }
           },
           {
               id: 5, 
@@ -82,7 +81,7 @@ export default function CarrosselProdutos() {
               nutriScore: "C", 
               ingrediente: "Brownie de chocolate, sorvete de creme, calda de chocolate", 
               id_categoria: { id: 4, descricao: "Sobremesas", palavraChave: "doce", imagem: "url_doce_categoria" }, 
-              usuario: { id: null, nome: "Restaurante Sabor Verde", usuario: "saborverde@delivery.com", senha: "senhaRestaurante123", foto: "url_restaurante_foto" }
+              id_usuario: { id: null, nome: "Restaurante Sabor Verde", usuario: "saborverde@delivery.com", senha: "senhaRestaurante123", foto: "url_restaurante_foto" }
           },
         ]);
       } finally {
@@ -167,15 +166,15 @@ export default function CarrosselProdutos() {
           1024: {
             slidesPerView: 4,
             spaceBetween: 235, 
-          },
-          1280: {
-            slidesPerView: 5,
-            spaceBetween: 230, 
-          },
-          1536: {
-            slidesPerView: 6, 
-            spaceBetween: 225, // Aumentado de 30 para 45
-          },
+          }
+          // 1280: {
+          //   slidesPerView: 5,
+          //   spaceBetween: 230, 
+          // },
+          // 1536: {
+          //   slidesPerView: 6, 
+          //   spaceBetween: 225, // Aumentado de 30 para 45
+          // },
         }}
         className="py-8 md:py-12 w-full h-full" 
       >
