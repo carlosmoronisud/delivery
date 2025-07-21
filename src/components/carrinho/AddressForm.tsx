@@ -1,8 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useEffect, useRef,  useCallback, type ChangeEvent } from 'react'; // Adicionado useCallback
 import { MapPin } from '@phosphor-icons/react';
-import type { EnderecoData } from '../models/EnderecoData';
-import { buscarEnderecoPorCep } from '../services/CepService';
+import type { EnderecoData } from '../../models/EnderecoData';
+import { buscarEnderecoPorCep } from '../../services/CepService';
 
 
 // Props para o componente AddressForm

@@ -2,12 +2,12 @@
 import React, { useEffect } from 'react';
 import { useLocation, useNavigate, Link } from 'react-router-dom';
 import Lottie from 'lottie-react';
-import { ToastAlerta } from '../utils/ToastAlerta';
-import type { EnderecoData } from '../models/EnderecoData';
+import { ToastAlerta } from '../../utils/ToastAlerta';
+import type { EnderecoData } from '../../models/EnderecoData';
 import { ShoppingCartSimple, MapPinLine } from '@phosphor-icons/react'; // Adicione os ícones aqui
 
 // Importe sua animação Lottie de confirmação
-import orderConfirmedAnimation from '../assets/lottie-animations/order_confirmed.json'; // Adapte o caminho
+import orderConfirmedAnimation from '../../assets/lottie-animations/order_confirmed.json'; // Adapte o caminho
 
 // Interface para os dados do pedido passados via state do Cart
 interface OrderConfirmationState {

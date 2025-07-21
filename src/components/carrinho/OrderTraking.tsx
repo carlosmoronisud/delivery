@@ -1,16 +1,16 @@
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import Lottie from 'lottie-react';
-import { ToastAlerta } from '../utils/ToastAlerta';
+import { ToastAlerta } from '../../utils/ToastAlerta';
 
-import type { EnderecoData } from '../models/EnderecoData';
+import type { EnderecoData } from '../../models/EnderecoData';
 
 // Importe suas animações Lottie
-import orderReceivedAnimation from '../assets/lottie-animations/order_received.json';
-import preparingFoodAnimation from '../assets/lottie-animations/preparing_food.json';
-import onTheWayAnimation from '../assets/lottie-animations/on_the_way.json';
-import courrierAnimation from '../assets/lottie-animations/Courier.json'; 
-import deliveredAnimation from '../assets/lottie-animations/delivered.json';
-import cancelledOrderAnimation from '../assets/lottie-animations/cancelled_order.json'
+import orderReceivedAnimation from '../../assets/lottie-animations/order_received.json';
+import preparingFoodAnimation from '../../assets/lottie-animations/preparing_food.json';
+import onTheWayAnimation from '../../assets/lottie-animations/on_the_way.json';
+import courrierAnimation from '../../assets/lottie-animations/Courier.json'; 
+import deliveredAnimation from '../../assets/lottie-animations/delivered.json';
+import cancelledOrderAnimation from '../../assets/lottie-animations/cancelled_order.json'
 
 import { ShoppingCartSimple, MapPinLine } from '@phosphor-icons/react';
 import { useState, useEffect, useCallback } from 'react';

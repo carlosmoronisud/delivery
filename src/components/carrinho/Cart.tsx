@@ -1,17 +1,14 @@
 // src/carrinho/Cart.tsx
 import { useContext, useState, useEffect } from 'react';
 import CardCart from './CartCard';
-import { CartContext, type Items } from '../contexts/CartContext';
+import { CartContext, type Items } from '../../contexts/CartContext';
 import { Link, useNavigate } from 'react-router-dom';
-import { ToastAlerta } from '../utils/ToastAlerta';
-
-import { AuthContext } from '../contexts/AuthContext';
-// Não mais importamos DeliveryMap
-// import DeliveryMap from './DeliveryMap';
-import { Frown } from 'lucide-react';
+import { ToastAlerta } from '../../utils/ToastAlerta';
+import { AuthContext } from '../../contexts/AuthContext';
 import AddressForm from './AddressForm';
-import type { EnderecoData } from '../models/EnderecoData'; 
-import DeliveryVisualization from './DeliveryVisualization'; // Opcional, se quiser manter a visualização no carrinho
+import type { EnderecoData } from '../../models/EnderecoData'; 
+import DeliveryVisualization from './DeliveryVisualization';
+import { Frown } from 'lucide-react';
 
 const LOJA_ENDERECO_ORIGEM = 'Rua do Ouvidor, 666, Campinas, SP';
 

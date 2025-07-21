@@ -1,6 +1,6 @@
 // src/components/ui/BotaoVoltar.tsx
 import { useNavigate } from 'react-router-dom';
-import { ArrowLeft } from 'lucide-react'; // ou qualquer outro ícone, ex: react-icons
+import { ArrowLeft } from 'lucide-react';
 
 export default function BotaoVoltar() {
   const navigate = useNavigate();

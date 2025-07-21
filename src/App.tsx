@@ -20,10 +20,10 @@ import FormProduto from './components/produto/formprodutos/FormProdutos';
 import DeletarProduto from './components/produto/deleteproduto/DeleteProdutos';
 
 // Componentes do carrinho e finalização
-import Cart from './carrinho/Cart';
+import Cart from './components/carrinho/Cart';
 import FormUsuario from './components/formusuario/FormUsuario';
-import OrderConfirmation from './carrinho/OrderConfirmation'; 
-import OrderTracking from './carrinho/OrderTraking'; 
+import OrderConfirmation from './components/carrinho/OrderConfirmation'; 
+import OrderTracking from './components/carrinho/OrderTraking'; 
 
 // Contextos
 import { AuthProvider } from './contexts/AuthContext';

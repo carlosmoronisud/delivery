@@ -1,10 +1,10 @@
-import { MinusCircle, PlusCircle, XCircle } from "@phosphor-icons/react"; // Using Phosphor icons for consistency
+import { MinusCircle, PlusCircle, XCircle } from "@phosphor-icons/react";
 import { useContext } from "react";
-import type { Items } from "../contexts/CartContext";
-import { CartContext } from '../contexts/CartContext';
-import { ToastAlerta } from "../utils/ToastAlerta"; // Ensure this path is correct
+import type { Items } from "../../contexts/CartContext";
+import { CartContext } from '../../contexts/CartContext';
+import { ToastAlerta } from "../../utils/ToastAlerta";
 
-// Props esperadas pelo CardCart: um item do carrinho
+
 interface CardProdutosProps {
     item: Items;
 }
@@ -23,23 +23,22 @@ function CardCart({ item }: Readonly<CardProdutosProps>) {
         // Card principal com imagem, detalhes e botões
         <div className='relative flex flex-col rounded-xl overflow-hidden justify-between
                                  bg-white shadow-md border border-gray-200
-                                 transform transition-transform duration-300 hover:scale-[1.02]'> {/* Estilo base do card */}
-            
-            {/* Botão de remover item completamente - posicionado no canto superior direito */}
+                                 transform transition-transform duration-300 hover:scale-[1.02]'> 
+
             <button
                 onClick={handleRemoverCompletamente}
                 className="absolute top-2 right-2 z-10 p-1 rounded-full bg-red-500 text-white
                                 hover:bg-red-600 shadow-sm transition-all duration-200 cursor-pointer"
                 title="Remover item do carrinho"
             >
-                <XCircle size={20} weight="bold" /> {/* Ícone de fechar/remover */}
+                <XCircle size={20} weight="bold" />
             </button>
 
-            <div className='flex flex-col flex-grow'> {/* Flex-grow para preencher espaço */}
+            <div className='flex flex-col flex-grow'> 
                 {/* Imagem do produto */}
                 <div className="flex justify-center items-center p-4 bg-gray-50 border-b border-gray-100">
                     <img src={item.imagem || 'https://placehold.co/120x120?text=Produto'}
-                              className='h-32 w-32 object-contain rounded-lg' // Tamanho fixo, object-contain para não cortar
+                              className='h-32 w-32 object-contain rounded-lg' 
                               alt={item.nome} />
                 </div>
 

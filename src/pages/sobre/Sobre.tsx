@@ -1,5 +1,4 @@
-import ColaboradorCard from "../../components/colaborador/Colaborador"; // Ensure correct path
-import React from 'react'; // Import React
+import ColaboradorCard from "../../components/colaborador/Colaborador"; 
 
 function SobreProjetoPage() {
   const membros = [
@@ -36,7 +35,7 @@ function SobreProjetoPage() {
     {
       nome: 'Pablo',
       cargo: 'Scrum Master',
-      linkedin: 'https://github.com/Pablo-Casagrande', // Placeholder, ensure real link
+      linkedin: 'https://github.com/Pablo-Casagrande',
       imagem: 'https://github.com/Pablo-Casagrande.png',
     },
   ];
@@ -96,10 +95,10 @@ function SobreProjetoPage() {
           Conheça Nossa Equipe 🧑‍💻
         </h1>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8 justify-items-center"> {/* Grid responsivo para colaboradores */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8 justify-items-center"> 
           {membros.map((membro) => (
             <ColaboradorCard
-              key={membro.nome} // Use nome como key, se for único
+              key={membro.nome}
               nome={membro.nome}
               cargo={membro.cargo}
               linkedin={membro.linkedin}
