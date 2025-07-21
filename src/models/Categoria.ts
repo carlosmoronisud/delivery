@@ -1,4 +1,3 @@
-
 export default interface Categoria{
     id: number | undefined;
     descricao: string;

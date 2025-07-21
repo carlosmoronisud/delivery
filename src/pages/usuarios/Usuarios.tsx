@@ -9,10 +9,10 @@ import {
   buscarUsuarioPorId,
   buscarUsuarioPorEmail,
   buscarUsuariosPorNome,
-} from '../../services/Service'; // Ensure these are correctly typed in Service.ts
+} from '../../services/Service'; 
 
 import type Usuario from "../../models/Usuario";
-import CardUsuario from "../../components/cardusuario/CardUsuario"; // Assume this component exists and is styled
+import CardUsuario from "../../components/cardusuario/CardUsuario"; 
 import { ToastAlerta } from "../../utils/ToastAlerta";
 
 function Usuarios() {
@@ -21,31 +21,30 @@ function Usuarios() {
 
   const [filtro, setFiltro] = useState("");
   const [usuariosExibidos, setUsuariosExibidos] = useState<Usuario[]>([]);
-  const [tipoBusca, setTipoBusca] = useState("meuPerfil"); // Default to 'meuPerfil'
-  const [isLoadingContent, setIsLoadingContent] = useState(true); // Loader for content fetch
+  const [tipoBusca, setTipoBusca] = useState("meuPerfil"); 
+  const [isLoadingContent, setIsLoadingContent] = useState(true); 
 
-  // Admin ID is 7
+ 
   const isAdmin = loggedInUser.id === 7;
 
-  // --- Initial Load: Fetch current user's profile ---
   useEffect(() => {
-    if (loggedInUser.id !== null && loggedInUser.id !== undefined && token) { // Ensure ID and token exist
-      // If admin, default to showing all users. Otherwise, show only own profile.
+    if (loggedInUser.id !== null && loggedInUser.id !== undefined && token) { 
+      
       if (isAdmin) {
-          setTipoBusca("todos"); // Default admin view to 'todos'
-          buscar(); // Trigger initial search for all users
+          setTipoBusca("todos"); 
+          buscar(); 
       } else {
-          setTipoBusca("meuPerfil"); // Default regular user view
-          buscarMeuPerfil(); // Trigger initial search for own profile
+          setTipoBusca("meuPerfil"); 
+          buscarMeuPerfil(); 
       }
     } else {
-        // Handle case where user is not logged in or token is missing
+        
         ToastAlerta("Você precisa estar logado para ver usuários.", "info");
-        handleLogout(); // Log out and redirect if not properly logged in
+        handleLogout(); 
     }
-  }, [loggedInUser.id, isAdmin, token]); // Add token to dependencies to re-run if it changes
+ }, [loggedInUser.id, isAdmin, token]);
 
-  // --- Search for current user's profile ---
+  
   async function buscarMeuPerfil() {
     if (loggedInUser.id === null || loggedInUser.id === undefined || !token) {
       ToastAlerta("ID do usuário ou token não encontrado para carregar o perfil.", "erro");
@@ -67,10 +66,10 @@ function Usuarios() {
     }
   }
 
-  // --- Generic Search Function (for Admin) ---
+  
   async function buscar() {
-    if (!isAdmin) { // Double check admin permission
-      ToastAlerta("Apenas administradores podem buscar outros usuários.", "aviso");
+    if (!isAdmin) { 
+      ToastAlerta("Apenas administradores podem buscar outros usuários.", "info");
       setFiltro("");
       setTipoBusca("meuPerfil");
       buscarMeuPerfil();
@@ -83,24 +82,23 @@ function Usuarios() {
       switch (tipoBusca) {
         case "id":
           if (!filtro.trim()) {
-            ToastAlerta("Por favor, digite um ID para buscar.", "aviso");
+            ToastAlerta("Por favor, digite um ID para buscar.", "info");
             setIsLoadingContent(false);
             return;
           }
           await buscarUsuarioPorId(Number(filtro), (res: Usuario) => setUsuariosExibidos([res]), authHeader);
           break;
-        case "usuario": // Email
+        case "usuario": 
           if (!filtro.trim()) {
-            ToastAlerta("Por favor, digite um email para buscar.", "aviso");
+            ToastAlerta("Por favor, digite um email para buscar.", "info");
             setIsLoadingContent(false);
             return;
           }
-          // Assuming buscarUsuarioPorEmail returns an array or you handle conversion
           await buscarUsuarioPorEmail(filtro, setUsuariosExibidos, authHeader);
           break;
         case "nome":
           if (!filtro.trim()) {
-            ToastAlerta("Por favor, digite um nome para buscar.", "aviso");
+            ToastAlerta("Por favor, digite um nome para buscar.", "info");
             setIsLoadingContent(false);
             return;
           }
@@ -109,9 +107,9 @@ function Usuarios() {
         case "todos":
           await buscarTodosUsuarios(setUsuariosExibidos, authHeader);
           break;
-        case "meuPerfil": // If admin switches to 'meuPerfil' option
+        case "meuPerfil": 
             buscarMeuPerfil();
-            return; // Exit to avoid double loading state
+            return; 
         default:
           ToastAlerta("Tipo de busca inválido.", "erro");
           break;
@@ -128,16 +126,15 @@ function Usuarios() {
     }
   }
 
-  // --- Render ---
   return (
     <motion.div
-      className="p-6 bg-gray-100 min-h-screen font-sans flex flex-col items-center" // Consistent background and centering
+      className="p-6 bg-gray-100 min-h-screen font-sans flex flex-col items-center" 
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}
     >
       <motion.h2
-        className="text-4xl md:text-5xl text-gray-800 font-bold mb-8 text-center" // Professional title
+        className="text-4xl md:text-5xl text-gray-800 font-bold mb-8 text-center" 
         initial={{ opacity: 0, x: -50 }}
         animate={{ opacity: 1, x: 0 }}
         transition={{ duration: 0.5 }}
@@ -154,15 +151,15 @@ function Usuarios() {
             className="border border-gray-300 p-3 rounded-lg bg-gray-50 text-gray-700 text-lg focus:outline-none focus:ring-2 focus:ring-orange-500 transition-colors cursor-pointer w-full md:w-auto flex-shrink-0"
           >
             <option value="todos">Todos os Usuários</option>
-            <option value="meuPerfil">Meu Perfil</option> {/* Option for admin to view own profile */}
+            <option value="meuPerfil">Meu Perfil</option>
             <option value="id">Buscar por ID</option>
             <option value="usuario">Buscar por Email</option>
             <option value="nome">Buscar por Nome</option>
           </select>
 
-          {tipoBusca !== "todos" && tipoBusca !== "meuPerfil" && ( // Input only for specific search types
+          {tipoBusca !== "todos" && tipoBusca !== "meuPerfil" && ( 
             <input
-              type={tipoBusca === "id" ? "number" : "text"} // Type number for ID
+              type={tipoBusca === "id" ? "number" : "text"} 
               placeholder={`Digite o ${tipoBusca === "id" ? "ID" : tipoBusca === "usuario" ? "Email" : "Nome"}`}
               className="border border-gray-300 p-3 rounded-lg flex-1 bg-white text-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-orange-500 transition-colors"
               value={filtro}
@@ -214,7 +211,7 @@ function Usuarios() {
           ) : (
             usuariosExibidos.map((usuario) => (
               <motion.div
-                key={usuario.id || usuario.usuario} // Use email as fallback key for safety
+                key={usuario.id || usuario.usuario} 
                 initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.4, ease: "easeOut" }}

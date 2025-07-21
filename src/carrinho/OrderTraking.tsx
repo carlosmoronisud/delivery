@@ -50,7 +50,6 @@ function OrderTracking() {
         }
 
         if (isSimulating) {
-            // Nova sequência de status
             const statuses: OrderStatus[] = ['pending', 'preparing', 'on_the_way', 'courier_arrived']; 
             let currentStatusIndex = statuses.indexOf(orderStatus);
             if (currentStatusIndex === -1) currentStatusIndex = 0;
@@ -61,15 +60,15 @@ function OrderTracking() {
                     setOrderStatus(statuses[currentStatusIndex]);
                     setProgress((currentStatusIndex / (statuses.length - 1)) * 100);
                 } else {
-                    // Se a simulação chegou ao fim (entregador na porta), para o intervalo
+                    
                     clearInterval(interval);
                     setIsSimulating(false); 
-                    // Se o status final da simulação for 'courier_arrived', mostra a mensagem
+                    
                     if (statuses[currentStatusIndex] === 'courier_arrived') {
                          ToastAlerta('Seu pedido chegou! O entregador está na porta.', 'sucesso');
                     }
                 }
-            }, 5000); // Muda de status a cada 5 segundos
+            }, 5000); 
 
             return () => clearInterval(interval);
         }
@@ -93,7 +92,7 @@ function OrderTracking() {
         if (orderStatus !== 'delivered' && orderStatus !== 'cancelled') {
             setOrderStatus('cancelled');
             setIsSimulating(false);
-            setProgress(0); // Ou um valor específico para cancelado
+            setProgress(0); 
             ToastAlerta('Seu pedido foi cancelado.', 'info');
         } else {
             ToastAlerta('Não é possível cancelar um pedido já entregue ou cancelado.', 'erro');
@@ -104,8 +103,8 @@ function OrderTracking() {
     const handleConfirmDelivery = () => {
         if (orderStatus === 'courier_arrived') {
             setOrderStatus('delivered');
-            setIsSimulating(false); // Garante que a simulação pare
-            setProgress(100); // Força a barra para 100%
+            setIsSimulating(false); 
+            setProgress(100); 
             ToastAlerta('Entrega confirmada com sucesso!', 'sucesso');
         } else if (orderStatus === 'delivered' || orderStatus === 'cancelled') {
             ToastAlerta('Este pedido já foi finalizado.', 'info');
@@ -177,7 +176,7 @@ function OrderTracking() {
 
                 {/* Lado Direito: Informações da Entrega e Botões de Ação */}
                 <div className="lg:w-1/2 flex flex-col gap-6">
-                    {/* Detalhes da Entrega */}
+                    
                     <div className="p-6 bg-gray-50 rounded-lg border border-gray-200 flex-grow">
                         <h2 className="text-xl font-bold text-gray-800 mb-4 border-b pb-3 border-gray-200">
                             Detalhes da Entrega <MapPinLine size={24} className="inline-block ml-2 text-orange-600"/>
@@ -203,7 +202,7 @@ function OrderTracking() {
                     </div>
 
                     {/* Botões de Ação do Pedido */}
-                    <div className="flex flex-col md:flex-row justify-center gap-4 mt-auto"> {/* mt-auto para empurrar para o fundo */}
+                    <div className="flex flex-col md:flex-row justify-center gap-4 mt-auto"> 
                         <button
                             onClick={handleCancelOrder}
                             disabled={orderStatus === 'delivered' || orderStatus === 'cancelled'}
@@ -216,7 +215,6 @@ function OrderTracking() {
                         {orderData.deliveryOption === 'delivery' && (
                             <button
                                 onClick={handleConfirmDelivery}
-                                // Botão ativado apenas quando entregador na porta e não finalizado
                                 disabled={!isConfirmDeliveryEnabled} 
                                 className="flex-1 px-6 py-3 rounded-lg text-lg font-semibold shadow-md 
                                            bg-green-600 text-white hover:bg-green-700 

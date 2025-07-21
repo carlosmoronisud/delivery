@@ -3,10 +3,10 @@ import React from 'react';
 
 // Props para o componente DeliveryVisualization
 interface DeliveryVisualizationProps {
-    origin: string; // Endereço de origem (ex: endereço da loja)
-    destination: string; // Endereço de destino (string formatada do formulário)
-    distance: string; // Distância calculada (ex: "5.2 km")
-    duration: string; // Duração calculada (ex: "15 mins")
+    origin: string; 
+    destination: string; 
+    distance: string; 
+    duration: string; 
 }
 
 const DeliveryVisualization: React.FC<DeliveryVisualizationProps> = ({ origin, destination, distance, duration }) => {

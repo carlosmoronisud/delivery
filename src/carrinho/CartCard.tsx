@@ -1,8 +1,8 @@
-import { MinusCircle, PlusCircle, XCircle } from "@phosphor-icons/react"; // Using Phosphor icons for consistency
+import { MinusCircle, PlusCircle, XCircle } from "@phosphor-icons/react"; 
 import { useContext } from "react";
 import type { Items } from "../contexts/CartContext";
 import { CartContext } from '../contexts/CartContext';
-import { ToastAlerta } from "../utils/ToastAlerta"; // Ensure this path is correct
+import { ToastAlerta } from "../utils/ToastAlerta"; 
 
 // Props esperadas pelo CardCart: um item do carrinho
 interface CardProdutosProps {
@@ -23,7 +23,7 @@ function CardCart({ item }: Readonly<CardProdutosProps>) {
         // Card principal com imagem, detalhes e botões
         <div className='relative flex flex-col rounded-xl overflow-hidden justify-between
                                  bg-white shadow-md border border-gray-200
-                                 transform transition-transform duration-300 hover:scale-[1.02]'> {/* Estilo base do card */}
+                                 transform transition-transform duration-300 hover:scale-[1.02]'> 
             
             {/* Botão de remover item completamente - posicionado no canto superior direito */}
             <button
@@ -32,22 +32,18 @@ function CardCart({ item }: Readonly<CardProdutosProps>) {
                                 hover:bg-red-600 shadow-sm transition-all duration-200 cursor-pointer"
                 title="Remover item do carrinho"
             >
-                <XCircle size={20} weight="bold" /> {/* Ícone de fechar/remover */}
+                <XCircle size={20} weight="bold" /> 
             </button>
 
-            <div className='flex flex-col flex-grow'> {/* Flex-grow para preencher espaço */}
-                {/* Imagem do produto */}
+            <div className='flex flex-col flex-grow'> 
                 <div className="flex justify-center items-center p-4 bg-gray-50 border-b border-gray-100">
                     <img src={item.imagem || 'https://placehold.co/120x120?text=Produto'}
-                              className='h-32 w-32 object-contain rounded-lg' // Tamanho fixo, object-contain para não cortar
+                              className='h-32 w-32 object-contain rounded-lg' 
                               alt={item.nome} />
                 </div>
 
                 <div className='p-4 flex flex-col gap-1 text-gray-800'>
-                    {/* Nome do produto */}
                     <p className='text-base font-semibold text-center leading-tight'>{item.nome}</p>
-                    
-                    {/* Preço formatado */}
                     <h3 className='text-xl text-center font-bold text-orange-600 mb-2'>
                         {Intl.NumberFormat('pt-BR', {
                             style: 'currency',
@@ -55,7 +51,7 @@ function CardCart({ item }: Readonly<CardProdutosProps>) {
                         }).format(item.preco * item.quantidade)}
                     </h3>
                     
-                    {/* Categoria do item (se existir e for um objeto) */}
+                    {/* Categoria do item  */}
                     {item.id_categoria && typeof item.id_categoria === 'object' && 'descricao' in item.id_categoria && ( // Mais checks de segurança
                         <p className='text-xs italic text-gray-600 text-center'>
                             Categoria: {item.id_categoria.descricao}

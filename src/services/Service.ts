@@ -2,13 +2,12 @@
 /* eslint-disable @typescript-eslint/no-unsafe-function-type */
 /* eslint-disable @typescript-eslint/no-wrapper-object-types */
 import axios from "axios";
-
+const BASE_URL = import.meta.env.VITE_APP_BACKEND_URL
 
 
 export const api = axios.create({
-    //baseURL: import.meta.env.VITE_API_URL,
-    baseURL: 'https://delivery-hzm2.onrender.com',
-})
+    baseURL: BASE_URL 
+});
 
 export const cadastrarUsuario = async (url: string, dados: Object, setDados: Function) => {
     const resposta = await api.post(url, dados)

@@ -1,5 +1,4 @@
-import ColaboradorCard from "../../components/colaborador/Colaborador"; // Ensure correct path
-import React from 'react'; // Import React
+import ColaboradorCard from "../../components/colaborador/Colaborador";  
 
 function SobreProjetoPage() {
   const membros = [
@@ -36,19 +35,19 @@ function SobreProjetoPage() {
     {
       nome: 'Pablo',
       cargo: 'Scrum Master',
-      linkedin: 'https://github.com/Pablo-Casagrande', // Placeholder, ensure real link
+      linkedin: 'https://github.com/Pablo-Casagrande', 
       imagem: 'https://github.com/Pablo-Casagrande.png',
     },
   ];
 
   return (
-    <div className="min-h-screen w-full bg-gray-50 flex flex-col font-sans"> {/* Consistent light background */}
+    <div className="min-h-screen w-full bg-gray-50 flex flex-col font-sans">
 
-      {/* 🌟 Section 1: About the Delivery - Hero */}
+      {/*  Section 1: About the Delivery - Hero */}
       <section className="bg-gradient-to-r from-orange-500 to-yellow-400 text-white py-16 md:py-24 px-6 md:px-16 shadow-lg">
         <div className="max-w-4xl mx-auto text-center">
           <h1 className="text-5xl md:text-7xl font-extrabold leading-tight mb-6 drop-shadow-md">
-            Sobre <br className="md:hidden"/>Nosso Delivery 🚀
+            Sobre <br className="md:hidden"/>Nosso Delivery Valor
           </h1>
           <p className="text-xl md:text-2xl font-light leading-relaxed opacity-90">
             O **Delivery Valor** é uma plataforma inovadora criada para transformar sua experiência em pedidos de alimentos. Conectamos você aos melhores sabores, com praticidade e transparência.
@@ -56,17 +55,16 @@ function SobreProjetoPage() {
         </div>
       </section>
 
-      {/* 🚀 Section 2: Key Features & Benefits */}
+      {/*  Section 2: Key Features & Benefits */}
       <article className="px-6 md:px-16 py-16 w-full flex flex-col items-center">
         <div className="flex flex-col md:flex-row items-center justify-center gap-12 md:gap-20 max-w-6xl w-full">
-          {/* Logo do Delivery - Lado esquerdo */}
+
           <img
             className="rounded-full border-4 border-orange-400 h-64 w-64 md:h-80 md:w-80 object-cover shadow-xl hover:scale-105 hover:shadow-2xl hover:shadow-orange-600 transition-all duration-300 transform hover:-translate-y-2"
             src="https://ik.imagekit.io/8h7kfljfc/imgs/deliverylogo.png?updatedAt=1752066792229"
             alt="Logo do Delivery"
           />
 
-          {/* Descrição das funcionalidades - Lado direito */}
           <section className="flex flex-col gap-6 w-full max-w-2xl text-gray-800">
             <h2 className="text-3xl md:text-4xl font-bold text-gray-800 border-b pb-4 border-gray-200">
               O que oferecemos? ✨
@@ -90,16 +88,15 @@ function SobreProjetoPage() {
         </div>
       </article>
 
-      {/* 🤝 Section 3: Our Team */}
       <div className="max-w-7xl mx-auto px-6 md:px-16 py-16">
         <h1 className="text-4xl md:text-5xl font-bold text-center text-gray-800 mb-12">
           Conheça Nossa Equipe 🧑‍💻
         </h1>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8 justify-items-center"> {/* Grid responsivo para colaboradores */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8 justify-items-center"> 
           {membros.map((membro) => (
             <ColaboradorCard
-              key={membro.nome} // Use nome como key, se for único
+              key={membro.nome} 
               nome={membro.nome}
               cargo={membro.cargo}
               linkedin={membro.linkedin}

@@ -1,5 +1,3 @@
-// src/types/EnderecoData.ts
-
 export interface EnderecoData {
     rua: string;
     numero: string;

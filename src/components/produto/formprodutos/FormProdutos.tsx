@@ -250,7 +250,7 @@ function FormProduto() {
             />
           </div>
 
-          {/* Campo Ingredientes */}
+          {/* Campo ingredientes */}
           <div className="flex flex-col gap-2">
             <label htmlFor="ingrediente" className="text-lg font-semibold text-gray-700">Ingredientes</label>
             <textarea // Usando textarea para múltiplos ingredientes

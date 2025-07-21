@@ -106,7 +106,7 @@ const OrderConfirmation: React.FC = () => {
                     </div>
 
                     {/* Bloco do Link para o celular */}
-                    <div className="p-4 bg-blue-100 text-blue-800 rounded-lg shadow-inner text-center mt-auto"> {/* mt-auto para empurrar para o fundo */}
+                    <div className="p-4 bg-blue-100 text-blue-800 rounded-lg shadow-inner text-center mt-auto">
                         <p className="mb-2 font-semibold">🔗 Link de rastreamento enviado para seu celular!</p>
                         <Link
                             to={getTrackingLink()}

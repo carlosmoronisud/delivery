@@ -1,6 +1,5 @@
-
 export default interface UsuarioLogin{
-    id?: number;
+    id?: number | string;
     nome: string;
     usuario: string;
     senha: string;

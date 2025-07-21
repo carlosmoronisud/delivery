@@ -116,7 +116,7 @@ export default function CarrosselProdutos() {
     >
       {/* Botões de navegação responsivos e com novo estilo */}
       {/* Posicionamento mais distante e visível apenas em telas maiores */}
-      <div className="absolute -left-12 top-1/2 z-20 -translate-y-1/2 hidden lg:block"> 
+       <div className="absolute -left-8 top-1/2 z-20 -translate-y-1/2 hidden lg:block"> {/* Ajuste o left */}
         <button
           ref={prevRef}
           className="bg-white text-orange-500 hover:bg-orange-100 rounded-full p-3 md:p-4 shadow-xl focus:outline-none focus:ring-2 focus:ring-orange-500 transition-all duration-200 cursor-pointer"
@@ -125,7 +125,7 @@ export default function CarrosselProdutos() {
         </button>
       </div>
 
-      <div className="absolute -right-12 top-1/2 z-20 -translate-y-1/2 hidden lg:block"> 
+      <div className="absolute -right-8 top-1/2 z-20 -translate-y-1/2 hidden lg:block"> {/* Ajuste o right */}
         <button
           ref={nextRef}
           className="bg-white text-orange-500 hover:bg-orange-100 rounded-full p-3 md:p-4 shadow-xl focus:outline-none focus:ring-2 focus:ring-orange-500 transition-all duration-200 cursor-pointer"
@@ -141,7 +141,8 @@ export default function CarrosselProdutos() {
           nextEl: nextRef.current,
         }}
         onInit={(swiper) => {
-          if (prevRef.current && nextRef.current) {
+          // Garante que a navegação seja inicializada corretamente
+          if (swiper.params.navigation && prevRef.current && nextRef.current) {
             (swiper.params.navigation as any).prevEl = prevRef.current;
             (swiper.params.navigation as any).nextEl = nextRef.current;
             swiper.navigation.init();
@@ -149,37 +150,43 @@ export default function CarrosselProdutos() {
           }
         }}
         loop={true}
-        // Aumentando o spaceBetween para todas as resoluções
-        spaceBetween={30} // Valor padrão para mobile (se não houver outro breakpoint menor)
+        // Ajuste os breakpoints para controlar o espaçamento e número de slides
+        // Os valores de spaceBetween devem ser testados e ajustados visualmente
+        // Ajuste os slidesPerView para evitar sobreposição
         breakpoints={{
-          320: {
-            slidesPerView: 1.5, 
-            spaceBetween: 230, // Aumentado de 10 para 20
+          320: { // Mobile pequeno
+            slidesPerView: 1.2, // Um pouco mais de 1 para dar a ideia de carrossel
+            spaceBetween: 10, // Espaçamento pequeno
           },
-          480: {
+          480: { // Mobile médio
+            slidesPerView: 1.5,
+            spaceBetween: 15,
+          },
+          640: { // Tablets pequenos / Mobile grande
             slidesPerView: 2,
-            spaceBetween: 235, // Aumentado de 15 para 25
+            spaceBetween: 20,
           },
-          768: {
-            slidesPerView: 3,
-            spaceBetween: 230, // Aumentado de 20 para 30
+          768: { // Tablets / Desktop pequeno
+            slidesPerView: 2.5, // 2.5 para dar a sensação de carrossel contínuo
+            spaceBetween: 25,
           },
-          1024: {
+          1024: { // Desktop médio
+            slidesPerView: 3.5, // 3.5 para carrosséis mais largos
+            spaceBetween: 30,
+          },
+          1280: { // Desktop grande
             slidesPerView: 4,
-            spaceBetween: 235, 
+            spaceBetween: 30,
           },
-          1280: {
-            slidesPerView: 5,
-            spaceBetween: 230, 
-          },
-          1536: {
-            slidesPerView: 6, 
-            spaceBetween: 225, // Aumentado de 30 para 45
+          1536: { // Desktop muito grande
+            slidesPerView: 4.5, // ou até 5.5 dependendo do tamanho do card
+            spaceBetween: 35,
           },
         }}
         className="py-8 md:py-12 w-full h-full" 
       >
         {produtos.map((produto) => (
+          // O CardProduto tem largura w-full e altura fixa, o que ajuda no ajuste
           <SwiperSlide key={produto.id || produto.nome} className="flex justify-center"> 
             <CardProduto produto={produto} />
           </SwiperSlide>

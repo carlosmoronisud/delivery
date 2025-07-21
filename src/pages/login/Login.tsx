@@ -1,7 +1,5 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Link, useNavigate } from 'react-router-dom';
-// import './Login.css'; // Não precisamos mais deste CSS puro, exceto pela animação customizada se for em outro componente
 import {
   useContext,
   useEffect,
@@ -22,7 +20,7 @@ function Login() {
   );
 
   const { usuario, handleLogin, isLoading, setUsuario } =
-    useContext(AuthContext); // Removido handleLogout se não for usado aqui
+    useContext(AuthContext); 
 
   useEffect(() => {
     if (usuario.token !== '') {
@@ -50,7 +48,7 @@ function Login() {
       id: decoded.sub,
       nome: decoded.name,
       usuario: decoded.email,
-      senha: decoded.sub, // A senha é o 'sub' do Google, como no seu original
+      senha: decoded.sub, 
       foto: decoded.picture,
       token: credentialResponse.credential,
     };
@@ -61,27 +59,16 @@ function Login() {
 
   return (
     <div className="min-h-screen w-full flex items-center justify-center p-4 md:p-8 bg-gray-100 font-sans">
-      {/* Container Principal do Login - Card grande e responsivo */}
+     
       <div className="relative w-full max-w-5xl bg-white rounded-3xl shadow-2xl overflow-hidden flex flex-col lg:flex-row min-h-[600px]">
 
-        {/* Seção da Imagem de Fundo (mantendo a URL e adicionando o overlay e texto que tínhamos) */}
+        
         <div 
           className="w-full lg:w-1/2 flex items-center justify-center p-8 text-white relative 
                      bg-[url('https://ik.imagekit.io/8h7kfljfc/imgs/2150857908.jpg?updatedAt=1752066425064')] 
                      bg-cover bg-center bg-no-repeat rounded-3xl lg:rounded-l-3xl lg:rounded-r-none"
         >
-          {/* Overlay para melhorar contraste do texto */}
-          {/* <div className="absolute inset-0 bg-black bg-opacity-40 rounded-3xl lg:rounded-l-3xl lg:rounded-r-none"></div>
-          <div className="relative z-10 text-center">
-            <h2 className="text-4xl md:text-5xl font-bold mb-4 drop-shadow-lg">
-              Bem-Vindo de Volta!
-            </h2>
-            <p className="text-xl md:text-2xl font-light leading-relaxed">
-              Descubra seus pratos favoritos e tenha a entrega mais rápida.
-            </p>
-          </div> */}
         </div>
-
         {/* Seção do Formulário de Login */}
         <div className="w-full lg:w-1/2 p-8 md:p-12 flex flex-col justify-center items-center">
           <h2 className="text-4xl md:text-5xl font-bold text-gray-800 mb-8 text-center">

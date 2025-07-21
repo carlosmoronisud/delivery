@@ -1,107 +1,142 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import { useSearchParams } from "react-router-dom";
 import type Categoria from "../../models/Categoria";
-import { buscar } from "../../services/Service"; // ou seu método para buscar categorias
+import { buscar } from "../../services/Service"; // Supondo que 'buscar' é para buscar categorias
+import { FunnelSimple, X } from "@phosphor-icons/react"; // Ícones para o botão de filtro e fechar
 
 export default function FiltroProduto() {
   const [params, setParams] = useSearchParams();
   const [categorias, setCategorias] = useState<Categoria[]>([]);
+  const [isMobileFilterOpen, setIsMobileFilterOpen] = useState(false); 
 
   // Captura os valores dos filtros da URL para controlar os inputs
   const selectedPrecoMin = params.get("precoMin") || "";
   const selectedPrecoMax = params.get("precoMax") || "";
   const selectedIngrediente = params.get("ingrediente") || "";
-  const selectedNutriScore = params.get("nutriScore"); // Mantido como string, pode ser null
+  const excludeIngrediente = params.get("excluirIngrediente") === 'true'; // Novo: estado do toggle de exclusão
+  const selectedNutriScore = params.get("nutriScore");
   const selectedCategoria = params.get("categoriaId") || "";
+  // REMOVIDO: selectedRestricoes não é mais um filtro separado, agora é categoria.
 
-  // Handler genérico para inputs de texto e select
-  function handleChange(e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) {
+  // Lista de restrições alimentares (removida daqui, agora são categorias)
+  // const restricoesAlimentares: RestricaoAlimentar[] = [...]
+
+  const handleChange = useCallback((e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
-    const newParams = new URLSearchParams(params); // Cria uma nova instância de URLSearchParams
+    const newParams = new URLSearchParams(params);
 
     if (value === "") {
-      newParams.delete(name); // Remove o parâmetro se o valor estiver vazio
+      newParams.delete(name);
     } else {
-      newParams.set(name, value); // Define ou atualiza o parâmetro
+      newParams.set(name, value);
     }
-    setParams(newParams); // Atualiza a URL
-  }
+    setParams(newParams);
+  }, [params, setParams]);
 
-  // Handler específico para os botões do NutriScore
-  function handleNutriScore(value: string) {
-    const newParams = new URLSearchParams(params); // Cria uma nova instância de URLSearchParams
+  const handleNutriScore = useCallback((value: string) => {
+    const newParams = new URLSearchParams(params);
     if (newParams.get("nutriScore") === value) {
-      newParams.delete("nutriScore"); // Desseleciona se já estiver selecionado
+      newParams.delete("nutriScore");
     } else {
-      newParams.set("nutriScore", value); // Seleciona o novo NutriScore
+      newParams.set("nutriScore", value);
     }
-    setParams(newParams); // Atualiza a URL
-  }
+    setParams(newParams);
+  }, [params, setParams]);
 
-  // Efeito para buscar as categorias ao montar o componente
+  // NOVO: Handler para o toggle de exclusão de ingredientes
+  const handleToggleExcludeIngrediente = useCallback(() => {
+    const newParams = new URLSearchParams(params);
+    if (excludeIngrediente) {
+        newParams.delete("excluirIngrediente");
+    } else {
+        newParams.set("excluirIngrediente", "true");
+    }
+    setParams(newParams);
+  }, [params, setParams, excludeIngrediente]);
+
+
+  // REMOVIDO: handleRestricao não é mais necessário, pois as restrições são categorias.
+
   useEffect(() => {
     async function fetchCategorias() {
       try {
         await buscar("/categorias", setCategorias);
       } catch (err) {
         console.error("Erro ao buscar categorias", err);
-        // ToastAlerta("Não foi possível carregar as categorias.", "erro"); // Opcional: mostrar alerta
       }
     }
     fetchCategorias();
-  }, []); // Array de dependências vazio para rodar apenas uma vez ao montar
+  }, []);
 
-  return (
-    <div className="flex flex-col gap-8 p-6 bg-white rounded-2xl shadow-lg border border-gray-100 font-sans text-gray-800"> {/* Ajustes do container principal */}
+  const filtersContent = (
+    <div className="flex flex-col gap-8 p-6 text-gray-800">
       <h2 className="text-3xl font-bold border-b pb-4 border-gray-200">
         Filtros Rápidos ✨
       </h2>
 
       {/* Preço */}
       <div className="flex flex-col gap-3">
-        <label className="text-xl font-semibold">Preço (R$)</label>
+        <label htmlFor="precoMin" className="text-xl font-semibold">Preço (R$)</label>
         <div className="flex gap-4">
           <input
+            id="precoMin"
             name="precoMin"
             type="number"
             onChange={handleChange}
-            value={selectedPrecoMin} // Controla o input com o estado da URL
+            value={selectedPrecoMin}
             className="w-full p-3 text-lg border border-gray-300 rounded-lg shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition-all duration-200"
             placeholder="Mínimo"
-            step="0.01" // Permite decimais
+            step="0.01"
           />
           <input
+            id="precoMax"
             name="precoMax"
             type="number"
             onChange={handleChange}
-            value={selectedPrecoMax} // Controla o input com o estado da URL
+            value={selectedPrecoMax}
             className="w-full p-3 text-lg border border-gray-300 rounded-lg shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition-all duration-200"
             placeholder="Máximo"
-            step="0.01" // Permite decimais
+            step="0.01"
           />
         </div>
       </div>
 
-      {/* Ingredientes */}
+      {/* Ingredientes com Toggle de Exclusão */}
       <div className="flex flex-col gap-3">
-        <label className="text-xl font-semibold">Ingredientes</label>
-        <input
-          name="ingrediente"
-          type="text"
-          onChange={handleChange}
-          value={selectedIngrediente} // Controla o input com o estado da URL
-          className="w-full p-3 border border-gray-300 rounded-lg shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition-all duration-200"
-          placeholder="Ex: alho, tomate, queijo..."
-        />
+        <label htmlFor="ingrediente" className="text-xl font-semibold">Ingredientes</label>
+        <div className="flex gap-2 items-center mb-2">
+            <input
+                id="ingrediente"
+                name="ingrediente"
+                type="text"
+                onChange={handleChange}
+                value={selectedIngrediente}
+                className="flex-grow p-3 border border-gray-300 rounded-lg shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition-all duration-200"
+                placeholder="Ex: alho, tomate..."
+            />
+            <button
+                type="button"
+                onClick={handleToggleExcludeIngrediente}
+                className={`flex-shrink-0 px-3 py-2 rounded-lg text-sm font-medium transition-all duration-200 
+                            ${excludeIngrediente ? "bg-red-500 text-white shadow-md" : "bg-gray-200 text-gray-700 hover:bg-gray-300"}`}
+                title={excludeIngrediente ? "Excluindo produtos com este ingrediente" : "Incluindo produtos com este ingrediente"}
+            >
+                {excludeIngrediente ? "EXCLUIR" : "INCLUIR"}
+            </button>
+        </div>
+        <p className="text-xs text-gray-500 -mt-1">
+            Use o botão ao lado para buscar produtos que contêm ou **não** contêm o ingrediente.
+        </p>
       </div>
 
       {/* Categoria */}
       <div className="flex flex-col gap-3">
-        <label className="text-xl font-semibold">Categoria</label>
+        <label htmlFor="categoriaId" className="text-xl font-semibold">Categoria</label>
         <select
+          id="categoriaId"
           name="categoriaId"
-          value={selectedCategoria} // Controla o select com o estado da URL
+          value={selectedCategoria}
           onChange={handleChange}
           className="w-full p-3 border border-gray-300 rounded-lg shadow-sm text-gray-700 cursor-pointer focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition-all duration-200"
         >
@@ -117,32 +152,32 @@ export default function FiltroProduto() {
       {/* NutriScore */}
       <div className="flex flex-col gap-3">
         <label className="text-xl font-semibold">NutriScore</label>
-        <div className="flex flex-wrap gap-3 justify-center"> {/* flex-wrap para responsividade em mobile */}
+        <div className="flex flex-wrap gap-3 justify-center">
           {["A", "B", "C", "D", "E"].map((score) => {
-            const isSelected = selectedNutriScore?.toUpperCase() === score; // Comparação case-insensitive
+            const isSelected = selectedNutriScore?.toUpperCase() === score;
 
             const defaultColors = {
-              A: "bg-green-100 text-green-700 hover:bg-green-200", // Mais suave
-              B: "bg-lime-100 text-lime-700 hover:bg-lime-200",   // Mais suave
-              C: "bg-yellow-100 text-yellow-700 hover:bg-yellow-200", // Mais suave
-              D: "bg-orange-100 text-orange-700 hover:bg-orange-200", // Mais suave
-              E: "bg-red-100 text-red-700 hover:bg-red-200",     // Mais suave
+              A: "bg-green-100 text-green-700 hover:bg-green-200",
+              B: "bg-lime-100 text-lime-700 hover:bg-lime-200",
+              C: "bg-yellow-100 text-yellow-700 hover:bg-yellow-200",
+              D: "bg-orange-100 text-orange-700 hover:bg-orange-200",
+              E: "bg-red-100 text-red-700 hover:bg-red-200",
             };
 
             const selectedColors = {
-              A: "bg-green-500 text-white shadow-md", // Mais forte quando selecionado
+              A: "bg-green-500 text-white shadow-md",
               B: "bg-lime-500 text-white shadow-md",
               C: "bg-yellow-500 text-white shadow-md",
               D: "bg-orange-500 text-white shadow-md",
               E: "bg-red-500 text-white shadow-md",
             };
 
-            const baseStyle = "w-12 h-12 rounded-full flex justify-center items-center text-lg font-bold transition-all duration-200 transform hover:scale-105 cursor-pointer"; // Ajustei tamanho e adicionei scale
+            const baseStyle = "w-12 h-12 rounded-full flex justify-center items-center text-lg font-bold transition-all duration-200 transform hover:scale-105 cursor-pointer";
 
             return (
               <button
                 key={score}
-                type="button" // Importante: type="button" para não submeter o formulário
+                type="button"
                 onClick={() => handleNutriScore(score)}
                 className={`${baseStyle} ${isSelected ? selectedColors[score as keyof typeof selectedColors] : defaultColors[score as keyof typeof defaultColors]}`}
               >
@@ -153,5 +188,55 @@ export default function FiltroProduto() {
         </div>
       </div>
     </div>
+  );
+
+  return (
+    <>
+      {/* Botão de Filtro para Mobile (aparece apenas em telas pequenas) */}
+      <div className="md:hidden fixed bottom-6 right-6 z-40">
+        <button 
+          onClick={() => setIsMobileFilterOpen(true)}
+          className="bg-orange-600 text-white p-4 rounded-full shadow-lg hover:bg-orange-700 transition-colors duration-200"
+          aria-label="Abrir filtros"
+        >
+          <FunnelSimple size={28} weight="bold" />
+        </button>
+      </div>
+
+      {/* Filtros para Desktop (sempre visíveis em telas maiores) */}
+      <div className="hidden md:block w-full max-w-xs">
+        <div className="bg-white rounded-2xl shadow-lg border border-gray-100 font-sans text-gray-800">
+            {filtersContent}
+        </div>
+      </div>
+
+      {/* Modal de Filtros para Mobile (exibido condicionalmente) */}
+      {isMobileFilterOpen && (
+        <div className="fixed inset-0 z-50 bg-black bg-opacity-70 flex justify-end items-center md:hidden">
+          {/* Conteúdo do Modal (Painel Lateral) */}
+          <div className="bg-white w-full max-w-sm h-full overflow-y-auto transform translate-x-0 transition-transform duration-300 ease-in-out">
+            <div className="flex justify-between items-center p-6 border-b border-gray-200">
+              <h2 className="text-2xl font-bold text-gray-800">Filtros</h2>
+              <button 
+                onClick={() => setIsMobileFilterOpen(false)}
+                className="text-gray-600 hover:text-gray-900 transition-colors"
+                aria-label="Fechar filtros"
+              >
+                <X size={28} weight="bold" />
+              </button>
+            </div>
+            {filtersContent} {/* Reutiliza o conteúdo dos filtros */}
+            <div className="p-6 border-t border-gray-200">
+                <button 
+                    onClick={() => setIsMobileFilterOpen(false)} 
+                    className="w-full bg-orange-600 text-white font-bold py-3 rounded-lg hover:bg-orange-700 transition-colors"
+                >
+                    Aplicar Filtros
+                </button>
+            </div>
+          </div>
+        </div>
+      )}
+    </>
   );
 }

@@ -22,8 +22,8 @@ import DeletarProduto from './components/produto/deleteproduto/DeleteProdutos';
 // Componentes do carrinho e finalização
 import Cart from './carrinho/Cart';
 import FormUsuario from './components/formusuario/FormUsuario';
-import OrderConfirmation from './carrinho/OrderConfirmation'; // Importe o novo componente
-import OrderTracking from './carrinho/OrderTraking'; // O componente de rastreamento
+import OrderConfirmation from './carrinho/OrderConfirmation';
+import OrderTracking from './carrinho/OrderTraking'; 
 
 // Contextos
 import { AuthProvider } from './contexts/AuthContext';
@@ -34,7 +34,6 @@ import { GoogleOAuthProvider } from '@react-oauth/google';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import RotaPrivada from './contexts/RotaPrivada';
-
 
 type MenuState = 'closed' | 'open';
 
@@ -50,9 +49,15 @@ function App() {
   };
 
   const shouldShowFooter = (): boolean => menuState === 'closed';
+  const GOOGLE_CLIENT_ID = import.meta.env.VITE_GOOGLE_CLIENT_ID;
+
+if (!GOOGLE_CLIENT_ID) {
+  console.error("Erro: A variável de ambiente VITE_GOOGLE_CLIENT_ID não está configurada.");
+  
+}
 
   return (
-    <GoogleOAuthProvider clientId="81916486443-v4tlh14vid1irmcs4juc0ptahmgqbvqs.apps.googleusercontent.com">
+    <GoogleOAuthProvider clientId={GOOGLE_CLIENT_ID}>
       <AuthProvider>
         <CartProvider>
           <ToastContainer />
@@ -86,7 +91,7 @@ function App() {
                   {/* NOVO: Rota de Confirmação de Pedido */}
                   <Route path="/order-confirmation" element={<RotaPrivada><OrderConfirmation /></RotaPrivada>} />
 
-                  {/* Rota de Acompanhamento de Pedido (agora pode receber um ID) */}
+                  {/* Rota de Acompanhamento de Pedido */}
                   <Route path="/order-tracking/:orderId?" element={<RotaPrivada><OrderTracking /></RotaPrivada>} />
 
                   {/* Rotas protegidas (somente usuário logado) */}

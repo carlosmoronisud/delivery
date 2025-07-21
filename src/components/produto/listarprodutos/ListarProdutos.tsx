@@ -1,110 +1,80 @@
-import { ToastAlerta } from "../../../utils/ToastAlerta";
-import { DNA } from "react-loader-spinner";
-import CardProduto from "../cardproduto/CardProduto";
-import { useQuery } from "@tanstack/react-query";
-import { useSearchParams } from "react-router-dom";
-import { buscarTodosProdutos } from "../../../services/Service";
-import type Produto from "../../../models/Produto"; // Ensure this import is correct and up-to-date
-import type Categoria from "../../../models/Categoria"; // Import Categoria for filtering logic
+// src/components/produto/listarprodutos/ListarProdutos.tsx
+import { useEffect, useState,  } from 'react';
+import { useSearchParams } from 'react-router-dom';
+import type Produto from '../../../models/Produto'; // Caminho para o seu modelo Produto
+import { buscar } from '../../../services/Service'; // Seu serviço para buscar produtos
 
-function ListarProdutos() {
-  const [searchParams] = useSearchParams();
+import { ToastAlerta } from '../../../utils/ToastAlerta'; // Para alertas
 
-  const filtros = {
-    precoMin: searchParams.get("precoMin") || "",
-    precoMax: searchParams.get("precoMax") || "",
-    nutriScore: searchParams.get("nutriScore") || "",
-    categoriaId: searchParams.get("categoriaId") || "",
-    ingrediente: searchParams.get("ingrediente") || "",
-  };
 
-  const {
-    data: produtos = [],
-    isLoading,
-    error,
-  } = useQuery<Produto[]>({
-    queryKey: ["produtos", filtros],
-    queryFn: async () => {
-      const data = await buscarTodosProdutos(); // This should return Produto[]
+import Lottie from 'lottie-react'; // Para animação de loading
+import loadingSpinner from '../../../assets/lottie-animations/FoodCarousel.json';
+import emptyStateAnimation from '../../../assets/lottie-animations/cancelled_order.json'; 
+import { filtrarProdutos } from '../../../utils/FilterLogic';
+import CardProduto from '../cardproduto/CardProduto';
 
-      // Filter logic applied on the client-side
-      return data.filter((produto) => {
-        const preco = parseFloat(produto.preco?.toString() || '0'); // Safely get price, default to 0
-        const precoMin = parseFloat(filtros.precoMin) || 0;
-        const precoMax = parseFloat(filtros.precoMax) || Infinity;
+export default function ListarProdutos() {
+  const [produtos, setProdutos] = useState<Produto[]>([]);
+  const [produtosFiltrados, setProdutosFiltrados] = useState<Produto[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
 
-        const matchPreco = preco >= precoMin && preco <= precoMax;
-        
-        // NutriScore filter
-        const matchNutri =
-          !filtros.nutriScore || (produto.nutriScore?.toUpperCase() === filtros.nutriScore.toUpperCase());
+  const [params] = useSearchParams(); // Pega os parâmetros da URL para filtrar
 
-        // Category filter: Ensure produto.categoria is an object before accessing its id
-        const matchCategoria =
-          !filtros.categoriaId ||
-          (typeof produto.id_categoria === "object" && produto.id_categoria !== null && // Check for object and not null
-           (produto.id_categoria as Categoria).id?.toString() === filtros.categoriaId); // Type assertion for safety
-        
-        // Ingredient filter
-        const matchIngrediente =
-          !filtros.ingrediente ||
-          produto.ingrediente
-            ?.toLowerCase()
-            .includes(filtros.ingrediente.toLowerCase());
+  // Contexto para obter o token se necessário para a busca
 
-        return matchPreco && matchNutri && matchCategoria && matchIngrediente;
-      });
-    },
-    // Adding staleTime to prevent refetches on every mount if data doesn't change frequently
-    // Adjust based on how fresh you need the product list to be.
-    staleTime: 5 * 60 * 1000, // 5 minutes
-  });
 
-  if (error) {
-    ToastAlerta("Erro ao carregar produtos. Tente novamente mais tarde.", "erro"); // More user-friendly message
-    console.error("Erro na consulta de produtos:", error); // Log error for debugging
-    return null; // Or render an error component
+  // Função para buscar todos os produtos do backend
+  async function fetchProdutos() {
+    setIsLoading(true);
+    try {
+      // Adapte a rota e o método de busca conforme sua API
+      // Se sua API de busca de produtos precisa de um token, adicione-o aqui.
+      // Ex: await buscar('/produtos', setProdutos, { headers: { Authorization: `Bearer ${token}` } });
+      await buscar('/produtos', setProdutos); 
+      ToastAlerta('Produtos carregados com sucesso!', 'sucesso');
+    } catch (error) {
+      console.error("Erro ao buscar produtos:", error);
+      ToastAlerta("Não foi possível carregar os produtos.", "erro");
+    } finally {
+      setIsLoading(false);
+    }
   }
+
+  // Efeito para buscar os produtos UMA VEZ ao montar o componente
+  useEffect(() => {
+    fetchProdutos();
+  }, []); // Array de dependências vazio para rodar apenas uma vez
+
+  // Efeito para aplicar os filtros sempre que os produtos originais ou os parâmetros da URL mudarem
+  useEffect(() => {
+    // Aplica a função de filtro importada aos produtos
+    const produtosAposFiltro = filtrarProdutos(produtos, params);
+    setProdutosFiltrados(produtosAposFiltro);
+  }, [produtos, params]); // Depende da lista de produtos e dos parâmetros da URL
 
   if (isLoading) {
     return (
-      <div className="flex justify-center items-center py-20 w-full"> {/* Center loader */}
-        <DNA
-          visible={true}
-          height="120" // Consistent loader size with other components
-          width="120"
-          ariaLabel="Carregando produtos..."
-          wrapperClass="dna-wrapper"
-        />
+      <div className="flex justify-center items-center h-full min-h-[400px]">
+        <Lottie animationData={loadingSpinner} loop={true} autoplay={true} style={{ width: 150, height: 150 }} />
+      </div>
+    );
+  }
+
+  if (produtosFiltrados.length === 0) {
+    return (
+      <div className="flex flex-col items-center justify-center h-full min-h-[400px] text-gray-600">
+        <Lottie animationData={emptyStateAnimation} loop={true} autoplay={true} style={{ width: 200, height: 200 }} />
+        <p className="text-xl mt-4 font-semibold">Nenhum produto encontrado com os filtros aplicados.</p>
+        <button onClick={() => setProdutos([])} className="mt-4 text-orange-600 hover:underline">Limpar filtros</button>
       </div>
     );
   }
 
   return (
-    <div className="flex flex-col items-center w-full py-8 px-4"> {/* Adjusted padding and centering */}
-      <div className="container mx-auto">
-        {produtos.length === 0 ? (
-          <div className="text-center my-12 p-6 bg-white rounded-lg shadow-md border border-gray-200">
-            <p className="text-3xl font-semibold text-gray-700 mb-4">
-              Ops! 😟 Nenhum produto encontrado.
-            </p>
-            <p className="text-xl text-gray-500">
-              Verifique os filtros ou tente buscar por algo diferente.
-            </p>
-          </div>
-        ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-8 p-4 md:p-0"> {/* Responsive grid with gap */}
-            {produtos.map((produto) =>
-              // Render CardProduto only if product and its ID are valid
-              produto?.id ? (
-                <CardProduto key={produto.id} produto={produto} />
-              ) : null
-            )}
-          </div>
-        )}
-      </div>
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+      {produtosFiltrados.map((produto) => (
+        <CardProduto key={produto.id} produto={produto} />
+      ))}
     </div>
   );
 }
-
-export default ListarProdutos;

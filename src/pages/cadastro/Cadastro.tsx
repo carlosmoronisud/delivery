@@ -54,7 +54,7 @@ function Cadastro() {
       } catch (error) {
         ToastAlerta('Erro ao cadastrar o usuário', "erro");
         console.error(error);
-      } finally { // Use finally para garantir que isLoading seja falso
+      } finally {
         setIsLoading(false);
       }
     } else {
@@ -64,7 +64,7 @@ function Cadastro() {
         senha: '',
       });
       setConfirmaSenha("");
-      setIsLoading(false); // Garante que o loader não fique preso se a validação falhar
+      setIsLoading(false); 
     }
   }
 
@@ -200,16 +200,6 @@ function Cadastro() {
                      bg-[url('https://ik.imagekit.io/8h7kfljfc/imgs/2151989794.jpg?updatedAt=1752706340278')] 
                      bg-cover bg-center bg-no-repeat rounded-3xl lg:rounded-r-3xl lg:rounded-l-none"
         >
- 
-          {/* <div className="absolute inset-0 bg-black bg-opacity-30 rounded-3xl lg:rounded-r-3xl lg:rounded-l-none"></div>
-          <div className="relative z-10 text-center">
-            <h2 className="text-4xl md:text-5xl font-bold mb-4 drop-shadow-lg">
-              Sua Aventura Culinária Começa Aqui!
-            </h2>
-            <p className="text-xl md:text-2xl font-light leading-relaxed">
-              Junte-se à nossa comunidade e descubra um mundo de sabores.
-            </p>
-          </div> */}
         </div>
       </div>
     </div>
