@@ -61,7 +61,7 @@ function SobreProjetoPage() {
           {/* Logo do Delivery - Lado esquerdo */}
           <img
             className="rounded-full border-4 border-orange-400 h-64 w-64 md:h-80 md:w-80 object-cover shadow-xl hover:scale-105 hover:shadow-2xl hover:shadow-orange-600 transition-all duration-300 transform hover:-translate-y-2"
-            src="https://ik.imagekit.io/8h7kfljfc/imgs/deliverylogo.png?updatedAt=1752066792229"
+            src="https://ik.imagekit.io/8h7kfljfc/imgs/ChatGPT%20Image%20Jul%2021,%202025,%2008_36_03%20PM.png?updatedAt=1753140984875"
             alt="Logo do Delivery"
           />
 
