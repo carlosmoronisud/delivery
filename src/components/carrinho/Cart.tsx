@@ -8,7 +8,8 @@ import { AuthContext } from '../../contexts/AuthContext';
 import AddressForm from './AddressForm';
 import type { EnderecoData } from '../../models/EnderecoData'; 
 import DeliveryVisualization from './DeliveryVisualization';
-import { Frown } from 'lucide-react';
+import { ShoppingCart } from '@phosphor-icons/react';
+
 
 const LOJA_ENDERECO_ORIGEM = 'Rua do Ouvidor, 666, Campinas, SP';
 
@@ -148,7 +149,7 @@ function Cart() {
 
                 {items.length === 0 ? (
                     <div className="flex flex-col items-center justify-center py-16 text-gray-600">
-                        <Frown size={80} className="mb-4 text-gray-400" />
+                        <ShoppingCart size={80} className="mb-4 text-gray-400" />
                         <span className="text-2xl md:text-3xl text-center font-semibold mb-4">
                             O seu carrinho está vazio!
                         </span>

@@ -1,6 +1,6 @@
 import { useState, useRef } from "react";
-import { MapPin } from "lucide-react";
 import axios from "axios";
+import { MapPin } from "@phosphor-icons/react";
 
 export default function LocationButton() {
     const [cepInput, setCepInput] = useState("");

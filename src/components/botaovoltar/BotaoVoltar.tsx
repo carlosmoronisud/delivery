@@ -1,6 +1,7 @@
 // src/components/ui/BotaoVoltar.tsx
+import { ArrowLeft } from '@phosphor-icons/react';
 import { useNavigate } from 'react-router-dom';
-import { ArrowLeft } from 'lucide-react';
+
 
 export default function BotaoVoltar() {
   const navigate = useNavigate();
