@@ -9,7 +9,7 @@ import orderReceivedAnimation from '../../assets/lottie-animations/orderreceived
 import preparingFoodAnimation from '../../assets/lottie-animations/preparingfood.json';
 import onTheWayAnimation from '../../assets/lottie-animations/ontheway.json';
 import courrierAnimation from '../../assets/lottie-animations/courier.json'; 
-import deliveredAnimation from '../../assets/lottie-animations/Delivered.json';
+import deliveredAnimation from '../../assets/lottie-animations/deliver.json';
 import cancelledOrderAnimation from '../../assets/lottie-animations/cancelled.json'
 
 import { ShoppingCartSimple, MapPinLine } from '@phosphor-icons/react';
