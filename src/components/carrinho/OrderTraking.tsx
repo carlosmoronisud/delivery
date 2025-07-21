@@ -5,12 +5,12 @@ import { ToastAlerta } from '../../utils/ToastAlerta';
 import type { EnderecoData } from '../../models/EnderecoData';
 
 // Importe suas animações Lottie
-import orderReceivedAnimation from '../../assets/lottie-animations/Order_received.json';
-import preparingFoodAnimation from '../../assets/lottie-animations/Preparing_food.json';
-import onTheWayAnimation from '../../assets/lottie-animations/On_the_way.json';
+import orderReceivedAnimation from '../../assets/lottie-animations/orderreceived.json';
+import preparingFoodAnimation from '../../assets/lottie-animations/preparingfood.json';
+import onTheWayAnimation from '../../assets/lottie-animations/ontheway.json';
 import courrierAnimation from '../../assets/lottie-animations/courier.json'; 
 import deliveredAnimation from '../../assets/lottie-animations/Delivered.json';
-import cancelledOrderAnimation from '../../assets/lottie-animations/Cancelled_order.json'
+import cancelledOrderAnimation from '../../assets/lottie-animations/cancelled.json'
 
 import { ShoppingCartSimple, MapPinLine } from '@phosphor-icons/react';
 import { useState, useEffect, useCallback } from 'react';
