@@ -8,7 +8,7 @@ import type { EnderecoData } from '../../models/EnderecoData';
 import orderReceivedAnimation from '../../assets/lottie-animations/Order_received.json';
 import preparingFoodAnimation from '../../assets/lottie-animations/Preparing_food.json';
 import onTheWayAnimation from '../../assets/lottie-animations/On_the_way.json';
-import courrierAnimation from '../../assets/lottie-animations/Courier.json'; 
+import courrierAnimation from '../../assets/lottie-animations/courier.json'; 
 import deliveredAnimation from '../../assets/lottie-animations/Delivered.json';
 import cancelledOrderAnimation from '../../assets/lottie-animations/Cancelled_order.json'
 
