@@ -191,7 +191,7 @@ function Navbar({ menuState, onMenuToggle, onMenuClose }: Readonly<NavbarProps>)
                     <div className="relative flex flex-col items-start justify-start gap-4 p-6 text-left text-lg text-white">
                         <div className="flex w-full items-center justify-between mb-6">
                             <img
-                                src="https://ik.imagekit.io/8h7kfljfc/imgs/deliverylogo.png?updatedAt=1752066792229"
+                                src="https://ik.imagekit.io/8h7kfljfc/imgs/ChatGPT%20Image%20Jul%2021,%202025,%2008_36_03%20PM.png?updatedAt=1753140984875"
                                 alt="Logo do Delivery"
                                 className='h-16 rounded-full object-cover'
                             />
