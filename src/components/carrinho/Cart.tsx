@@ -1,5 +1,5 @@
-// src/carrinho/Cart.tsx
-import { useContext, useState, useEffect } from 'react';
+/* eslint-disable @typescript-eslint/no-unused-vars */
+import { useContext, useState, useEffect, useCallback } from 'react';
 import CardCart from './CartCard';
 import { CartContext, type Items } from '../../contexts/CartContext';
 import { Link, useNavigate } from 'react-router-dom';
@@ -7,11 +7,14 @@ import { ToastAlerta } from '../../utils/ToastAlerta';
 import { AuthContext } from '../../contexts/AuthContext';
 import AddressForm from './AddressForm';
 import type { EnderecoData } from '../../models/EnderecoData'; 
-import DeliveryVisualization from './DeliveryVisualization';
+
 import { ShoppingCart } from '@phosphor-icons/react';
+import MapDisplay from '../../components/map/MapDisplay'; 
+import { geocodeAddress } from '../../services/GeocodeService';
 
 
-const LOJA_ENDERECO_ORIGEM = 'Rua do Ouvidor, 666, Campinas, SP';
+
+const LOJA_ENDERECO_ORIGEM = 'Rua do Ouvidor, 666, Campinas, SP'; 
 
 function Cart() {
     const navigate = useNavigate();
@@ -20,7 +23,7 @@ function Cart() {
 
     const [deliveryOption, setDeliveryOption] = useState<'none' | 'pickup' | 'delivery'>('none');
     const [frete, setFrete] = useState<number>(0);
-    const [enderecoData, setEnderecoData] = useState<EnderecoData>({ rua: '', numero: '', bairro: '', cidade: '', complemento: '', cep: '' });
+    const [enderecoData, setEnderecoData] = useState<EnderecoData>({ rua: '', numero: '', bairro: '', cidade: '', complemento: '', cep: '', latitude: undefined, longitude: undefined });
     const [showAddressForm, setShowAddressForm] = useState(false);
     const [isFreteCalculated, setIsFreteCalculated] = useState(false);
     const [deliveryTime, setDeliveryTime] = useState<string>('');
@@ -28,17 +31,42 @@ function Cart() {
 
     const valorTotalComFrete = valorTotal + frete;
 
+    // Função para geocodificar e atualizar enderecoData com lat/lng
+    const updateAddressWithCoordinates = useCallback(async (address: EnderecoData) => {
+        const fullAddressString = `${address.rua}, ${address.numero}, ${address.bairro ? address.bairro + ', ' : ''}${address.cidade}, ${address.estado || ''}, ${address.cep || ''}`;
+        
+        console.log("Cart: Iniciando geocodificação para:", fullAddressString); // LOG 1
+        const coords = await geocodeAddress(fullAddressString);
+        
+        if (coords) {
+            console.log("Cart: Coordenadas obtidas:", coords); // LOG 2
+            setEnderecoData(prev => ({
+                ...prev,
+                latitude: coords.latitude,
+                longitude: coords.longitude,
+            }));
+        } else {
+            console.log("Cart: Falha ao obter coordenadas para:", fullAddressString); 
+            ToastAlerta('Não foi possível geocodificar o endereço para o mapa.', 'info');
+            setEnderecoData(prev => ({ ...prev, latitude: undefined, longitude: undefined }));
+        }
+    }, []);
+
     useEffect(() => {
         if (deliveryOption === 'pickup' || deliveryOption === 'none') {
             setFrete(0);
             setDeliveryTime('');
             setDistance('');
             setIsFreteCalculated(false);
+            // Ao mudar para pickup/none, limpa coords também
+            setEnderecoData(prev => ({ ...prev, latitude: undefined, longitude: undefined }));
         } else if (deliveryOption === 'delivery' && (!enderecoData.rua || !enderecoData.numero || !enderecoData.cidade)) {
             setFrete(0);
             setDeliveryTime('');
             setDistance('');
             setIsFreteCalculated(false);
+            // Ao tornar o endereço incompleto, limpa coords
+            setEnderecoData(prev => ({ ...prev, latitude: undefined, longitude: undefined }));
         }
     }, [deliveryOption, enderecoData.rua, enderecoData.numero, enderecoData.cidade]);
 
@@ -55,16 +83,19 @@ function Cart() {
     };
 
     const handleAddressChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setEnderecoData(prev => ({
-            ...prev,
+        const newAddressData = {
+            ...enderecoData,
             [e.target.name]: e.target.value,
-        }));
+        };
+        setEnderecoData(newAddressData);
         setIsFreteCalculated(false);
         setDeliveryTime('');
         setDistance('');
         
-        const currentAddress = { ...enderecoData, [e.target.name]: e.target.value };
-        if (currentAddress.rua && currentAddress.numero && currentAddress.cidade) {
+        // Disparar geocodificação ao digitar, se o endereço estiver minimamente completo
+        if (newAddressData.rua && newAddressData.cidade) {
+            updateAddressWithCoordinates(newAddressData);
+            // Simular cálculo de rota para preencher frete/tempo
             const simulatedDistance = "5.0 km";
             const simulatedDuration = "20 mins";
             handleRouteCalculated(simulatedDistance, simulatedDuration);
@@ -77,14 +108,28 @@ function Cart() {
         setDeliveryTime('');
         setDistance('');
 
-        if (selectedAddress.rua && selectedAddress.numero && selectedAddress.cidade) {
-            const simulatedDistance = "7.5 km";
-            const simulatedDuration = "30 mins";
-            handleRouteCalculated(simulatedDistance, simulatedDuration);
+        if (selectedAddress.rua && selectedAddress.cidade) {
+            // Se o autocomplete já trouxe lat/lng (ideal), use. Senão, geocodifique.
+            if (selectedAddress.latitude && selectedAddress.longitude) {
+                console.log("Cart: Endereço selecionado já tem coords.", selectedAddress); // LOG 4
+                setEnderecoData(selectedAddress); // Use o endereço completo já com coords
+                // Simular cálculo de rota
+                const simulatedDistance = "7.5 km";
+                const simulatedDuration = "30 mins";
+                handleRouteCalculated(simulatedDistance, simulatedDuration);
+            } else {
+                console.log("Cart: Endereço selecionado sem coords, geocodificando."); // LOG 5
+                updateAddressWithCoordinates(selectedAddress); // Geocodifique
+                // Simular cálculo de rota
+                const simulatedDistance = "7.5 km";
+                const simulatedDuration = "30 mins";
+                handleRouteCalculated(simulatedDistance, simulatedDuration);
+            }
         }
     };
 
     const handleFinalizarPedido = () => {
+        console.log("Cart: Finalizar Pedido clicado."); // LOG 6
         if (!usuario || !usuario.token) {
             ToastAlerta('Você precisa estar logado para finalizar a compra!', 'erro');
             return;
@@ -93,6 +138,11 @@ function Cart() {
         if (deliveryOption === 'delivery') {
             if (!enderecoData.rua || !enderecoData.numero || !enderecoData.bairro || !enderecoData.cidade) {
                 ToastAlerta('Por favor, preencha todos os campos obrigatórios do endereço para entrega.', 'erro');
+                return;
+            }
+            // Verifica se as coordenadas estão disponíveis antes de prosseguir
+            if (!enderecoData.latitude || !enderecoData.longitude) {
+                ToastAlerta('Aguarde a confirmação do endereço no mapa ou digite um endereço válido.', 'erro');
                 return;
             }
             if (!isFreteCalculated) {
@@ -104,12 +154,15 @@ function Cart() {
             return;
         }
 
-        // Redireciona para a página de confirmação de pedido
-        navigate('/order-confirmation', { // <--- Nova rota de redirecionamento
+        navigate('/order-confirmation', { 
             state: {
                 deliveryOption,
                 frete,
-                enderecoData,
+                enderecoData: { // Passa uma cópia do enderecoData para evitar modificações acidentais
+                    ...enderecoData,
+                    latitude: enderecoData.latitude, 
+                    longitude: enderecoData.longitude,
+                },
                 valorTotal,
                 quantidadeItems,
                 deliveryTime,
@@ -118,11 +171,10 @@ function Cart() {
             }
         });
 
-        // Limpa o carrinho e reseta os estados locais APÓS a navegação para que os dados sejam passados
+        ToastAlerta('Pedido finalizado com sucesso!', 'sucesso'); // Movido para após a navegação
         limparCart();
         setDeliveryOption('none');
-        setFrete(0);
-        setEnderecoData({ rua: '', numero: '', bairro: '', cidade: '', complemento: '', cep: '' });
+        setEnderecoData({ rua: '', numero: '', bairro: '', cidade: '', complemento: '', cep: '', latitude: undefined, longitude: undefined });
         setShowAddressForm(false);
         setIsFreteCalculated(false);
         setDeliveryTime('');
@@ -132,13 +184,13 @@ function Cart() {
     const isConfirmButtonDisabled =
         quantidadeItems === 0 ||
         deliveryOption === 'none' ||
-        (deliveryOption === 'delivery' && (!enderecoData.rua || !enderecoData.numero || !enderecoData.cidade || !isFreteCalculated)) ||
+        (deliveryOption === 'delivery' && (!enderecoData.rua || !enderecoData.numero || !enderecoData.cidade || !enderecoData.latitude || !enderecoData.longitude || !isFreteCalculated)) ||
         !usuario.token;
 
 
     const showConfirmButton =
         (deliveryOption === 'pickup' && quantidadeItems > 0 && usuario.token) ||
-        (deliveryOption === 'delivery' && isFreteCalculated && enderecoData.rua && enderecoData.numero && enderecoData.cidade && quantidadeItems > 0 && usuario.token);
+        (deliveryOption === 'delivery' && isFreteCalculated && enderecoData.rua && enderecoData.numero && enderecoData.cidade && enderecoData.latitude && enderecoData.longitude && quantidadeItems > 0 && usuario.token);
 
     return (
         <div className="min-h-screen w-full bg-gray-100 flex flex-col items-center py-12 px-4 font-sans">
@@ -209,13 +261,20 @@ function Cart() {
                                             onAddressChange={handleAddressChange}
                                             onAddressSelect={handleAddressSelect}
                                         />
-                                        {isFreteCalculated && (
-                                            <DeliveryVisualization
-                                                origin={LOJA_ENDERECO_ORIGEM}
-                                                destination={`${enderecoData.rua}, ${enderecoData.numero}, ${enderecoData.bairro ? enderecoData.bairro + ', ' : ''}${enderecoData.cidade}`}
-                                                distance={distance}
-                                                duration={deliveryTime}
-                                            />
+                                        {/* NOVO: Mapa de Confirmação do Endereço */}
+                                        {enderecoData.latitude !== undefined && enderecoData.longitude !== undefined ? ( // Verifica se lat/lng são definidos
+                                            <div className="mt-8">
+                                                <h3 className="text-xl font-bold text-gray-800 mb-4 text-center">Confirme seu Endereço no Mapa:</h3>
+                                                <MapDisplay 
+                                                    latitude={enderecoData.latitude} 
+                                                    longitude={enderecoData.longitude} 
+                                                />
+                                                <p className="text-sm text-gray-600 mt-2 text-center">Este é o ponto de entrega. Arraste para ajustar se necessário (funcionalidade avançada, não implementada aqui).</p>
+                                            </div>
+                                        ) : (
+                                            <div className="text-gray-600 text-center p-4 bg-gray-100 rounded-md">
+                                                Aguardando coordenadas do endereço para exibir o mapa...
+                                            </div>
                                         )}
                                     </>
                                 )}
@@ -241,8 +300,8 @@ function Cart() {
                                                 <p className="mb-2">Selecione uma opção de entrega/retirada para continuar.</p>
                                             )}
                                             {usuario.token && deliveryOption === 'delivery' && 
-                                                (!enderecoData.rua || !enderecoData.numero || !enderecoData.cidade || !isFreteCalculated) && (
-                                                <p className="mb-2">Preencha o endereço e aguarde o cálculo do frete para finalizar.</p>
+                                                (!enderecoData.rua || !enderecoData.numero || !enderecoData.cidade || !isFreteCalculated || enderecoData.latitude === undefined || enderecoData.longitude === undefined) && ( // Ajustado aqui
+                                                <p className="mb-2">Preencha o endereço, confirme no mapa e aguarde o cálculo do frete para finalizar.</p>
                                             )}
                                         </div>
                                     )}

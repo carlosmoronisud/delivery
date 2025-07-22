@@ -1,4 +1,4 @@
-// src/types/EnderecoData.ts
+// src/models/EnderecoData.ts
 
 export interface EnderecoData {
     rua: string;
@@ -7,4 +7,7 @@ export interface EnderecoData {
     cidade: string;
     complemento?: string;
     cep?: string;
+    latitude?: number; 
+    longitude?: number; 
+    estado?: string;
 }
