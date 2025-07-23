@@ -1,5 +1,5 @@
+import { useState } from "react";
 import { motion } from "framer-motion";
-import ColaboradorCard from "../../components/colaborador/Colaborador";
 import Lottie from 'lottie-react';
 import innovationAnimation from '../../assets/lottie-animations/innovation.json';
 import uxuiAnimation from '../../assets/lottie-animations/designthinking.json';
@@ -31,12 +31,61 @@ const staggerContainer = {
 };
 
 function SobreProjetoPage() {
+  const [hovered, setHovered] = useState<string | null>(null);
+
+  // Seu nome para destaque, pode ser alterado
+  const membroDestaque = "Carlos Moroni"; 
+
+  const getCardStyle = (nome: string) => {
+    const isDefault = nome === membroDestaque && !hovered;
+    const isHovered = nome === hovered;
+
+    const destaqueStyle = "bg-gradient-to-br from-orange-500 to-yellow-400 text-white shadow-2xl border-2 border-orange-400";
+    const normalStyle = "bg-white text-gray-800 shadow-md border border-gray-200";
+    
+    // Adição para o destaque sutil de borda (ring)
+    const isNotCarlosHover = hovered && nome !== hovered && nome === membroDestaque;
+    const ringStyle = isNotCarlosHover ? "ring-2 ring-orange-200" : "";
+
+    return `${(isDefault || isHovered) ? destaqueStyle : normalStyle} ${ringStyle}`;
+  };
+
   const membros = [
     {
       nome: 'Carlos Moroni',
-      cargo: 'Desenvolvedor Fullstack Jr',
+      cargo: 'Dev. Fullstack Jr. | UX/UI Designer',
       linkedin: 'https://www.linkedin.com/in/carlosmoroni/',
       imagem: 'https://github.com/carlosmoronisud.png',
+    },
+    {
+      nome: 'Bruno',
+      cargo: 'Designer',
+      linkedin: 'https://www.linkedin.com/in/bruno-exemplo', 
+      imagem: 'https://github.com/BrunoAlves-tech.png',
+    },
+    {
+      nome: 'Luiz',
+      cargo: 'Dev Fullstack',
+      linkedin: 'https://www.linkedin.com/in/luizhenrique-dev/',
+      imagem: 'https://github.com/luizsantos7.png',
+    },
+    {
+      nome: 'Murilo',
+      cargo: 'Dev Fullstack',
+      linkedin: 'https://www.linkedin.com/in/murilomattosm/',
+      imagem: 'https://github.com/Matttosz.png',
+    },
+    {
+      nome: 'Natan',
+      cargo: 'Tester',
+      linkedin: 'https://www.linkedin.com/in/natan-macedo/',
+      imagem: 'https://github.com/natanmac.png',
+    },
+    {
+      nome: 'Pablo',
+      cargo: 'Scrum Master',
+      linkedin: 'https://github.com/Pablo-Casagrande', 
+      imagem: 'https://github.com/Pablo-Casagrande.png',
     },
   ];
 
@@ -264,7 +313,7 @@ function SobreProjetoPage() {
           
           <motion.div 
             variants={staggerContainer}
-            className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-6"
+            className="grid grid-cols-2 sm:grid-3 md:grid-cols-4 lg:grid-cols-6 gap-6"
           >
             {tecnologias.map((tech) => (
               <motion.div
@@ -291,18 +340,47 @@ function SobreProjetoPage() {
         className="max-w-7xl mx-auto px-6 md:px-16 py-16"
       >
         <motion.h1 variants={fadeInUp} className="text-4xl md:text-5xl font-bold text-center text-gray-800 mb-12">
-          O Desenvolvedor 🧑‍💻
+          Nossa Equipe
+          <div className="bg-white/10 p-4 text-center text-sm">
+            <Lottie 
+              animationData={innovationAnimation} 
+              loop={true} 
+              autoplay={true} 
+              className="h-20"
+            />
+          </div>
         </motion.h1>
 
-        <motion.div variants={fadeInUp} className="grid grid-cols-1 justify-items-center">
+        <motion.div variants={fadeInUp} className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
           {membros.map((membro) => (
-            <ColaboradorCard
+            <motion.div
               key={membro.nome}
-              nome={membro.nome}
-              cargo={membro.cargo}
-              linkedin={membro.linkedin}
-              imagem={membro.imagem}
-            />
+              variants={fadeInUp}
+              // Alterado o whileHover aqui
+              whileHover={{ y: -5, scale: 1.03 }} 
+              onMouseEnter={() => setHovered(membro.nome)}
+              onMouseLeave={() => setHovered(null)}
+              // Adicionado ease-in-out e o getCardStyle refatorado
+              className={`rounded-xl overflow-hidden transition-all duration-300 ease-in-out ${getCardStyle(membro.nome)}`}
+            >
+              <div className="p-4 flex flex-col items-center text-center">
+                <img 
+                  className="w-32 h-32 rounded-full border-4 border-white mb-4 object-cover shadow-md"
+                  src={membro.imagem} 
+                  alt={membro.nome}
+                />
+                <h3 className="text-2xl font-bold mb-1">{membro.nome}</h3>
+                <p className="text-md mb-4 bg-white/20 px-3 py-1 rounded-full">{membro.cargo}</p>
+                <a 
+                  href={membro.linkedin} 
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="bg-white text-orange-600 hover:bg-gray-100 px-6 py-2 rounded-full font-medium transition-all flex items-center gap-2"
+                >
+                  <span>LinkedIn</span>
+                </a>
+              </div>
+            </motion.div>
           ))}
         </motion.div>
       </motion.div>
@@ -345,7 +423,7 @@ function SobreProjetoPage() {
               href="https://delivery-hzm2.onrender.com" 
               target="_blank" 
               rel="noopener noreferrer"
-              className="bg-transparent border-2 border-white hover:bg-white hover:text-blue-600 px-8 py-4 rounded-full font-bold text-lg transition-all duration-300 shadow-lg hover:shadow-xl flex items-center justify-center gap-2"
+              className="bg-transparent border-2 border-white hover:bg-green-600 hover:text-white-600 px-8 py-4 rounded-full font-bold text-lg transition-all duration-300 shadow-lg hover:shadow-xl flex items-center justify-center gap-2"
             >
               <SiSpringboot className="text-lg" />
               Ver Backend
