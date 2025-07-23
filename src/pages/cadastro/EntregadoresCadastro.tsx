@@ -41,11 +41,10 @@ function CadastroEntregador() {
     modeloMoto: '',
   });
 
-  // Função para simular o retorno (neste caso, apenas fecha o modal e limpa o formulário)
+  // Função para simular o retorno 
   function retornar() {
     setShowMessageBox(false);
-    setMessageBoxContent(''); // Limpa o conteúdo da mensagem
-    // Limpa o formulário após a "simulação" de cadastro
+    setMessageBoxContent(''); 
     setEntregador({
       nome: '',
       email: '',
@@ -56,7 +55,7 @@ function CadastroEntregador() {
       modeloMoto: '',
     });
     setConfirmaSenha('');
-    navigate('/login'); // Redireciona para a home page
+    navigate('/login'); 
   }
 
   // Atualiza o estado dos campos do formulário
@@ -107,7 +106,7 @@ function CadastroEntregador() {
 
   // Função para exibir a mensagem de login simulado
   const handleLoginSimulado = () => {
-    setMessageBoxContent('Esta é uma página de simulação. Não há login real.');
+    setMessageBoxContent('Esta é uma página de simulação. Não há login real, nem armazenamento de dados, devido a LGPD.');
     setShowMessageBox(true);
   };
 
@@ -208,7 +207,7 @@ function CadastroEntregador() {
                 Link da Foto de Perfil (URL)
               </label>
               <input
-                type="url" // Alterado para 'url' para melhor validação de link
+                type="url" 
                 id="foto"
                 name="foto"
                 placeholder="https://suafoto.com/perfil.jpg"
@@ -254,7 +253,7 @@ function CadastroEntregador() {
             <div className="flex justify-between w-full gap-4 pt-4"> 
               <button
                 type="button" 
-                onClick={retornar} // Agora apenas limpa o formulário e fecha o modal se estiver aberto
+                onClick={retornar} 
                 className="w-1/2 bg-red-600 text-white font-bold py-3 rounded-lg text-xl shadow-lg hover:bg-red-700 transition-all duration-300 ease-in-out transform hover:-translate-y-1 cursor-pointer"
               >
                 Cancelar
@@ -263,7 +262,7 @@ function CadastroEntregador() {
               <button
                 type="submit"
                 className="w-1/2 bg-orange-600 text-white font-bold py-3 rounded-lg text-xl shadow-lg hover:bg-orange-700 transition-all duration-300 ease-in-out transform hover:-translate-y-1 cursor-pointer flex justify-center items-center"
-                disabled={isLoading} // Desabilita o botão enquanto carrega
+                disabled={isLoading} 
               >
                 {isLoading ? (
                   <RotatingLines
@@ -296,7 +295,7 @@ function CadastroEntregador() {
         {/* Seção da Imagem de Fundo */}
         <div
           className="w-full lg:w-1/2 hidden lg:flex items-center justify-center p-8 text-white relative 
-                     bg-[url('https://ik.imagekit.io/8h7kfljfc/imgs/2151989794.jpg?updatedAt=1752706340278')] 
+                     bg-[url('https://ik.imagekit.io/8h7kfljfc/imgs/ChatGPT%20Image%20Jul%2023,%202025,%2002_26_34%20PM.png?updatedAt=1753291666462')] 
                      bg-cover bg-center bg-no-repeat rounded-3xl lg:rounded-r-3xl lg:rounded-l-none"
         >
           {/* Você pode adicionar um overlay ou texto aqui se desejar */}
@@ -314,7 +313,7 @@ function CadastroEntregador() {
       {/* MessageBox condicional */}
       {showMessageBox && (
         <MessageBox
-          message={messageBoxContent} // Usa o conteúdo dinâmico do estado
+          message={messageBoxContent} 
           onClose={retornar}
         />
       )}

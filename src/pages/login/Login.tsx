@@ -162,7 +162,7 @@ function Login() {
           </div>
 
           {/* Botão de Login com Google - Integrado com GoogleLogin do @react-oauth/google */}    
-          <div className="w-full flex justify-center items-center">
+          <div className="w-full flex flex-col justify-center items-center">
             <GoogleLogin
               onSuccess={handleGoogleSuccess}
               onError={() => console.log('Login Failed')}
@@ -171,6 +171,7 @@ function Login() {
               shape="pill" 
               width="280" 
             />
+            <p className='p-4 text-center text-orange-600  font-' >Respeitamos a LGPD, não imeros guardar seus dados, eles permanecem no seu navegador e são apagados assim que fechar o navegador ou sair da aplicação</p>
           </div>
 
           <p className="mt-8 text-gray-700 text-center text-lg">

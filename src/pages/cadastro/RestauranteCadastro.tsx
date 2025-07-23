@@ -315,7 +315,7 @@ function CadastroRestaurante() {
         {/* Seção da Imagem de Fundo */}
         <div
           className="w-full lg:w-1/2 hidden lg:flex items-center justify-center p-8 text-white relative 
-                     bg-[url('https://ik.imagekit.io/8h7kfljfc/imgs/2151989794.jpg?updatedAt=1752706340278')] 
+                     bg-[url('https://ik.imagekit.io/8h7kfljfc/imgs/ChatGPT%20Image%20Jul%2023,%202025,%2002_26_34%20PM.png?updatedAt=1753291666462')] 
                      bg-cover bg-center bg-no-repeat rounded-3xl lg:rounded-r-3xl lg:rounded-l-none"
         >
           {/* Você pode adicionar um overlay ou texto aqui se desejar */}
