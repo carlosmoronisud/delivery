@@ -1,4 +1,4 @@
-import { GithubLogo,  LinkedinLogo, InstagramLogo, FacebookLogo } from '@phosphor-icons/react';
+import { GithubLogo,  LinkedinLogo } from '@phosphor-icons/react';
 import { Link } from 'react-router-dom';
 
 function Footer() {
@@ -52,12 +52,12 @@ function Footer() {
             <a href="www.linkedin.com/in/carlosmoronigarcia" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">
               <LinkedinLogo size={32} weight='fill' className="text-gray-300 hover:text-orange-500 transition-colors duration-200 cursor-pointer" />
             </a>
-            <a href="https://www.instagram.com/cmoroniacg/" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
+            {/* <a href="https://www.instagram.com/cmoroniacg/" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
               <InstagramLogo size={32} weight='fill' className="text-gray-300 hover:text-orange-500 transition-colors duration-200 cursor-pointer" />
             </a>
             <a href="https://www.facebook.com/carlos.moroni.94/" target="_blank" rel="noopener noreferrer" aria-label="Facebook">
               <FacebookLogo size={32} weight='fill' className="text-gray-300 hover:text-orange-500 transition-colors duration-200 cursor-pointer" />
-            </a>
+            </a> */}
             <a href="https://github.com/carlosmoronisud" target="_blank" rel="noopener noreferrer" aria-label="GitHub">
               <GithubLogo size={32} weight='fill' className="text-gray-300 hover:text-orange-500 transition-colors duration-200 cursor-pointer" />
             </a>

@@ -19,10 +19,7 @@ import { PencilSimpleLine } from '@phosphor-icons/react';
 import { MapPinLine } from '@phosphor-icons/react/dist/ssr/MapPinLine';
 
 export function Cart() {
-    const { items, quantidadeItems, valorTotal, limparCart } = useContext(CartContext);
-
-
-    
+    const { items, quantidadeItems, valorTotal, limparCart } = useContext(CartContext);    
     const { setUserAddress } = useUserLocation();
     const [showAddressForm, setShowAddressForm] = useState(false); 
 
@@ -315,6 +312,7 @@ export function Cart() {
                                             isMarkerDraggable={false} 
                                         />
                                     </div>
+                                    {showAddressForm && (     
                                     <div className="text-sm text-gray-700 space-y-1">
                                         <p><strong>Rua:</strong> {enderecoData.rua}, {enderecoData.numero}</p>
                                         <p><strong>Bairro:</strong> {enderecoData.bairro}</p>
@@ -324,6 +322,7 @@ export function Cart() {
                                         <p className="mt-2 text-orange-600 font-semibold">Tempo estimado: {deliveryTime}</p>
                                         <p className="text-gray-600 font-semibold">Distância: {distance}</p>
                                     </div>
+                                    )}
                                     <button
                                         onClick={() => setIsDeliveryModalOpen(true)}
                                         className="mt-4 w-full bg-blue-500 text-white py-2 px-4 rounded-lg flex items-center justify-center gap-2

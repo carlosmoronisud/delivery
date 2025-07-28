@@ -23,7 +23,7 @@ function Login() {
  
 
   const { usuario, handleLogin, isLoading, setUsuario } =
-    useContext(AuthContext); // Removido handleLogout se não for usado aqui
+    useContext(AuthContext); 
 
   useEffect(() => {
     if (usuario.token !== '') {
@@ -171,7 +171,7 @@ function Login() {
               shape="pill" 
               width="280" 
             />
-            <p className='p-4 text-center text-orange-600  font-' >Respeitamos a LGPD, não imeros guardar seus dados, eles permanecem no seu navegador e são apagados assim que fechar o navegador ou sair da aplicação</p>
+            <p className='p-4 text-center text-orange-600  font-' >Respeitando a LGPD, não iremos coletar seus dados pessoais, nem guardar seus dados de login, eles permanecem no seu navegador e são apagados assim que fechar o navegador ou sair da aplicação</p>
           </div>
 
           <p className="mt-8 text-gray-700 text-center text-lg">
