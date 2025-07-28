@@ -1,10 +1,12 @@
-import { List, ShoppingCartSimple, User, X, MagnifyingGlass } from "@phosphor-icons/react";
+import { } from "@phosphor-icons/react";
 import { useContext, useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { CartContext } from "../../contexts/CartContext";
 import { AuthContext } from "../../contexts/AuthContext";
 import { ToastAlerta } from "../../utils/ToastAlerta";
 import LocationButton from "../botaolocalozacao/LocationButton";
+import { User } from "@phosphor-icons/react/dist/ssr/User";
+import { List, MagnifyingGlass, ShoppingCartSimple, X } from "@phosphor-icons/react/dist/ssr";
 
 
 type MenuState = 'closed' | 'open';
@@ -124,7 +126,7 @@ function Navbar({ menuState, onMenuToggle, onMenuClose }: Readonly<NavbarProps>)
                     {/* Seção Central: Localização e Busca (Desktop Only) */}
                     <div className="hidden md:flex flex-grow items-center justify-center gap-4 mx-8">
                         {/* Botão de Localização (Desktop) */}
-                        <LocationButton /> {/* Usa o componente LocationButton que consome o contexto */}
+                        <LocationButton /> 
 
                         {/* Campo de Busca (Desktop) */}
                         <div className="relative flex-grow max-w-md">
@@ -141,7 +143,7 @@ function Navbar({ menuState, onMenuToggle, onMenuClose }: Readonly<NavbarProps>)
                     <div className='hidden md:flex items-center gap-6'>
                         <Link to='/produtos' className='hover:scale-105 hover:text-orange-600 transition-transform cursor-pointer'>Produtos</Link>
                         <Link to='/categorias' className='hover:scale-105 hover:text-orange-600 transition-transform cursor-pointer'>Categorias</Link>
-                        <Link to='/sobre' className='hover:scale-105 hover:text-orange-600 transition-transform cursor-pointer'>Sobre</Link> {/* Restaurado o link "Sobre" */}
+                        <Link to='/sobre' className='hover:scale-105 hover:text-orange-600 transition-transform cursor-pointer'>Sobre</Link>
                         
                         <div className="flex items-center gap-6 pl-4 border-l border-gray-200">
                             {navPerfilContent}
@@ -156,7 +158,7 @@ function Navbar({ menuState, onMenuToggle, onMenuClose }: Readonly<NavbarProps>)
                         </div>
                     </div>
 
-                    {/* Botão para Abrir Menu Mobile (e ícones importantes para Mobile) */}
+                    {/* Botão para Abrir Menu Mobile */}
                     <div className="flex items-center md:hidden gap-4">
                         {/* Campo de Busca Mobile */}
                         <button className="p-2 rounded-full bg-gray-100 text-gray-700 hover:text-orange-600 transition-colors" aria-label="Buscar">
@@ -191,7 +193,7 @@ function Navbar({ menuState, onMenuToggle, onMenuClose }: Readonly<NavbarProps>)
                     <div className="relative flex flex-col items-start justify-start gap-4 p-6 text-left text-lg text-white">
                         <div className="flex w-full items-center justify-between mb-6">
                             <img
-                                src="https://ik.imagekit.io/8h7kfljfc/imgs/deliverylogo.png?updatedAt=1752066792229"
+                                src="https://ik.imagekit.io/8h7kfljfc/imgs/ChatGPT%20Image%20Jul%2021,%202025,%2008_36_03%20PM.png?updatedAt=1753140984875"
                                 alt="Logo do Delivery"
                                 className='h-16 rounded-full object-cover'
                             />
@@ -206,7 +208,7 @@ function Navbar({ menuState, onMenuToggle, onMenuClose }: Readonly<NavbarProps>)
                         </div>
 
                         {/* Botão de Localização no Menu Mobile */}
-                        <LocationButton /> {/* <--- RENDERIZADO AQUI NO MOBILE */}
+                        <LocationButton /> 
 
                         {/* Campo de Busca Mobile dentro do menu lateral */}
                         <div className="relative w-full mb-4">
@@ -224,15 +226,15 @@ function Navbar({ menuState, onMenuToggle, onMenuClose }: Readonly<NavbarProps>)
                         <Link to='/categorias' onClick={handleMenuClose} className="py-2 w-full text-white hover:text-orange-400 border-b border-gray-700">Categorias</Link>
                         <Link to='/sobre' onClick={handleMenuClose} className="py-2 w-full text-white hover:text-orange-400 border-b border-gray-700">Sobre</Link>
                         {usuario.token && (
-                            // O link "Usuários" é movido para o dropdown do perfil, não aqui no menu principal mobile
+                            
                             // <Link to="/usuarios" onClick={handleMenuClose} className="py-2 w-full text-white hover:text-orange-400 border-b border-gray-700">Usuários</Link>
-                            null // Renderiza nulo aqui para não duplicar
+                            null 
                         )}
                         
                         {/* Ícones de Perfil e Carrinho - Mobile (no final do menu) */}
                         <div className='mt-8 flex flex-col w-full gap-4 pt-4 border-t border-gray-700'>
                             {navPerfilContent}
-                            {/* O link do carrinho principal já está no cabeçalho mobile */}
+                            
                         </div>
                     </div>
                 </div>

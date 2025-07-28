@@ -75,14 +75,12 @@ export default function Home() {
     return (
         <div className="w-full flex flex-col items-center justify-center bg-gray-50 font-sans">
             {/* Hero Section: Proposta de Valor e Busca de Endereço */}
-            {/* Adicionado pt-[calc(64px+2rem)] para compensar a navbar fixa e dar um padding superior */}
             <article className="bg-gradient-to-br from-orange-500 via-yellow-400 to-yellow-200 w-full px-4 py-8 md:py-16 pt-[calc(64px+2rem)] md:pt-16 shadow-lg relative overflow-hidden"> 
                 <div className="absolute inset-0 bg-pattern-overlay opacity-10 pointer-events-none"></div> 
                 
-                {/* Ajustado o gap e padding para melhor responsividade */}
+                
                 <div className="flex flex-col lg:flex-row justify-center items-center gap-6 md:gap-10 max-w-7xl mx-auto relative z-10 py-4 md:py-8">
                     {/* Conteúdo de Texto */}
-                    {/* Texto com tamanhos de fonte responsivos e alinhamento ajustado */}
                     <section className="flex flex-col justify-center items-center lg:items-start gap-4 max-w-2xl text-center lg:text-left">
                         <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold text-white leading-tight drop-shadow-lg animate-fade-in-down">
                             Seu Delivery, <br className="hidden md:inline"/>Na Sua Porta!
@@ -124,7 +122,7 @@ export default function Home() {
                         </div>
                     </section>
 
-                    {/* Imagem de Destaque - OCULTAR NO MOBILE */}
+                    {/* Imagem de Destaque - Hambúrguer */}
                     <section className="hidden md:block">
                         <div className="flex justify-center items-center"> 
                         <img
@@ -137,13 +135,12 @@ export default function Home() {
                 </div>
             </article>
 
-            {/* Seção de Categorias de Serviços (Alinhado com iFood/Rappi) */}
-            {/* Ajustado o margin-top negativo para compensar a altura da Hero Section e sobrepô-la */}
-            <div className="w-full max-w-7xl px-4 py-8 md:py-12 bg-white rounded-lg shadow-xl -mt-10 relative z-20 md:-mt-20 lg:-mt-28"> 
+            {/* Seção de Categorias de Serviços */}
+            <div className="w-full max-w-7xl px-4 py-8 md:py-12 bg-white rounded-lg shadow-xl -mt-10 relative z-20 md:-mt-20 lg:-mt-28 sm:-mt-16"> 
                 <h2 className="text-2xl md:text-3xl font-bold text-gray-800 text-center mb-6 md:mb-8">
                     O que você precisa está aqui
                 </h2>
-                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4 justify-items-center"> {/* Ajustado gap */}
+                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4 justify-items-center"> 
                     <Link to="/produtos" className="flex flex-col items-center gap-2 p-3 bg-gray-100 rounded-lg shadow-md hover:shadow-lg transition-all duration-200 w-full max-w-[100px]">
                         <Storefront size={40} weight="fill" className="text-green-600" />
                         <span className="text-sm font-semibold text-gray-700 text-center">Restaurantes</span>

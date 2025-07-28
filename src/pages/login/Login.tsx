@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Link, useNavigate } from 'react-router-dom';
 // import './Login.css'; // Não precisamos mais deste CSS puro, exceto pela animação customizada se for em outro componente
@@ -19,7 +18,9 @@ function Login() {
 
   const [usuarioLogin, setUsuarioLogin] = useState<UsuarioLogin>(
     {} as UsuarioLogin
+    
   );
+ 
 
   const { usuario, handleLogin, isLoading, setUsuario } =
     useContext(AuthContext); // Removido handleLogout se não for usado aqui
@@ -115,7 +116,7 @@ function Login() {
                 placeholder="********"
                 className="w-full px-5 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500 text-lg cursor-text"
                 value={usuarioLogin.senha}
-                onChange={atualizarEstado}
+                onChange={atualizarEstado}                
               />
             </div>
 
@@ -125,7 +126,7 @@ function Login() {
                 Lembrar-me
               </label>
               <Link
-                to="/esqueci-senha"
+                to="/usuarios/cadastrar"
                 className="text-orange-600 hover:text-orange-700 font-medium transition duration-200 cursor-pointer"
               >
                 Esqueceu a senha?
@@ -161,7 +162,7 @@ function Login() {
           </div>
 
           {/* Botão de Login com Google - Integrado com GoogleLogin do @react-oauth/google */}    
-          <div className="w-full flex justify-center items-center">
+          <div className="w-full flex flex-col justify-center items-center">
             <GoogleLogin
               onSuccess={handleGoogleSuccess}
               onError={() => console.log('Login Failed')}
@@ -170,6 +171,7 @@ function Login() {
               shape="pill" 
               width="280" 
             />
+            <p className='p-4 text-center text-orange-600  font-' >Respeitamos a LGPD, não imeros guardar seus dados, eles permanecem no seu navegador e são apagados assim que fechar o navegador ou sair da aplicação</p>
           </div>
 
           <p className="mt-8 text-gray-700 text-center text-lg">

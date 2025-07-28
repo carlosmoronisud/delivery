@@ -33,9 +33,8 @@ import { GoogleOAuthProvider } from '@react-oauth/google';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import RotaPrivada from './contexts/RotaPrivada';
-import { Cart } from './components/carrinho/cart/Cart';
-import OrderConfirmation from './components/carrinho/cart/OrderConfirmation';
-
+import CadastroRestaurante from './pages/cadastro/RestauranteCadastro';
+import CadastroEntregador from './pages/cadastro/EntregadoresCadastro';
 
 
 type MenuState = 'closed' | 'open';
@@ -78,6 +77,9 @@ function App() {
                   <Route path="/cadastro" element={<Cadastro />} />
                   <Route path="/usuarios/cadastrar" element={<Cadastro />} />
                   <Route path="/sobre" element={<Sobre />} />
+                  <Route path="/cadastro-restaurante" element={<CadastroRestaurante />} />
+                  <Route path="/cadastro-entregador" element={<CadastroEntregador />} />
+
 
                   {/* Rotas de listagem de produtos e categorias */}
                   <Route path="/produtos" element={<Produtos />} />

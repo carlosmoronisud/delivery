@@ -1,4 +1,4 @@
-import { FacebookLogo, GithubLogo, InstagramLogo, LinkedinLogo } from '@phosphor-icons/react';
+import { GithubLogo,  LinkedinLogo, InstagramLogo, FacebookLogo } from '@phosphor-icons/react';
 import { Link } from 'react-router-dom';
 
 function Footer() {
@@ -22,8 +22,8 @@ function Footer() {
           </div>
           <p className="text-base text-gray-300">Rua do Ouvidor, 666 - Centro</p>
           <p className="text-base text-gray-300">Campinas - SP, Brasil</p>
-          <p className="text-base text-gray-300">+55 (19) 4992-8922</p>
-          <p className="text-base text-gray-300">contato@seudelivery.com</p> 
+          <p className="text-base text-gray-300">+55 (19) 1992-8922</p>
+          <p className="text-base text-gray-300">contato@contatodelivery.com</p> 
         </div>
 
         {/* Coluna 2 - Navegação (Mapa do Site) */}
@@ -49,16 +49,16 @@ function Footer() {
         <div className="flex flex-col gap-3 min-w-[150px]">
           <h3 className="text-lg font-bold mb-3">Conecte-se</h3>
           <div className="flex gap-4"> 
-            <a href="https://www.linkedin.com/in/seu-perfil" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">
+            <a href="www.linkedin.com/in/carlosmoronigarcia" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">
               <LinkedinLogo size={32} weight='fill' className="text-gray-300 hover:text-orange-500 transition-colors duration-200 cursor-pointer" />
             </a>
-            <a href="https://www.instagram.com/seu-perfil" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
+            <a href="https://www.instagram.com/cmoroniacg/" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
               <InstagramLogo size={32} weight='fill' className="text-gray-300 hover:text-orange-500 transition-colors duration-200 cursor-pointer" />
             </a>
-            <a href="https://www.facebook.com/seu-perfil" target="_blank" rel="noopener noreferrer" aria-label="Facebook">
+            <a href="https://www.facebook.com/carlos.moroni.94/" target="_blank" rel="noopener noreferrer" aria-label="Facebook">
               <FacebookLogo size={32} weight='fill' className="text-gray-300 hover:text-orange-500 transition-colors duration-200 cursor-pointer" />
             </a>
-            <a href="https://github.com/seu-perfil" target="_blank" rel="noopener noreferrer" aria-label="GitHub">
+            <a href="https://github.com/carlosmoronisud" target="_blank" rel="noopener noreferrer" aria-label="GitHub">
               <GithubLogo size={32} weight='fill' className="text-gray-300 hover:text-orange-500 transition-colors duration-200 cursor-pointer" />
             </a>
           </div>
@@ -112,8 +112,8 @@ function Footer() {
 
       {/* Rodapé Inferior - Direitos Autorais e Dados da Empresa (Alinhado com iFood/Rappi) */}
       <div className="mt-10 text-center text-sm text-gray-400 border-t border-gray-700 pt-6"> 
-        <p>&copy; {currentYear} Seu Delivery. Todos os direitos reservados. RAPPI BRASIL INTERMEDIAÇÃO DE NEGÓCIOS LTDA., empresa com sede social na R Haddock Lobo, 595, 9 andar, conj. 91, Lado A, Cerqueira Cesar, São Paulo/SP CEP. 01414-905, CNPJ/MF n° 26.900.161/0001-25.</p>
-        <p className="mt-2">Desenvolvido com 🧡 para a Comunidade.</p>
+        <p>&copy; {currentYear} Delivery Appetito. Todos os direitos reservados. </p>
+        <p className="mt-2">Desenvolvido com 🙌 para a Comunidade.</p>
         <div className="flex flex-wrap justify-center gap-x-4 gap-y-2 mt-4 text-xs">
             <Link to="/termos-de-uso" className="text-gray-400 hover:text-orange-500 hover:underline">Termos e Condições de Uso</Link>
             <Link to="/politica-de-privacidade" className="text-gray-400 hover:text-orange-500 hover:underline">Política de Privacidade</Link>
