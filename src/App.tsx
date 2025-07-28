@@ -35,6 +35,8 @@ import 'react-toastify/dist/ReactToastify.css';
 import RotaPrivada from './contexts/RotaPrivada';
 import CadastroRestaurante from './pages/cadastro/RestauranteCadastro';
 import CadastroEntregador from './pages/cadastro/EntregadoresCadastro';
+import OrderConfirmation from './components/carrinho/cart/OrderConfirmation';
+import { Cart } from './components/carrinho/cart/Cart';
 
 
 type MenuState = 'closed' | 'open';
