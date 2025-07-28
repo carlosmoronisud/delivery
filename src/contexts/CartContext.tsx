@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable react-refresh/only-export-components */
-import { createContext, useState, useMemo, type ReactNode } from "react";
+import { createContext, useState, useMemo, type ReactNode, useContext } from "react";
 import type Produto from "../models/Produto"; // Make sure this path is correct
 import { ToastAlerta } from "../utils/ToastAlerta"; // Ensure this path is correct and ToastAlerta is updated
 
@@ -14,7 +14,7 @@ interface CartContextProps {
   adicionarProduto: (produto: Produto) => void;
   adicionarItem: (id: number) => void;
   removerItem: (id: number) => void;
-  removerProdutoDoCarrinho: (id: number) => void; // Adicionada esta função
+  removerProdutoDoCarrinho: (id: number) => void; 
   limparCart: () => void;
   items: Items[];
   quantidadeItems: number;
@@ -25,10 +25,19 @@ interface CartContextProps {
 interface CartProviderProps {
   children: ReactNode;
 }
+export const CartContext = createContext({} as CartContextProps);
 
+// Crie o hook useCart aqui, antes do Provider
+export function useCart() {
+  const context = useContext(CartContext);
+  if (!context) {
+    throw new Error('useCart deve ser usado dentro de um CartProvider');
+  }
+  return context;
+}
 
 // Criação do contexto do carrinho
-export const CartContext = createContext({} as CartContextProps);
+
 
 // Provider do contexto do carrinho, envolve a aplicação
 export function CartProvider({ children }: Readonly<CartProviderProps>) {
@@ -51,12 +60,14 @@ export function CartProvider({ children }: Readonly<CartProviderProps>) {
       const novoCart = [...items];
       novoCart[itemIndex].quantidade += 1;
       setItems(novoCart);
-      ToastAlerta('Mais 01 item adicionado ao carrinho!', 'info'); // Usando ToastAlerta
+      ToastAlerta('Mais 01 item adicionado ao carrinho!', 'info'); 
     } else {
       // Produto não está no carrinho, adiciona novo item
       setItems(itensAtuais => [...itensAtuais, { ...produto, quantidade: 1 }]);
-      ToastAlerta('Produto adicionado ao carrinho!', 'sucesso'); // Usando ToastAlerta
+      ToastAlerta('Produto adicionado ao carrinho!', 'sucesso'); 
     }
+
+
   }
 
   // Incrementa a quantidade de um item já presente no carrinho
@@ -67,10 +78,10 @@ export function CartProvider({ children }: Readonly<CartProviderProps>) {
       const novoCart = [...items];
       novoCart[itemIndex].quantidade += 1;
       setItems(novoCart);
-      ToastAlerta('Quantidade aumentada em 01!', 'info'); // Usando ToastAlerta
+      ToastAlerta('Quantidade aumentada em 01!', 'info'); 
     } else {
       // Isso não deveria acontecer se a lógica de UI for correta, mas é um fallback
-      ToastAlerta('Produto não encontrado no carrinho para adicionar!', 'erro'); // Usando ToastAlerta
+      ToastAlerta('Produto não encontrado no carrinho para adicionar!', 'erro'); 
     }
   }
 
@@ -85,12 +96,12 @@ export function CartProvider({ children }: Readonly<CartProviderProps>) {
         // Reduz a quantidade do produto
         novoCart[itemIndex].quantidade -= 1;
         setItems(novoCart);
-        ToastAlerta('Quantidade diminuída em 01!', 'info'); // Usando ToastAlerta
+        ToastAlerta('Quantidade diminuída em 01!', 'info');
       } else {
         // Remove o produto se a quantidade for 1 (com feedback específico)
         novoCart.splice(itemIndex, 1);
         setItems(novoCart);
-        ToastAlerta('Item removido do carrinho!', 'sucesso'); // Usando ToastAlerta
+        ToastAlerta('Item removido do carrinho!', 'sucesso'); 
       }
     }
   }
@@ -99,7 +110,7 @@ export function CartProvider({ children }: Readonly<CartProviderProps>) {
   function removerProdutoDoCarrinho(id: number) {
     setItems(currentItems => {
       const updatedItems = currentItems.filter(item => item.id !== id);
-      // O ToastAlerta para isso será chamado pelo CardCart
+  
       return updatedItems;
     });
   }
@@ -107,8 +118,8 @@ export function CartProvider({ children }: Readonly<CartProviderProps>) {
 
   // Limpa o carrinho
   function limparCart() {
-    if (quantidadeItems > 0) { // Só mostra o alerta se houver itens para finalizar
-      ToastAlerta('Compra efetuada com sucesso! ✨', 'sucesso'); // Usando ToastAlerta
+    if (quantidadeItems > 0) { 
+      ToastAlerta('Compra efetuada com sucesso! ✨', 'sucesso'); 
       setItems([]);
     } else {
       ToastAlerta('Seu carrinho já está vazio!', 'info');
@@ -120,12 +131,14 @@ export function CartProvider({ children }: Readonly<CartProviderProps>) {
     adicionarProduto,
     adicionarItem,
     removerItem,
-    removerProdutoDoCarrinho, // Adicionada aqui para ser exportada
+    removerProdutoDoCarrinho, 
     limparCart,
     items,
     quantidadeItems,
     valorTotal
   }), [items, quantidadeItems, valorTotal]);
+
+  
 
   // Retorna o provider envolvendo os filhos
   return (

@@ -1,8 +1,8 @@
 import { MinusCircle, PlusCircle, XCircle } from "@phosphor-icons/react";
 import { useContext } from "react";
-import type { Items } from "../../contexts/CartContext";
-import { CartContext } from '../../contexts/CartContext';
-import { ToastAlerta } from "../../utils/ToastAlerta";
+import type { Items } from "../../../contexts/CartContext";
+import { CartContext } from '../../../contexts/CartContext';
+import { ToastAlerta } from "../../../utils/ToastAlerta";
 
 
 interface CardProdutosProps {

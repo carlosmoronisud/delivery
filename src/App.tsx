@@ -20,10 +20,9 @@ import FormProduto from './components/produto/formprodutos/FormProdutos';
 import DeletarProduto from './components/produto/deleteproduto/DeleteProdutos';
 
 // Componentes do carrinho e finalização
-import Cart from './components/carrinho/Cart';
-import FormUsuario from './components/formusuario/FormUsuario';
-import OrderConfirmation from './components/carrinho/OrderConfirmation'; 
-import OrderTracking from './components/carrinho/OrderTraking'; 
+import FormUsuario from './components/formusuario/FormUsuario'; 
+import OrderTracking from './components/carrinho/cart/OrderTraking';
+
 
 // Contextos
 import { AuthProvider } from './contexts/AuthContext';
@@ -34,6 +33,9 @@ import { GoogleOAuthProvider } from '@react-oauth/google';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import RotaPrivada from './contexts/RotaPrivada';
+import { Cart } from './components/carrinho/cart/Cart';
+import OrderConfirmation from './components/carrinho/cart/OrderConfirmation';
+
 
 
 type MenuState = 'closed' | 'open';
@@ -85,7 +87,7 @@ function App() {
                   <Route path="/cart" element={<Cart />} />
 
                   {/* NOVO: Rota de Confirmação de Pedido */}
-                  <Route path="/order-confirmation" element={<RotaPrivada><OrderConfirmation /></RotaPrivada>} />
+                  <Route path="/order-confirmation" element={<RotaPrivada><OrderConfirmation /></RotaPrivada>}/>
 
                   {/* Rota de Acompanhamento de Pedido (agora pode receber um ID) */}
                   <Route path="/order-tracking/:orderId?" element={<RotaPrivada><OrderTracking /></RotaPrivada>} />

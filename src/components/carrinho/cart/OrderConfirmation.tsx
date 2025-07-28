@@ -1,24 +1,27 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 // src/carrinho/OrderConfirmation.tsx
 import React, { useEffect } from 'react';
 import { useLocation, useNavigate, Link } from 'react-router-dom';
 import Lottie from 'lottie-react';
-import { ToastAlerta } from '../../utils/ToastAlerta';
-import type { EnderecoData } from '../../models/EnderecoData';
-import { ShoppingCartSimple, MapPinLine } from '@phosphor-icons/react'; 
+import { ToastAlerta } from '../../../utils/ToastAlerta';
+import type { EnderecoData } from '../../../models/EnderecoData';
+import { ShoppingCartSimple, MapPinLine, ArrowCircleRight } from '@phosphor-icons/react'; 
 
-// Importe sua animação Lottie de confirmação
-import orderConfirmedAnimation from '../../assets/lottie-animations/orderconfirmed.json'; 
+// FIX: Caminho corrigido para a animação Lottie
+import orderConfirmedAnimation from '../../../assets/lottie-animations/orderconfirmed.json'; // <<-- AQUI ESTÁ A CORREÇÃO
+import { MapDisplay } from '../map/MapDisplay';
 
 // Interface para os dados do pedido passados via state do Cart
 interface OrderConfirmationState {
+    items: any[]; 
     deliveryOption: 'pickup' | 'delivery';
     frete: number;
-    enderecoData: EnderecoData;
+    enderecoData: EnderecoData | null; 
     valorTotal: number;
-    quantidadeItems: number;
+    totalFinal: number;
     deliveryTime: string;
     distance: string;
-    totalFinal: number;
+    user: any; 
 }
 
 const OrderConfirmation: React.FC = () => {
@@ -27,8 +30,8 @@ const OrderConfirmation: React.FC = () => {
     const orderData = location.state as OrderConfirmationState | null;
 
     useEffect(() => {
-        // Redireciona se não houver dados válidos do pedido
-        if (!orderData || orderData.quantidadeItems === 0) {
+        // Redireciona se não houver dados válidos do pedido ou se o carrinho estiver vazio
+        if (!orderData || !orderData.items || orderData.items.length === 0) {
             ToastAlerta('Nenhum pedido para confirmar. Faça um pedido primeiro!', 'info');
             navigate('/home');
         }
@@ -36,8 +39,8 @@ const OrderConfirmation: React.FC = () => {
 
     if (!orderData) {
         return (
-            <div className="min-h-screen flex items-center justify-center text-gray-600">
-                Carregando confirmação do pedido...
+            <div className="min-h-screen flex items-center justify-center text-gray-600 bg-gray-100">
+                <p>Carregando confirmação do pedido...</p>
             </div>
         );
     }
@@ -52,7 +55,7 @@ const OrderConfirmation: React.FC = () => {
         <div className="min-h-screen w-full bg-gray-100 flex flex-col items-center py-12 px-4 font-sans">
             <div className="w-full max-w-4xl bg-white rounded-xl shadow-lg p-8 flex lg:flex-row flex-col gap-8 border border-gray-200">
                 
-                {/* Lado Esquerdo: Animação e Resumo do Pedido */}
+                {/* Animação e Resumo do Pedido */}
                 <div className="lg:w-1/2 flex flex-col gap-6">
                     <h1 className="text-3xl md:text-4xl font-bold text-gray-800 text-center mb-6">
                         Pedido Confirmado! 🎉
@@ -72,30 +75,60 @@ const OrderConfirmation: React.FC = () => {
                         <h2 className="text-xl font-bold text-gray-800 mb-4 border-b pb-3 border-gray-200">
                             Detalhes do Pedido <ShoppingCartSimple size={24} className="inline-block ml-2 text-orange-600"/>
                         </h2>
-                        <p className="text-lg"><span className="font-semibold">Items:</span> {orderData.quantidadeItems}</p>
-                        <p className="text-lg"><span className="font-semibold">Total Final:</span> {Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(orderData.totalFinal)}</p>
-                        {orderData.deliveryOption === 'delivery' && (
-                            <p className="text-lg"><span className="font-semibold">Entrega em:</span> {orderData.enderecoData.rua}, {orderData.enderecoData.numero}</p>
-                        )}
+                        <div className="text-base text-gray-700 space-y-2">
+                            {orderData.items.map((item: any) => (
+                                <p key={item.id} className="flex justify-between">
+                                    <span>{item.nome} x {item.quantidade}</span>
+                                    <span>{Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(item.preco * item.quantidade)}</span>
+                                </p>
+                            ))}
+                        </div>
+                        <div className="border-t pt-3 mt-3 space-y-2">
+                            <p className="flex justify-between">
+                                <span className="font-semibold">Subtotal:</span>
+                                <span>{Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(orderData.valorTotal)}</span>
+                            </p>
+                            {orderData.deliveryOption === 'delivery' && (
+                                <p className="flex justify-between">
+                                    <span className="font-semibold">Frete:</span>
+                                    <span>{Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(orderData.frete)}</span>
+                                </p>
+                            )}
+                            <p className="flex justify-between text-lg font-bold pt-2 border-t mt-2">
+                                <span>Total Final:</span>
+                                <span className="text-orange-600">{Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(orderData.totalFinal)}</span>
+                            </p>
+                        </div>
                     </div>
                 </div>
 
-                {/* Lado Direito: Informações de Entrega e Link de Rastreamento */}
+                {/* Informações de Entrega e Link de Rastreamento */}
                 <div className="lg:w-1/2 flex flex-col gap-6">
                     <div className="p-6 bg-gray-50 rounded-lg border border-gray-200 flex-grow">
                         <h2 className="text-xl font-bold text-gray-800 mb-4 border-b pb-3 border-gray-200">
                             Detalhes da Entrega <MapPinLine size={24} className="inline-block ml-2 text-orange-600"/>
                         </h2>
-                        {orderData.deliveryOption === 'delivery' ? (
+                        {orderData.deliveryOption === 'delivery' && orderData.enderecoData ? (
                             <div className="text-lg text-gray-700 space-y-2">
                                 <p><span className="font-semibold">Tipo:</span> Entrega (Delivery)</p>
                                 <p><span className="font-semibold">Endereço:</span> {orderData.enderecoData.rua}, {orderData.enderecoData.numero}</p>
                                 <p><span className="font-semibold">Bairro:</span> {orderData.enderecoData.bairro}</p>
-                                <p><span className="font-semibold">Cidade:</span> {orderData.enderecoData.cidade}</p>
+                                <p><span className="font-semibold">Cidade:</span> {orderData.enderecoData.cidade}-{orderData.enderecoData.estado}</p>
                                 {orderData.enderecoData.complemento && <p><span className="font-semibold">Complemento:</span> {orderData.enderecoData.complemento}</p>}
                                 {orderData.enderecoData.cep && <p><span className="font-semibold">CEP:</span> {orderData.enderecoData.cep}</p>}
-                                {orderData.deliveryTime && <p className="mt-4 text-orange-600 font-semibold">Tempo estimado: {orderData.deliveryTime}</p>}
-                                {orderData.distance && <p className="mt-2 text-gray-600 font-semibold">Distância: {orderData.distance}</p>}
+                                <p className="mt-4 text-orange-600 font-semibold">Tempo estimado: {orderData.deliveryTime}</p>
+                                <p className="mt-2 text-gray-600 font-semibold">Distância: {orderData.distance}</p>
+
+                                {/* Mapa na página de Confirmação */}
+                                {orderData.enderecoData.latitude !== undefined && orderData.enderecoData.longitude !== undefined && (
+                                    <div className="mt-4 h-48 w-full rounded-lg overflow-hidden border border-gray-300">
+                                        <MapDisplay 
+                                            latitude={orderData.enderecoData.latitude} 
+                                            longitude={orderData.enderecoData.longitude}
+                                            isMarkerDraggable={false}
+                                        />
+                                    </div>
+                                )}
                             </div>
                         ) : (
                             <div className="text-lg text-gray-700 space-y-2">
@@ -106,11 +139,14 @@ const OrderConfirmation: React.FC = () => {
                     </div>
 
                     {/* Bloco do Link para o celular */}
-                    <div className="p-4 bg-blue-100 text-blue-800 rounded-lg shadow-inner text-center mt-auto"> {/* mt-auto para empurrar para o fundo */}
-                        <p className="mb-2 font-semibold">🔗 Link de rastreamento enviado para seu celular!</p>
+                    <div className="p-4 bg-blue-100 text-blue-800 rounded-lg shadow-inner text-center mt-auto">
+                        <p className="mb-2 font-semibold flex items-center justify-center gap-2">
+                            <ArrowCircleRight size={24} className="text-blue-600" />
+                            Link de rastreamento enviado para seu celular!
+                        </p>
                         <Link
                             to={getTrackingLink()}
-                            state={orderData} // Passa os dados do pedido para a página de rastreamento
+                            state={orderData} 
                             className="inline-block bg-blue-600 text-white font-bold py-2 px-4 rounded-lg text-lg shadow-md hover:bg-blue-700 transition-colors duration-200"
                         >
                             Abrir Link de Rastreamento

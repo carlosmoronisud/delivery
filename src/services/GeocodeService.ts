@@ -1,42 +1,52 @@
-// src/utils/geocodingService.ts
+export interface GeocodeResult {
+  latitude: number;
+  longitude: number;
+  formattedAddress?: string;
+}
 
-import type { EnderecoData } from "../models/EnderecoData"; 
+export async function geocodeAddress(addressText: string): Promise<GeocodeResult | null> {
+  // Verifica se a chave de API existe
+  const apiKey = import.meta.env.VITE_GOOGLE_MAPS_API_KEY;
+  if (!apiKey) {
+    console.error('Chave da API do Google Maps não configurada');
+    return null;
+  }
 
-const Maps_API_KEY = "AIzaSyCo7TSp3iHMUWOq6eKwcFAxlJoXPAILKTI"; 
+  // Verifica se o endereço é válido
+  if (!addressText?.trim()) {
+    console.warn('Endereço vazio fornecido para geocodificação');
+    return null;
+  }
 
-console.log("GeocodingService: Chave de API do Google Maps:", Maps_API_KEY ? Maps_API_KEY.substring(0, 5) + '...' : "NÃO CONFIGURADA");
+  try {
+    // Faz a requisição para a API
+    const response = await fetch(
+      `https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(addressText)}&key=${apiKey}`
+    );
 
-export async function geocodeAddress(addressText: string): Promise<Pick<EnderecoData, 'latitude' | 'longitude'> | null> {
-    if (!Maps_API_KEY) {
-        console.error("GeocodingService: Maps_API_KEY não está configurada.");
-        return null;
+    // Verifica se a resposta é válida
+    if (!response.ok) {
+      throw new Error(`Erro na requisição: ${response.status}`);
     }
-    if (!addressText) {
-        return null;
+
+    const data = await response.json();
+
+    // Verifica o status da resposta
+    if (data.status !== 'OK' || !data.results?.[0]) {
+      console.warn('Geocodificação falhou:', data.status, data.error_message);
+      return null;
     }
 
-    try {
-        const response = await fetch(
-            `https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(addressText)}&key=${Maps_API_KEY}`
-        );
+    // Extrai os dados necessários
+    const location = data.results[0].geometry.location;
+    return {
+      latitude: location.lat,
+      longitude: location.lng,
+      formattedAddress: data.results[0].formatted_address
+    };
 
-        if (!response.ok) {
-            console.error(`Erro na requisição de geocodificação: ${response.status} - ${response.statusText}`);
-            return null;
-        }
-
-        const data = await response.json();
-
-        if (data.status !== 'OK' || data.results.length === 0) {
-            console.warn(`Geocodificação falhou para o endereço "${addressText}": ${data.status}`);
-            return null;
-        }
-
-        const location = data.results[0].geometry.location;
-        return { latitude: location.lat, longitude: location.lng };
-
-    } catch (error) {
-        console.error("Erro ao geocodificar endereço:", error);
-        return null;
-    }
+  } catch (error) {
+    console.error('Erro ao geocodificar endereço:', error);
+    return null;
+  }
 }
