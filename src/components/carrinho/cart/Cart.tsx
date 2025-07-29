@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
+
 import { useContext, useState, useCallback, useEffect } from 'react';
 import { CartContext, type Items } from '../../../contexts/CartContext';
 import { AuthContext } from '../../../contexts/AuthContext';
@@ -46,21 +46,7 @@ export function Cart() {
         cep: '', latitude: undefined, longitude: undefined, estado: '' 
     });
     
-    useEffect(() => {
-        if (deliveryOption === 'delivery' && enderecoData.latitude !== undefined && enderecoData.longitude !== undefined) {
-            calcularFreteFixo(enderecoData.latitude, enderecoData.longitude);
-        } else if (deliveryOption === 'pickup') {
-            setFrete(0);
-            setDeliveryTime('Retirada no local');
-            setDistance('N/A');
-            setIsFreteCalculated(true);
-        } else {
-            setFrete(0);
-            setDeliveryTime('');
-            setDistance('');
-            setIsFreteCalculated(false);
-        }
-    }, [deliveryOption, enderecoData.latitude, enderecoData.longitude]);
+    
 
     const getBrowserLocation = useCallback(() => {
         setIsLoadingLocation(true);
@@ -157,6 +143,22 @@ export function Cart() {
         setDeliveryTime(`${tempoEstimado} minutos`);
         setIsFreteCalculated(true);
     }, [CENTRO_CAMPINAS.lat, CENTRO_CAMPINAS.lng]);
+
+    useEffect(() => {
+        if (deliveryOption === 'delivery' && enderecoData.latitude !== undefined && enderecoData.longitude !== undefined) {
+            calcularFreteFixo(enderecoData.latitude, enderecoData.longitude);
+        } else if (deliveryOption === 'pickup') {
+            setFrete(0);
+            setDeliveryTime('Retirada no local');
+            setDistance('N/A');
+            setIsFreteCalculated(true);
+        } else {
+            setFrete(0);
+            setDeliveryTime('');
+            setDistance('');
+            setIsFreteCalculated(false);
+        }
+    }, [deliveryOption, enderecoData.latitude, enderecoData.longitude,calcularFreteFixo ]);
 
     const handleAddressChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const newAddressData = {
