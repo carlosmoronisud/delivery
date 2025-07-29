@@ -1,15 +1,8 @@
 // src/components/carrinho/DeliveryModal.tsx
 import { X } from '@phosphor-icons/react';
 import type { EnderecoData } from '../../../models/EnderecoData';
-
 import AddressForm from './AddressForm';
 import { MapDisplay } from './MapDisplay';
-// Certifique-se que o caminho está correto para MapDisplay
-// Se MapDisplay estiver em 'src/components/map/MapDisplay.tsx',
-// e DeliveryModal está em 'src/components/carrinho/DeliveryModal.tsx',
-// então o caminho correto é '../../map/MapDisplay'.
-
-
 
 interface DeliveryModalProps {
   isOpen: boolean;
@@ -65,7 +58,7 @@ export const DeliveryModal = ({
               />
               <div className="mt-6 flex justify-end">
                 <button
-                  onClick={onConfirm} // Chamando onConfirm que já faz o cálculo e fecha o modal
+                  onClick={onConfirm} 
                   className="bg-green-600 text-white px-6 py-2 rounded-lg font-medium hover:bg-green-700 transition"
                   disabled={!enderecoData.rua || !enderecoData.numero || !enderecoData.cidade}
                 >
@@ -85,14 +78,12 @@ export const DeliveryModal = ({
                 </div>
               ) : (
                 <>
-                  {/* Renderiza o MapDisplay apenas se houver mapCenter ou enderecoData com coords */}
                   {(mapCenter || (enderecoData.latitude !== undefined && enderecoData.longitude !== undefined)) ? (
                     <MapDisplay
-                      // Se enderecoData.latitude/longitude estiverem definidos, use-os, senão use mapCenter
+                      
                       latitude={enderecoData.latitude ?? mapCenter?.lat ?? 0}
                       longitude={enderecoData.longitude ?? mapCenter?.lng ?? 0}
-                      isMarkerDraggable={true}
-                      // <<-- AQUI ESTÁ A SEGUNDA PARTE DA CORREÇÃO: Passando a prop para o MapDisplay
+                      isMarkerDraggable={true}                      
                       onMarkerDragEnd={handleMarkerDragEnd}
                     />
                   ) : (

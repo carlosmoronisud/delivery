@@ -37,6 +37,7 @@ import CadastroRestaurante from './pages/cadastro/RestauranteCadastro';
 import CadastroEntregador from './pages/cadastro/EntregadoresCadastro';
 import OrderConfirmation from './components/carrinho/cart/OrderConfirmation';
 import { Cart } from './components/carrinho/cart/Cart';
+import { UserLocationProvider } from './contexts/userLocation';
 
 
 type MenuState = 'closed' | 'open';
@@ -58,6 +59,7 @@ function App() {
   return (
     <GoogleOAuthProvider clientId={GOOGLE_CLIENT_ID}>
       <AuthProvider>
+        <UserLocationProvider>
         <CartProvider>
           <ToastContainer />
           <BrowserRouter>
@@ -119,6 +121,7 @@ function App() {
             </div>
           </BrowserRouter>
         </CartProvider>
+        </UserLocationProvider>
       </AuthProvider>
     </GoogleOAuthProvider>
   );

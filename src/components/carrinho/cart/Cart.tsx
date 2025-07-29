@@ -112,6 +112,7 @@ export function Cart() {
             }
         } catch (error) {
             ToastAlerta('Não foi possível encontrar a localização no mapa', 'erro');
+            console.log('Erro ao geocodificar o endereço:', `${address.rua}, ${address.numero}, ${address.bairro}, ${address.cidade}, ${address.estado}`);
             console.error('Erro ao geocodificar o endereço:', error);
         }
     };

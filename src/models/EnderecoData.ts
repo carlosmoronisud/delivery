@@ -8,5 +8,5 @@ export interface EnderecoData {
   estado?: string;
   latitude?: number;
   longitude?: number;
-  enderecoCompleto?: string; // Adicionado para armazenar o endereço formatado
+  enderecoCompleto?: string; 
 }
