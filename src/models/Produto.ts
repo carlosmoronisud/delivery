@@ -2,7 +2,6 @@ import type Categoria from "./Categoria";
 import type Usuario from "./Usuario";
 
 export default interface Produto {
-  descricao: ReactNode;
   id: number;
   nome: string;
   preco: number;
@@ -11,4 +10,5 @@ export default interface Produto {
   ingrediente?: string;
   id_categoria?: Categoria;
   id_usuario?: Usuario;
+  
 }

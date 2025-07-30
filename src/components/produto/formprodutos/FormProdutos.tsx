@@ -31,6 +31,7 @@ function FormProduto() {
     ingrediente: "",
     id_categoria: { id: undefined, descricao: "", palavraChave: "", imagem: "" }, 
     id_usuario: { id: null, nome: "", usuario: "", senha: "", foto: "" }, 
+    
   });
 
   // --- Auth Check ---

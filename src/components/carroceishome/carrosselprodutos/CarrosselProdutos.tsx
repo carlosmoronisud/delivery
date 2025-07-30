@@ -43,7 +43,7 @@ export default function CarrosselProdutos() {
             ingrediente: "Frango, catupiry, molho de tomate, mussarela",
             id_categoria: { id: 1, descricao: "Pizzas", palavraChave: "pizza", imagem: "url_pizza_categoria" },
             id_usuario: { id: null, nome: "Admin do Sabor", usuario: "admin@delivery.com", senha: "senhaSegura123", foto: "url_admin_foto" },
-            descricao: undefined
+            
           },
           {
             id: 2,
@@ -54,7 +54,7 @@ export default function CarrosselProdutos() {
             ingrediente: "Calabresa, cebola, molho de tomate, mussarela",
             id_categoria: { id: 1, descricao: "Pizzas", palavraChave: "pizza", imagem: "url_pizza_categoria" },
             id_usuario: { id: null, nome: "Admin do Sabor", usuario: "admin@delivery.com", senha: "senhaSegura123", foto: "url_admin_foto" },
-            descricao: undefined
+            
           },
           {
             id: 3,
@@ -65,7 +65,7 @@ export default function CarrosselProdutos() {
             ingrediente: "Alface, frango grelhado, croutons, molho caesar",
             id_categoria: { id: 2, descricao: "Saladas", palavraChave: "saudavel", imagem: "url_salada_categoria" },
             id_usuario: { id: null, nome: "Restaurante Sabor Verde", usuario: "saborverde@delivery.com", senha: "senhaRestaurante123", foto: "url_restaurante_foto" },
-            descricao: undefined
+            
           },
           {
             id: 4,
@@ -76,7 +76,7 @@ export default function CarrosselProdutos() {
             ingrediente: "Pão brioche, carne, queijo, bacon, alface, tomate",
             id_categoria: { id: 3, descricao: "Lanches", palavraChave: "lanche", imagem: "url_lanche_categoria" },
             id_usuario: { id: null, nome: "Admin do Sabor", usuario: "admin@delivery.com", senha: "senhaSegura123", foto: "url_admin_foto" },
-            descricao: undefined
+            
           },
           {
             id: 5,
@@ -87,7 +87,7 @@ export default function CarrosselProdutos() {
             ingrediente: "Brownie de chocolate, sorvete de creme, calda de chocolate",
             id_categoria: { id: 4, descricao: "Sobremesas", palavraChave: "doce", imagem: "url_doce_categoria" },
             id_usuario: { id: null, nome: "Restaurante Sabor Verde", usuario: "saborverde@delivery.com", senha: "senhaRestaurante123", foto: "url_restaurante_foto" },
-            descricao: undefined
+            
           },
         ]);
       } finally {
