@@ -35,54 +35,59 @@ export default function CarrosselProdutos() {
         console.error("Erro ao carregar produtos:", error);
         setProdutos([
           {
-              id: 1, 
-              nome: "Pizza Frango c/ Catupiry", 
-              preco: 45.00, 
-              imagem: "https://placehold.co/256x160/F0F0F0/ADADAD?text=Pizza+Frango", 
-              nutriScore: "C", 
-              ingrediente: "Frango, catupiry, molho de tomate, mussarela", 
-              id_categoria: { id: 1, descricao: "Pizzas", palavraChave: "pizza", imagem: "url_pizza_categoria" }, 
-              id_usuario: { id: null, nome: "Admin do Sabor", usuario: "admin@delivery.com", senha: "senhaSegura123", foto: "url_admin_foto" }
+            id: 1,
+            nome: "Pizza Frango c/ Catupiry",
+            preco: 45.00,
+            imagem: "https://placehold.co/256x160/F0F0F0/ADADAD?text=Pizza+Frango",
+            nutriScore: "C",
+            ingrediente: "Frango, catupiry, molho de tomate, mussarela",
+            id_categoria: { id: 1, descricao: "Pizzas", palavraChave: "pizza", imagem: "url_pizza_categoria" },
+            id_usuario: { id: null, nome: "Admin do Sabor", usuario: "admin@delivery.com", senha: "senhaSegura123", foto: "url_admin_foto" },
+            descricao: undefined
           },
           {
-              id: 2, 
-              nome: "Pizza Calabresa", 
-              preco: 40.00, 
-              imagem: "https://placehold.co/256x160/F0F0F0/ADADAD?text=Pizza+Calabresa", 
-              nutriScore: "D", 
-              ingrediente: "Calabresa, cebola, molho de tomate, mussarela", 
-              id_categoria: { id: 1, descricao: "Pizzas", palavraChave: "pizza", imagem: "url_pizza_categoria" }, 
-              id_usuario: { id: null, nome: "Admin do Sabor", usuario: "admin@delivery.com", senha: "senhaSegura123", foto: "url_admin_foto" }
+            id: 2,
+            nome: "Pizza Calabresa",
+            preco: 40.00,
+            imagem: "https://placehold.co/256x160/F0F0F0/ADADAD?text=Pizza+Calabresa",
+            nutriScore: "D",
+            ingrediente: "Calabresa, cebola, molho de tomate, mussarela",
+            id_categoria: { id: 1, descricao: "Pizzas", palavraChave: "pizza", imagem: "url_pizza_categoria" },
+            id_usuario: { id: null, nome: "Admin do Sabor", usuario: "admin@delivery.com", senha: "senhaSegura123", foto: "url_admin_foto" },
+            descricao: undefined
           },
           {
-              id: 3, 
-              nome: "Salada Caesar", 
-              preco: 30.00, 
-              imagem: "https://placehold.co/256x160/F0F0F0/ADADAD?text=Salada+Caesar", 
-              nutriScore: "B", 
-              ingrediente: "Alface, frango grelhado, croutons, molho caesar", 
-              id_categoria: { id: 2, descricao: "Saladas", palavraChave: "saudavel", imagem: "url_salada_categoria" }, 
-              id_usuario: { id: null, nome: "Restaurante Sabor Verde", usuario: "saborverde@delivery.com", senha: "senhaRestaurante123", foto: "url_restaurante_foto" }
+            id: 3,
+            nome: "Salada Caesar",
+            preco: 30.00,
+            imagem: "https://placehold.co/256x160/F0F0F0/ADADAD?text=Salada+Caesar",
+            nutriScore: "B",
+            ingrediente: "Alface, frango grelhado, croutons, molho caesar",
+            id_categoria: { id: 2, descricao: "Saladas", palavraChave: "saudavel", imagem: "url_salada_categoria" },
+            id_usuario: { id: null, nome: "Restaurante Sabor Verde", usuario: "saborverde@delivery.com", senha: "senhaRestaurante123", foto: "url_restaurante_foto" },
+            descricao: undefined
           },
           {
-              id: 4, 
-              nome: "Hambúrguer Artesanal", 
-              preco: 35.00, 
-              imagem: "https://placehold.co/256x160/F0F0F0/ADADAD?text=Hamburguer", 
-              nutriScore: "E", 
-              ingrediente: "Pão brioche, carne, queijo, bacon, alface, tomate", 
-              id_categoria: { id: 3, descricao: "Lanches", palavraChave: "lanche", imagem: "url_lanche_categoria" }, 
-              id_usuario: { id: null, nome: "Admin do Sabor", usuario: "admin@delivery.com", senha: "senhaSegura123", foto: "url_admin_foto" }
+            id: 4,
+            nome: "Hambúrguer Artesanal",
+            preco: 35.00,
+            imagem: "https://placehold.co/256x160/F0F0F0/ADADAD?text=Hamburguer",
+            nutriScore: "E",
+            ingrediente: "Pão brioche, carne, queijo, bacon, alface, tomate",
+            id_categoria: { id: 3, descricao: "Lanches", palavraChave: "lanche", imagem: "url_lanche_categoria" },
+            id_usuario: { id: null, nome: "Admin do Sabor", usuario: "admin@delivery.com", senha: "senhaSegura123", foto: "url_admin_foto" },
+            descricao: undefined
           },
           {
-              id: 5, 
-              nome: "Brownie c/ Sorvete", 
-              preco: 22.00, 
-              imagem: "https://placehold.co/256x160/F0F0F0/ADADAD?text=Brownie", 
-              nutriScore: "C", 
-              ingrediente: "Brownie de chocolate, sorvete de creme, calda de chocolate", 
-              id_categoria: { id: 4, descricao: "Sobremesas", palavraChave: "doce", imagem: "url_doce_categoria" }, 
-              id_usuario: { id: null, nome: "Restaurante Sabor Verde", usuario: "saborverde@delivery.com", senha: "senhaRestaurante123", foto: "url_restaurante_foto" }
+            id: 5,
+            nome: "Brownie c/ Sorvete",
+            preco: 22.00,
+            imagem: "https://placehold.co/256x160/F0F0F0/ADADAD?text=Brownie",
+            nutriScore: "C",
+            ingrediente: "Brownie de chocolate, sorvete de creme, calda de chocolate",
+            id_categoria: { id: 4, descricao: "Sobremesas", palavraChave: "doce", imagem: "url_doce_categoria" },
+            id_usuario: { id: null, nome: "Restaurante Sabor Verde", usuario: "saborverde@delivery.com", senha: "senhaRestaurante123", foto: "url_restaurante_foto" },
+            descricao: undefined
           },
         ]);
       } finally {
