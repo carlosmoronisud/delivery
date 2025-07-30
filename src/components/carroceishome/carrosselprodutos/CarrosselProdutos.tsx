@@ -3,11 +3,12 @@ import { useEffect, useRef, useState } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Pagination } from "swiper/modules"; 
 import { motion } from "framer-motion";
-import { DNA } from "react-loader-spinner";
+import foodCarouselAnimation from '../../../assets/lottie-animations/FoodCarousel.json';
 
 import CardProduto from "../../produto/cardproduto/CardProduto"; 
 import type Produto from "../../../models/Produto"; 
 import { buscarProdutos } from "../../../services/ProdutoService";
+import Lottie from "lottie-react";
  
 
 export default function CarrosselProdutos() {
@@ -95,12 +96,11 @@ export default function CarrosselProdutos() {
   if (isLoading) {
     return (
       <div className="w-full flex justify-center py-20">
-        <DNA
-          visible={true}
-          height="120" 
-          width="120"  
-          ariaLabel="Carregando produtos..."
-          wrapperClass="dna-wrapper"
+        <Lottie 
+          animationData={foodCarouselAnimation} 
+          loop={true} 
+          autoplay={true} 
+          className="h-60"
         />
       </div>
     );
@@ -113,8 +113,6 @@ export default function CarrosselProdutos() {
       animate={{ opacity: 1 }}
       transition={{ duration: 0.8 }}
     >
-      {/* Botões de navegação responsivos e com novo estilo */}
-      {/* Posicionamento mais distante e visível apenas em telas maiores */}
       <div className="absolute -left-12 top-1/2 z-20 -translate-y-1/2 hidden lg:block"> 
         <button
           ref={prevRef}
@@ -148,20 +146,20 @@ export default function CarrosselProdutos() {
           }
         }}
         loop={true}
-        // Aumentando o spaceBetween para todas as resoluções
-        spaceBetween={30} // Valor padrão para mobile (se não houver outro breakpoint menor)
+        
+        spaceBetween={30} 
         breakpoints={{
           320: {
             slidesPerView: 1.5, 
-            spaceBetween: 230, // Aumentado de 10 para 20
+            spaceBetween: 230, 
           },
           480: {
             slidesPerView: 2,
-            spaceBetween: 235, // Aumentado de 15 para 25
+            spaceBetween: 235, 
           },
           768: {
             slidesPerView: 3,
-            spaceBetween: 230, // Aumentado de 20 para 30
+            spaceBetween: 230, 
           },
           1024: {
             slidesPerView: 4,
@@ -173,7 +171,7 @@ export default function CarrosselProdutos() {
           // },
           // 1536: {
           //   slidesPerView: 6, 
-          //   spaceBetween: 225, // Aumentado de 30 para 45
+          //   spaceBetween: 225, 
           // },
         }}
         className="py-8 md:py-12 w-full h-full" 

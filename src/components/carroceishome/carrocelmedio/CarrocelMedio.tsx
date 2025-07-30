@@ -1,14 +1,14 @@
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay, Pagination } from "swiper/modules";
-import { motion } from "framer-motion"; // Animação com Framer Motion
+import { motion } from "framer-motion"; 
 
-// Array de URLs das imagens de banners de promoção
+
 
 const bannerPromocoes = [
   "https://ik.imagekit.io/8h7kfljfc/imgs/ChatGPT%20Image%20Jul%2016,%202025,%2008_30_48%20PM.png?updatedAt=1752708739819", 
   "https://ik.imagekit.io/8h7kfljfc/imgs/ChatGPT%20Image%20Jul%2016,%202025,%2008_38_40%20PM.png?updatedAt=1752709165673", 
-  "https://ik.imagekit.io/8h7kfljfc/imgs/ChatGPT%20Image%20Jul%2016,%202025,%2008_41_29%20PM.png?updatedAt=1752709330388", // Exemplo: Imagem de promoção de sobremesa
-  "https://ik.imagekit.io/8h7kfljfc/imgs/ChatGPT%20Image%20Jul%2016,%202025,%2008_54_50%20PM.png?updatedAt=1752710134648"  // Exemplo: Imagem de promoção de bebida
+  "https://ik.imagekit.io/8h7kfljfc/imgs/ChatGPT%20Image%20Jul%2016,%202025,%2008_41_29%20PM.png?updatedAt=1752709330388", 
+  "https://ik.imagekit.io/8h7kfljfc/imgs/ChatGPT%20Image%20Jul%2016,%202025,%2008_54_50%20PM.png?updatedAt=1752710134648"  
 ];
 
 export default function CarrosselMedio() {

@@ -33,7 +33,6 @@ const staggerContainer = {
 function SobreProjetoPage() {
   const [hovered, setHovered] = useState<string | null>(null);
 
-  // Seu nome para destaque, pode ser alterado
   const membroDestaque = "Carlos Moroni"; 
 
   const getCardStyle = (nome: string) => {
@@ -43,7 +42,7 @@ function SobreProjetoPage() {
     const destaqueStyle = "bg-gradient-to-br from-orange-500 to-yellow-400 text-white shadow-2xl border-2 border-orange-400";
     const normalStyle = "bg-white text-gray-800 shadow-md border border-gray-200";
     
-    // Adição para o destaque sutil de borda (ring)
+    
     const isNotCarlosHover = hovered && nome !== hovered && nome === membroDestaque;
     const ringStyle = isNotCarlosHover ? "ring-2 ring-orange-200" : "";
 

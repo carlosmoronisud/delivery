@@ -11,9 +11,6 @@ function Produtos() {
   const shouldShowAddProductButton = usuario.token && isBackendUser;
 
   return (
-    // Adicionado pt-16 (padding-top de 64px) para mobile e pt-20 (80px) para desktop
-    // para compensar a altura da Navbar fixa/pegajosa.
-    // Isso empurra o conteúdo da página para baixo da Navbar.
     <div className="w-full bg-gray-100 min-h-screen flex flex-col font-sans pt-16 md:pt-20"> 
 
       {/* Banner Principal de Produtos - Este header não é a navbar, mas o banner da página de produtos */}

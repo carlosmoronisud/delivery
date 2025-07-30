@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { AuthContext } from '../../../contexts/AuthContext';
 import { CartContext } from '../../../contexts/CartContext';
@@ -9,6 +9,26 @@ import { PencilSimpleLine, Trash, ShoppingCartSimple } from '@phosphor-icons/rea
 interface CardProdutoProps {
   produto: Produto;
 }
+
+
+
+const getNutriScoreDescricao = (score: string | undefined): { titulo: string; descricao: string } => {
+ switch (score?.toUpperCase()) {
+  case 'A':
+   return { titulo: 'NutriScore A', descricao: 'Alimento com excelente valor nutricional.' };
+  case 'B':
+   return { titulo: 'NutriScore B', descricao: 'Alimento com bom valor nutricional.' };
+  case 'C':
+   return { titulo: 'NutriScore C', descricao: 'Alimento com valor nutricional moderado.' };
+  case 'D':
+   return { titulo: 'NutriScore D', descricao: 'Alimento com baixo valor nutricional.' };
+  case 'E':
+   return { titulo: 'NutriScore E', descricao: 'Alimento com muito baixo valor nutricional.' };
+  default:
+   return { titulo: 'NutriScore', descricao: 'Classificação nutricional indisponível.' };
+ }
+};
+
 
 // Função para mapear NutriScore para classes Tailwind
 const getNutriScoreClasses = (score: string | undefined): string => {
@@ -29,9 +49,10 @@ const getNutriScoreClasses = (score: string | undefined): string => {
 };
 
 const CardProduto: React.FC<CardProdutoProps> = ({ produto }) => {
+  const tooltipRef = useRef<HTMLDivElement>(null);
   const { usuario: loggedInUser } = useContext(AuthContext);
   const { adicionarProduto } = useContext(CartContext);
-
+  const [showInfo, setShowInfo] = useState(false);
   console.log('Usuário logado:', loggedInUser);
   console.log('Produto recebido:', produto);
 
@@ -47,11 +68,29 @@ const CardProduto: React.FC<CardProdutoProps> = ({ produto }) => {
     }
   }
 
-  console.log('isDono:', isDono);
+  // console.log('isDono:', isDono);
+
+  
+
+useEffect(() => {
+  function handleClickOutside(event: MouseEvent) {
+    if (tooltipRef.current && !tooltipRef.current.contains(event.target as Node)) {
+      setShowInfo(false);
+    }
+  }
+
+  if (showInfo) {
+    document.addEventListener("mousedown", handleClickOutside);
+  }
+
+  return () => {
+    document.removeEventListener("mousedown", handleClickOutside);
+  };
+}, [showInfo]);
 
   return (
     <div className="relative bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 
-                    flex flex-col justify-start items-start overflow-hidden 
+                    flex flex-col justify-start items-start overflow-visible
                     w-64 h-96 p-4 border border-gray-200 cursor-pointer">
 
       <img
@@ -99,16 +138,38 @@ const CardProduto: React.FC<CardProdutoProps> = ({ produto }) => {
         )}
       </div>
 
-      {produto.nutriScore && ( 
-        <div 
-          className={`absolute top-4 left-4 flex items-center justify-center 
-                      w-10 h-10 rounded-full font-bold text-lg shadow-md z-10 
-                      ${getNutriScoreClasses(produto.nutriScore)}`}
-          title={`NutriScore: Nível de nutrição ${produto.nutriScore}`}
-        >
-          {produto.nutriScore}
-        </div>
-      )}
+      {produto.nutriScore && (
+  <>
+    <button
+      onClick={() => setShowInfo(!showInfo)}
+      className={`transition-all duration-300 transform hover:scale-110 hover:shadow-lg hover:border-2 border-orange-400 cursor-pointer absolute top-4 left-4 flex items-center justify-center
+        w-10 h-10 rounded-full font-bold text-lg shadow-md
+        ${getNutriScoreClasses(produto.nutriScore)} transition duration-200 z-20`}
+      title="Clique para saber mais sobre o NutriScore"
+    >
+      {produto.nutriScore}
+    </button>
+
+    {showInfo && (
+      <div
+        ref={tooltipRef}
+        className="absolute top-20 left-4 w-60 p-3 bg-white text-gray-800 border border-gray-300 
+                    rounded-lg shadow-xl text-sm z-40 origin-top-left 
+                    transform scale-95 opacity-0 transition-all duration-200 ease-out 
+                    animate-[fadeIn_0.2s_ease-out_forwards]
+                    before:content-[''] before:absolute before:-top-2 before:left-6 
+                    before:border-8 before:border-transparent before:border-b-white"
+
+
+  >
+
+        <strong className="block text-base mb-1">{getNutriScoreDescricao(produto.nutriScore).titulo}</strong>
+        <p>{getNutriScoreDescricao(produto.nutriScore).descricao}</p>
+      </div>
+    )}
+  </>
+)}
+
 
       <button
         onClick={() => adicionarProduto(produto)}

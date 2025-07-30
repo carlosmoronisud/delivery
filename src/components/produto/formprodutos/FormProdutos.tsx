@@ -296,7 +296,7 @@ function FormProduto() {
                 strokeColor="white"
                 strokeWidth="5"
                 animationDuration="0.75"
-                width="28" // Increased size for visibility
+                width="28" 
                 visible={true}
               />
             ) : (

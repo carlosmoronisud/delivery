@@ -2,37 +2,35 @@
 import type Categoria from "../../../models/Categoria";
 import CardCategorias from "../cardcategorias/CardCategorias";
 import { buscar } from "../../../services/Service";
-import { RotatingLines } from "react-loader-spinner"; // Usando RotatingLines para consistência
+import { RotatingLines } from "react-loader-spinner"; 
 import { useEffect, useState } from "react";
-import { ToastAlerta } from "../../../utils/ToastAlerta"; // Adicionado para feedback de erro
+import { ToastAlerta } from "../../../utils/ToastAlerta";
 
 function ListarCategorias() {
-  const [isLoading, setIsLoading] = useState<boolean>(true); // Inicia como true para mostrar loader ao carregar
+  const [isLoading, setIsLoading] = useState<boolean>(true); 
   const [categorias, setCategorias] = useState<Categoria[]>([]);
 
   async function buscarCategorias() {
     setIsLoading(true);
     try {
-      // Ajustado para usar a função 'buscar' de forma que ela passe os dados para setCategorias
+      
       await buscar("/categorias", setCategorias);
-    } catch (error: any) { // Capture o erro para exibir alerta
+    } catch (error: any) { 
       console.error("Erro ao carregar categorias:", error);
       ToastAlerta("Erro ao carregar as categorias. Tente novamente mais tarde.", "erro");
-      setCategorias([]); // Garante que o estado de categorias seja vazio em caso de erro
+      setCategorias([]); 
     } finally {
       setIsLoading(false);
     }
   }
 
-  // UseEffect para buscar categorias apenas uma vez ao montar o componente
-  // Mudei a dependência de `categorias.length` para `[]` para evitar loop infinito
-  // `categorias.length` causaria uma nova busca toda vez que `setCategorias` fosse chamado.
+ 
   useEffect(() => {
     buscarCategorias();
   }, []);
 
   return (
-    <section className="w-full min-h-screen bg-gray-100 py-12 px-4 font-sans"> {/* Fundo consistente, padding */}
+    <section className="w-full min-h-screen bg-gray-100 py-12 px-4 font-sans"> 
       <div className="container mx-auto flex flex-col items-center">
         <h2 className="text-4xl md:text-5xl font-bold text-center text-gray-800 mb-12 leading-tight">
           Explore Nossas Categorias de Sabor! 🍕
@@ -40,12 +38,12 @@ function ListarCategorias() {
 
         {/* Loader de carregamento */}
         {isLoading && (
-          <div className="flex justify-center items-center py-20 w-full"> {/* Centraliza o loader */}
+          <div className="flex justify-center items-center py-20 w-full"> 
             <RotatingLines
-              strokeColor="#F97316" // Cor laranja da paleta do seu app
+              strokeColor="#F97316"
               strokeWidth="5"
               animationDuration="0.75"
-              width="96" // Tamanho consistente com outros loaders
+              width="96" 
               visible={true}
             />
           </div>
