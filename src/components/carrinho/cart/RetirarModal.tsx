@@ -1,7 +1,7 @@
 import React, { useState, type ChangeEvent, type FormEvent } from 'react';
 import { RotatingLines } from 'react-loader-spinner';
 
-interface PickupDetailsModalProps {
+interface RetirarModalProps {
   isOpen: boolean;
   onClose: () => void;
   onConfirm: (name: string, phone: string) => void;
@@ -9,7 +9,7 @@ interface PickupDetailsModalProps {
   initialPhone?: string;
 }
 
-const PickupDetailsModal: React.FC<PickupDetailsModalProps> = ({
+const RetirarModal: React.FC<RetirarModalProps> = ({
   isOpen,
   onClose,
   onConfirm,
@@ -106,4 +106,4 @@ const PickupDetailsModal: React.FC<PickupDetailsModalProps> = ({
   );
 };
 
-export default PickupDetailsModal;
+export default RetirarModal;

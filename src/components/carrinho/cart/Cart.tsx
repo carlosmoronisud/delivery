@@ -16,7 +16,7 @@ import { DeliveryModal } from '../map/DeliveryModal';
 import { MapDisplay } from '../map/MapDisplay';
 import { PencilSimpleLine } from '@phosphor-icons/react'; 
 import { MapPinLine } from '@phosphor-icons/react/dist/ssr/MapPinLine';
-import PickupDetailsModal from './pickupDetailsModal';
+import PickupDetailsModal from './RetirarModal';
 
 
 
