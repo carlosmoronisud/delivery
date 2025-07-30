@@ -21,7 +21,7 @@ import PickupDetailsModal from './pickupDetailsModal';
 
 
 
-
+// Componente principal do carrinho
 export function Cart() {
     const { items, quantidadeItems, valorTotal, limparCart } = useContext(CartContext); 
     const { setUserAddress } = useUserLocation();
