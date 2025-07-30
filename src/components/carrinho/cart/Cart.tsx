@@ -19,6 +19,7 @@ import { MapPinLine } from '@phosphor-icons/react/dist/ssr/MapPinLine';
 import PickupDetailsModal from './pickupDetailsModal';
 
 
+
 export function Cart() {
     const { items, quantidadeItems, valorTotal, limparCart } = useContext(CartContext); 
     const { setUserAddress } = useUserLocation();
