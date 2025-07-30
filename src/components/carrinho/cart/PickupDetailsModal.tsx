@@ -25,7 +25,7 @@ const PickupDetailsModal: React.FC<PickupDetailsModalProps> = ({
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     if (name.trim() === '' || phone.trim() === '') {
-      alert('Por favor, preencha o nome e o telefone.');
+      alert('Por favor, preencha o nome e o telefone.'); // Usando alert temporariamente, você pode substituir por um ToastAlerta
       return;
     }
 
