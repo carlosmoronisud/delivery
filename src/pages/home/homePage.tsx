@@ -114,7 +114,7 @@ export default function Home() {
                             </div>
                             {addressFound && addressFound.rua && addressFound.cidade && (
                                 <p className="text-xs sm:text-sm text-white/90 text-center lg:text-left drop-shadow-md">
-                                    Localização: **{addressFound.rua}** - **{addressFound.cidade}**
+                                    Localização: <strong>{addressFound.rua}</strong> -<strong>{addressFound.cidade}</strong>
                                     {addressFound.bairro && ` (${addressFound.bairro})`}
                                     {addressFound.cep && ` - CEP: ${addressFound.cep}`}
                                 </p>

@@ -6,9 +6,7 @@ import Lottie from 'lottie-react';
 import { ToastAlerta } from '../../../utils/ToastAlerta';
 import type { EnderecoData } from '../../../models/EnderecoData';
 import { ShoppingCartSimple, MapPinLine, ArrowCircleRight } from '@phosphor-icons/react'; 
-
-// FIX: Caminho corrigido para a animação Lottie
-import orderConfirmedAnimation from '../../../assets/lottie-animations/orderconfirmed.json'; // <<-- AQUI ESTÁ A CORREÇÃO
+import orderConfirmedAnimation from '../../../assets/lottie-animations/orderconfirmed.json'; 
 import { MapDisplay } from '../map/MapDisplay';
 
 // Interface para os dados do pedido passados via state do Cart
@@ -30,7 +28,6 @@ const OrderConfirmation: React.FC = () => {
     const orderData = location.state as OrderConfirmationState | null;
 
     useEffect(() => {
-        // Redireciona se não houver dados válidos do pedido ou se o carrinho estiver vazio
         if (!orderData || !orderData.items || orderData.items.length === 0) {
             ToastAlerta('Nenhum pedido para confirmar. Faça um pedido primeiro!', 'info');
             navigate('/home');
@@ -114,7 +111,7 @@ const OrderConfirmation: React.FC = () => {
                                 <p><span className="font-semibold">Endereço:</span> {orderData.enderecoData.rua}, {orderData.enderecoData.numero}</p>
                                 <p><span className="font-semibold">Bairro:</span> {orderData.enderecoData.bairro}</p>
                                 <p><span className="font-semibold">Cidade:</span> {orderData.enderecoData.cidade}-{orderData.enderecoData.estado}</p>
-                                {orderData.enderecoData.complemento && <p><span className="font-semibold">Complemento:</span> {orderData.enderecoData.complemento}</p>}
+                                {orderData.enderecoData.complemento && <p><span className="font-semibold">Telefone:</span> {orderData.enderecoData.complemento}</p>}
                                 {orderData.enderecoData.cep && <p><span className="font-semibold">CEP:</span> {orderData.enderecoData.cep}</p>}
                                 <p className="mt-4 text-orange-600 font-semibold">Tempo estimado: {orderData.deliveryTime}</p>
                                 <p className="mt-2 text-gray-600 font-semibold">Distância: {orderData.distance}</p>

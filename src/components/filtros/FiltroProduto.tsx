@@ -1,4 +1,3 @@
-// src/components/filtros/FiltroProduto.tsx
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useEffect, useState, useCallback } from "react";
 import { useSearchParams } from "react-router-dom";
@@ -7,7 +6,7 @@ import { buscar } from "../../services/Service";
 
 // Importando os novos componentes de filtro
 import FiltroPreco from "./FiltroPreco";
-import FiltroIngredientes from "./FiltroIngredientes";
+import FiltroIngredientes from "./FiltroIngredientes"; // Importação atualizada
 import FiltroCategorias from "./FiltroCategorias";
 import FiltroNutriScore from "./FiltroNutriScore";
 import FiltroMobileButton from "./FiltroMobileButton";
@@ -22,7 +21,7 @@ export default function FiltroProduto() {
     const selectedPrecoMin = params.get("precoMin") || "";
     const selectedPrecoMax = params.get("precoMax") || "";
     const selectedIngrediente = params.get("ingrediente") || "";
-    const excludeIngrediente = params.get("excluirIngrediente") === 'true';
+    // REMOVIDO: const excludeIngrediente = params.get("excluirIngrediente") === 'true'; 
     const selectedNutriScore = params.get("nutriScore");
     const selectedCategoria = params.get("categoriaId") || "";
 
@@ -50,16 +49,24 @@ export default function FiltroProduto() {
         setParams(newParams);
     }, [params, setParams]);
 
-    // Handler para o toggle de exclusão de ingrediente
-    const handleToggleExcludeIngrediente = useCallback(() => {
+    // NOVO Handler para aplicar o filtro de ingrediente (incluir ou excluir)
+    const handleApplyIngredienteFilter = useCallback((include: boolean) => {
         const newParams = new URLSearchParams(params);
-        if (excludeIngrediente) {
+        if (selectedIngrediente.trim() === '') {
+            // Se o input estiver vazio, remove os parâmetros de ingrediente
+            newParams.delete("ingrediente");
             newParams.delete("excluirIngrediente");
         } else {
-            newParams.set("excluirIngrediente", "true");
+            newParams.set("ingrediente", selectedIngrediente);
+            if (!include) { // Se for para excluir
+                newParams.set("excluirIngrediente", "true");
+            } else { // Se for para incluir ou se o botão de excluir não foi clicado
+                newParams.delete("excluirIngrediente");
+            }
         }
         setParams(newParams);
-    }, [params, setParams, excludeIngrediente]);
+    }, [params, setParams, selectedIngrediente]);
+
 
     // Handler para as Restrições Alimentares (que atuam como categorias)
     const handleRestricaoAsCategory = useCallback((restricaoId: string) => {
@@ -95,10 +102,9 @@ export default function FiltroProduto() {
         fetchCategorias();
     }, []);
 
-    // Conteúdo comum dos filtros (será usado tanto no desktop quanto no modal mobile)
     const filtersContent = (
         <>
-            {/* <FiltroPalavraChave // NOVO: Renderiza o filtro de palavra-chave
+            {/* <FiltroPalavraChave 
                 selectedValue={selectedPalavraChave}
                 onChange={handleChange}
             /> */}
@@ -111,9 +117,8 @@ export default function FiltroProduto() {
 
             <FiltroIngredientes
                 selectedIngrediente={selectedIngrediente}
-                excludeIngrediente={excludeIngrediente}
                 onChange={handleChange}
-                onToggleExclude={handleToggleExcludeIngrediente}
+                onApplyFilter={handleApplyIngredienteFilter} // Passando a nova prop
             />
 
             <FiltroCategorias

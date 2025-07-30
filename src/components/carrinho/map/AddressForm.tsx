@@ -49,9 +49,9 @@ const AddressForm: React.FC<AddressFormProps> = ({
                 rua: '',
                 numero: '',
                 bairro: '',
-                cidade: '', // Será preenchido pelo autocomplete, mas o campo de input foi removido
+                cidade: '', 
                 cep: '',
-                estado: '', // Será preenchido pelo autocomplete, mas o campo de input foi removido
+                estado: '', 
                 latitude: place.geometry?.location?.lat(),
                 longitude: place.geometry?.location?.lng()
             };
@@ -196,10 +196,11 @@ const AddressForm: React.FC<AddressFormProps> = ({
                     onChange={onAddressChange}
                     className="border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-orange-500 focus:border-orange-500"
                 />
+                
                 <input
                     type="text"
                     name="complemento"
-                    placeholder="Complemento (Opcional)"
+                    placeholder="Telefone"
                     value={enderecoData.complemento || ''}
                     onChange={onAddressChange}
                     className="border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-orange-500 focus:border-orange-500"

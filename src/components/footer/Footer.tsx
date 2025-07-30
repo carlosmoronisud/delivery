@@ -49,7 +49,7 @@ function Footer() {
         <div className="flex flex-col gap-3 min-w-[150px]">
           <h3 className="text-lg font-bold mb-3">Conecte-se</h3>
           <div className="flex gap-4"> 
-            <a href="www.linkedin.com/in/carlosmoronigarcia" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">
+            <a href="https://linktr.ee/Appetitos" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">
               <LinkedinLogo size={32} weight='fill' className="text-gray-300 hover:text-orange-500 transition-colors duration-200 cursor-pointer" />
             </a>
             {/* <a href="https://www.instagram.com/cmoroniacg/" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
@@ -58,7 +58,7 @@ function Footer() {
             <a href="https://www.facebook.com/carlos.moroni.94/" target="_blank" rel="noopener noreferrer" aria-label="Facebook">
               <FacebookLogo size={32} weight='fill' className="text-gray-300 hover:text-orange-500 transition-colors duration-200 cursor-pointer" />
             </a> */}
-            <a href="https://github.com/carlosmoronisud" target="_blank" rel="noopener noreferrer" aria-label="GitHub">
+            <a href="https://github.com/carlosmoronisud/delivery" target="_blank" rel="noopener noreferrer" aria-label="GitHub">
               <GithubLogo size={32} weight='fill' className="text-gray-300 hover:text-orange-500 transition-colors duration-200 cursor-pointer" />
             </a>
           </div>

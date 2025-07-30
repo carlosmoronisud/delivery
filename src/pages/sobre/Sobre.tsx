@@ -13,6 +13,7 @@ import {
   SiJavascript,SiFramer 
 } from 'react-icons/si';
 import { FaGoogle, FaMapMarkedAlt, FaShoppingCart, FaLock } from 'react-icons/fa';
+import { GithubLogo } from "@phosphor-icons/react/dist/ssr/GithubLogo";
 
 // Animations
 const fadeInUp = {
@@ -408,13 +409,13 @@ function SobreProjetoPage() {
             <motion.a 
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
-              href="https://delivery-ten-iota.vercel.app" 
+              href="https://github.com/carlosmoronisud/delivery" 
               target="_blank" 
               rel="noopener noreferrer"
               className="bg-white text-blue-600 hover:bg-gray-100 px-8 py-4 rounded-full font-bold text-lg transition-all duration-300 shadow-lg hover:shadow-xl flex items-center justify-center gap-2"
             >
               <SiReact className="text-lg" />
-              Acessar Frontend
+              Repositório Frontend
             </motion.a>
             <motion.a 
               whileHover={{ scale: 1.05 }}
@@ -425,7 +426,18 @@ function SobreProjetoPage() {
               className="bg-transparent border-2 border-white hover:bg-green-600 hover:text-white-600 px-8 py-4 rounded-full font-bold text-lg transition-all duration-300 shadow-lg hover:shadow-xl flex items-center justify-center gap-2"
             >
               <SiSpringboot className="text-lg" />
-              Ver Backend
+              API Backend
+            </motion.a>
+            <motion.a 
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              href="https://github.com/Grupo05-Java82/delivery" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="bg-transparent border-2 border-white hover:bg-gray-600 hover:text-white-600 px-8 py-4 rounded-full font-bold text-lg transition-all duration-300 shadow-lg hover:shadow-xl flex items-center justify-center gap-2"
+            >
+              <GithubLogo className=" bg-gray-500 rounded-2xl text-lg" />
+              Repositório Backend
             </motion.a>
           </div>
         </div>

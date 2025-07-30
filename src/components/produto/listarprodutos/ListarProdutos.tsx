@@ -18,6 +18,7 @@ function ListarProdutos() {
     nutriScore: searchParams.get("nutriScore") || "",
     categoriaId: searchParams.get("categoriaId") || "",
     ingrediente: searchParams.get("ingrediente") || "",
+    excluirIngrediente: searchParams.get("excluirIngrediente") === 'true', 
   };
 
   const {
@@ -27,9 +28,9 @@ function ListarProdutos() {
   } = useQuery<Produto[]>({
     queryKey: ["produtos", filtros],
     queryFn: async () => {
-      const data = await buscarProdutos();
+      const data = await buscarProdutos(); 
 
-      // Filter logic applied on the client-side
+      // Lógica de filtro aplicada no lado do cliente
       return data.filter((produto) => {
         const preco = parseFloat(produto.preco?.toString() || '0'); 
         const precoMin = parseFloat(filtros.precoMin) || 0;
@@ -46,12 +47,21 @@ function ListarProdutos() {
           (typeof produto.id_categoria === "object" && produto.id_categoria !== null && 
            (produto.id_categoria as Categoria).id?.toString() === filtros.categoriaId); 
         
-        // Ingredient filter
-        const matchIngrediente =
-          !filtros.ingrediente ||
-          produto.ingrediente
+        // Lógica do filtro de ingrediente
+        let matchIngrediente = true; 
+        if (filtros.ingrediente) {           
+          const produtoContemIngrediente = produto.ingrediente
             ?.toLowerCase()
-            .includes(filtros.ingrediente.toLowerCase());
+            .includes(filtros.ingrediente.toLowerCase()) || false; 
+
+          if (filtros.excluirIngrediente) {
+            
+            matchIngrediente = !produtoContemIngrediente;
+          } else {
+            
+            matchIngrediente = produtoContemIngrediente;
+          }
+        }
 
         return matchPreco && matchNutri && matchCategoria && matchIngrediente;
       });
@@ -94,7 +104,7 @@ function ListarProdutos() {
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-8 p-4 md:p-0">
             {produtos.map((produto) =>
-               produto?.id ? (
+                produto?.id ? (
                 <CardProduto key={produto.id} produto={produto} />
               ) : null
             )}

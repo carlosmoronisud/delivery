@@ -38,6 +38,7 @@ import CadastroEntregador from './pages/cadastro/EntregadoresCadastro';
 import OrderConfirmation from './components/carrinho/cart/OrderConfirmation';
 import { Cart } from './components/carrinho/cart/Cart';
 import { UserLocationProvider } from './contexts/userLocation';
+import PickupConfirmation from './components/carrinho/cart/PickupConfirmation';
 
 
 type MenuState = 'closed' | 'open';
@@ -92,13 +93,15 @@ function App() {
                   {/* Rota do Carrinho de Compras */}
                   <Route path="/cart" element={<Cart />} />
 
-                  {/* NOVO: Rota de Confirmação de Pedido */}
+                  {/* Rota de Confirmação de Pedido */}
                   <Route path="/order-confirmation" element={<RotaPrivada><OrderConfirmation /></RotaPrivada>}/>
+                  <Route path="/pickup-confirmation" element={<RotaPrivada><PickupConfirmation /></RotaPrivada>} />             
+                 
 
-                  {/* Rota de Acompanhamento de Pedido (agora pode receber um ID) */}
+                  {/* Rota de Acompanhamento de Pedido e Rastreamento */}
                   <Route path="/order-tracking/:orderId?" element={<RotaPrivada><OrderTracking /></RotaPrivada>} />
 
-                  {/* Rotas protegidas (somente usuário logado) */}
+                  {/* Rotas protegidas (somente usuário logado no Backend) */}
                   <Route path="/usuarios" element={<RotaPrivada><Usuarios /></RotaPrivada>} />
                   <Route path="/perfil/:id" element={<RotaPrivada><FormUsuario /></RotaPrivada>} />
 

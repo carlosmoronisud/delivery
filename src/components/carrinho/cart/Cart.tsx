@@ -1,4 +1,3 @@
-
 import { useContext, useState, useCallback, useEffect } from 'react';
 import { CartContext, type Items } from '../../../contexts/CartContext';
 import { AuthContext } from '../../../contexts/AuthContext';
@@ -17,9 +16,11 @@ import { DeliveryModal } from '../map/DeliveryModal';
 import { MapDisplay } from '../map/MapDisplay';
 import { PencilSimpleLine } from '@phosphor-icons/react'; 
 import { MapPinLine } from '@phosphor-icons/react/dist/ssr/MapPinLine';
+import PickupDetailsModal from './pickupDetailsModal';
+
 
 export function Cart() {
-    const { items, quantidadeItems, valorTotal, limparCart } = useContext(CartContext);    
+    const { items, quantidadeItems, valorTotal, limparCart } = useContext(CartContext); 
     const { setUserAddress } = useUserLocation();
     const [showAddressForm, setShowAddressForm] = useState(false); 
 
@@ -27,7 +28,7 @@ export function Cart() {
     const [isDeliveryModalOpen, setIsDeliveryModalOpen] = useState(false);
     const [isLoadingLocation, setIsLoadingLocation] = useState(false);
     const [mapCenter, setMapCenter] = useState<{ lat: number; lng: number } | null>(null);
-    const navigate = useNavigate();    
+    const navigate = useNavigate(); 
     const { usuario } = useContext(AuthContext);
 
     // Estados para entrega
@@ -45,9 +46,12 @@ export function Cart() {
         rua: '', numero: '', bairro: '', cidade: '', complemento: '', 
         cep: '', latitude: undefined, longitude: undefined, estado: '' 
     });
-    
-    
 
+    // Novos estados para o modal de retirada no balcão
+    const [isPickupModalOpen, setIsPickupModalOpen] = useState(false);
+    const [pickupName, setPickupName] = useState('');
+    const [pickupPhone, setPickupPhone] = useState('');
+    
     const getBrowserLocation = useCallback(() => {
         setIsLoadingLocation(true);
         if (navigator.geolocation) {
@@ -81,8 +85,20 @@ export function Cart() {
         if (option === 'delivery') {
             setIsDeliveryModalOpen(true);
             getBrowserLocation();
+            setIsPickupModalOpen(false); 
+        } else if (option === 'pickup') {
+            setIsPickupModalOpen(true); 
+            setIsDeliveryModalOpen(false); 
+            setEnderecoData({ 
+                rua: '', numero: '', bairro: '', cidade: '', complemento: '', 
+                cep: '', latitude: undefined, longitude: undefined, estado: '' 
+            });
+            setFrete(0);
+            setDeliveryTime('Retirada no local');
+            setDistance('N/A');
+            setIsFreteCalculated(true);
         } else {
-             // Limpa dados de endereço e frete ao mudar para "none" ou "pickup"
+            // Limpa dados de endereço e frete ao mudar para "none"
             setEnderecoData({ 
                 rua: '', numero: '', bairro: '', cidade: '', complemento: '', 
                 cep: '', latitude: undefined, longitude: undefined, estado: '' 
@@ -91,6 +107,8 @@ export function Cart() {
             setDeliveryTime('');
             setDistance('');
             setIsFreteCalculated(false);
+            setIsDeliveryModalOpen(false);
+            setIsPickupModalOpen(false);
         }
     };
 
@@ -236,28 +254,42 @@ export function Cart() {
             if (!addressConfirmed) {
                 return; 
             }
-           
+            
             if (!isFreteCalculated) {
                 ToastAlerta('Aguarde o cálculo do frete para prosseguir.', 'info');
                 return;
             }
-        }
-
-        // Navega para a página de confirmação
-        navigate('/order-confirmation', {
-            state: {
-                items,
-                deliveryOption,
-                frete: deliveryOption === 'delivery' ? frete : 0, 
-                enderecoData: deliveryOption === 'delivery' ? enderecoData : null,
-                valorTotal,
-                totalFinal: valorTotalComFrete,
-                deliveryTime: deliveryOption === 'delivery' ? deliveryTime : 'Retirada no local', 
-                distance: deliveryOption === 'delivery' ? distance : 'N/A', 
-                user: usuario
+            // Navega para a página de confirmação de entrega
+            navigate('/order-confirmation', {
+                state: {
+                    items,
+                    deliveryOption,
+                    frete: frete, 
+                    enderecoData: enderecoData,
+                    valorTotal,
+                    totalFinal: valorTotalComFrete,
+                    deliveryTime: deliveryTime, 
+                    distance: distance, 
+                    user: usuario
+                }
+            });
+        } else if (deliveryOption === 'pickup') {
+            if (!pickupName || !pickupPhone) {
+                ToastAlerta('Por favor, preencha o nome e o telefone para retirada.', 'erro');
+                return;
             }
-        })
-        limparCart()
+            // Navega para a nova página de confirmação de retirada
+            navigate('/pickup-confirmation', {
+                state: {
+                    items,
+                    valorTotal,
+                    totalFinal: valorTotal, 
+                    pickupName,
+                    pickupPhone
+                }
+            });
+        }
+        limparCart(); 
     };
 
     const isConfirmButtonDisabled =
@@ -265,6 +297,7 @@ export function Cart() {
         deliveryOption === 'none' ||
         (deliveryOption === 'delivery' && (!enderecoData.rua || !enderecoData.numero || !enderecoData.cidade || 
          enderecoData.latitude === undefined || enderecoData.longitude === undefined || !isFreteCalculated)) ||
+        (deliveryOption === 'pickup' && (!pickupName || !pickupPhone)) || // Desabilita se pickup e dados não preenchidos
         !usuario?.token;
 
     return (
@@ -315,12 +348,12 @@ export function Cart() {
                                             isMarkerDraggable={false} 
                                         />
                                     </div>
-                                    {showAddressForm && (     
+                                    {showAddressForm && ( 
                                     <div className="text-sm text-gray-700 space-y-1">
                                         <p><strong>Rua:</strong> {enderecoData.rua}, {enderecoData.numero}</p>
                                         <p><strong>Bairro:</strong> {enderecoData.bairro}</p>
                                         <p><strong>Cidade/Estado:</strong> {enderecoData.cidade} - {enderecoData.estado}</p>
-                                        {enderecoData.complemento && <p><strong>Complemento:</strong> {enderecoData.complemento}</p>}
+                                        {enderecoData.complemento && <p><strong>Telefone:</strong> {enderecoData.complemento}</p>}
                                         {enderecoData.cep && <p><strong>CEP:</strong> {enderecoData.cep}</p>}
                                         <p className="mt-2 text-orange-600 font-semibold">Tempo estimado: {deliveryTime}</p>
                                         <p className="text-gray-600 font-semibold">Distância: {distance}</p>
@@ -329,7 +362,7 @@ export function Cart() {
                                     <button
                                         onClick={() => setIsDeliveryModalOpen(true)}
                                         className="mt-4 w-full bg-blue-500 text-white py-2 px-4 rounded-lg flex items-center justify-center gap-2
-                                                   hover:bg-blue-600 transition-colors duration-200 text-sm font-medium"
+                                                     hover:bg-blue-600 transition-colors duration-200 text-sm font-medium"
                                     >
                                         <PencilSimpleLine size={18} /> Alterar Endereço
                                     </button>
@@ -341,12 +374,46 @@ export function Cart() {
                                     <button
                                         onClick={() => setIsDeliveryModalOpen(true)}
                                         className="mt-3 bg-yellow-500 text-white py-2 px-4 rounded-lg flex items-center justify-center gap-2
-                                                   hover:bg-yellow-600 transition-colors duration-200 text-sm font-medium mx-auto"
+                                                     hover:bg-yellow-600 transition-colors duration-200 text-sm font-medium mx-auto"
                                     >
                                         <MapPinLine size={18} /> Definir Endereço
                                     </button>
                                 </div>
                             )}
+
+                            {/* Seção de detalhes de retirada no balcão */}
+                            {deliveryOption === 'pickup' && (pickupName && pickupPhone) && (
+                                <div className="p-4 bg-gray-50 rounded-lg shadow-md border border-gray-200">
+                                    <h3 className="text-lg font-semibold text-gray-800 mb-3">Detalhes da Retirada</h3>
+                                    <div className="text-sm text-gray-700 space-y-1">
+                                        <p><strong>Nome:</strong> {pickupName}</p>
+                                        <p><strong>Telefone:</strong> {pickupPhone}</p>
+                                        <p className="mt-2 text-green-600 font-semibold">
+                                            Pedido será retirado no balcão do restaurante.
+                                        </p>
+                                    </div>
+                                    <button
+                                        onClick={() => setIsPickupModalOpen(true)}
+                                        className="mt-4 w-full bg-blue-500 text-white py-2 px-4 rounded-lg flex items-center justify-center gap-2
+                                                     hover:bg-blue-600 transition-colors duration-200 text-sm font-medium"
+                                    >
+                                        <PencilSimpleLine size={18} /> Alterar Dados de Retirada
+                                    </button>
+                                </div>
+                            )}
+                            {deliveryOption === 'pickup' && (!pickupName || !pickupPhone) && (
+                                <div className="p-4 bg-yellow-100 text-yellow-800 rounded-lg border border-yellow-200 text-center">
+                                    <p className="font-semibold">Por favor, informe os dados para retirada no balcão.</p>
+                                    <button
+                                        onClick={() => setIsPickupModalOpen(true)}
+                                        className="mt-3 bg-yellow-500 text-white py-2 px-4 rounded-lg flex items-center justify-center gap-2
+                                                     hover:bg-yellow-600 transition-colors duration-200 text-sm font-medium mx-auto"
+                                    >
+                                        <MapPinLine size={18} /> Inserir Dados de Retirada
+                                    </button>
+                                </div>
+                            )}
+
 
                             <ConfirmOrderButton 
                                 isConfirmButtonDisabled={isConfirmButtonDisabled}
@@ -354,8 +421,8 @@ export function Cart() {
                                 deliveryOption={deliveryOption}
                                 enderecoData={enderecoData}
                                 isFreteCalculated={isFreteCalculated}
-                            />                      
-                        </div>                       
+                            /> 
+                        </div> 
                     </div>
                 )}
                 <DeliveryModal
@@ -365,7 +432,7 @@ export function Cart() {
                         const success = await handleConfirmAddress();
                         if (success) {
                             setIsDeliveryModalOpen(false);
-                           
+                            
                         }
                     }}
                     enderecoData={enderecoData}
@@ -375,6 +442,18 @@ export function Cart() {
                     onGeocodeRequest={handleGeocodeRequest}
                     isLoadingLocation={isLoadingLocation}
                     mapCenter={mapCenter}
+                />
+                {/* Novo modal para detalhes de retirada */}
+                <PickupDetailsModal
+                    isOpen={isPickupModalOpen}
+                    onClose={() => setIsPickupModalOpen(false)}
+                    onConfirm={(name, phone) => {
+                        setPickupName(name);
+                        setPickupPhone(phone);
+                        setIsPickupModalOpen(false);
+                    }}
+                    initialName={pickupName}
+                    initialPhone={pickupPhone}
                 />
             </div>
         </div>
